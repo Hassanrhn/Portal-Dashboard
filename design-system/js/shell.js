@@ -77,7 +77,7 @@
       { group: 'Actions', label: root.dataset.env === 'test' ? 'Switch to Live mode' : 'Switch to Test mode', icon: 'refund',
         run: () => setEnv(root.dataset.env === 'test' ? 'live' : 'test', { announce: true }) },
     ];
-    const records = (Portal.searchIndex || []).map((r) => ({ group: 'Payments', label: r.label, hint: r.hint, icon: 'payments', run: r.run }));
+    const records = (Portal.searchIndex || []).map((r) => ({ group: r.group || 'Payments', label: r.label, hint: r.hint, icon: r.icon || 'payments', run: r.run }));
     return [...records, ...pages, ...actions];
   }
 

@@ -167,5 +167,4 @@
     el('a', { className: 'btn btn--sm', attrs: { href: `mailto:${email}` } }, [iconEl('mail'), 'Email']),
   ])));
 
-  Portal.searchIndex = tickets.map((t) => ({ label: t.id, hint: t.subject, run: () => openTicket(t) }));
 })();

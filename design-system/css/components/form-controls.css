@@ -63,3 +63,6 @@
 .input-affix__addon { display: grid; place-items: center; padding: 0 var(--space-12); border: var(--border-width) solid var(--input-border); border-right: 0; border-radius: var(--input-radius) 0 0 var(--input-radius); background: var(--input-addon-bg); color: var(--text-secondary); font-size: var(--font-size-13); white-space: nowrap; }
 .input-affix .input { border-radius: 0 var(--input-radius) var(--input-radius) 0; }
 @media (max-width: 600px) { .form-grid--2, .radio-cards--2 { grid-template-columns: minmax(0, 1fr); } }
+.input-affix--suffix .input-affix__addon { border-right: var(--border-width) solid var(--input-border); border-left: 0; border-radius: 0 var(--input-radius) var(--input-radius) 0; }
+.input-affix--suffix:has(.input[aria-invalid="true"]) .input-affix__addon { border-color: var(--input-border-error); }
+.input-affix--suffix .input { border-radius: var(--input-radius) 0 0 var(--input-radius); }

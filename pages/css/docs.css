@@ -51,3 +51,4 @@
   .checklist__item { grid-template-columns: var(--size-24) minmax(0, 1fr); }
   .checklist__actions { grid-column: 2; flex-wrap: wrap; }
 }
+.docs .kv .u-mono { min-width: 0; overflow-wrap: anywhere; }
