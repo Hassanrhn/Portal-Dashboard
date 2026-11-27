@@ -60,16 +60,16 @@
     },
     "action": {
       "primary-bg": {
-        "$value": "{color.neutral.790}"
+        "$value": "{color.orange.500}"
       },
       "primary-bg-hover": {
-        "$value": "{color.neutral.950}"
+        "$value": "{color.orange.600}"
       },
       "primary-fg": {
-        "$value": "{color.white}"
+        "$value": "{color.neutral.900}"
       },
       "primary-border": {
-        "$value": "{color.neutral.900}"
+        "$value": "{color.orange.700}"
       },
       "disabled-bg": {
         "$value": "{color.neutral.450}"
@@ -94,6 +94,9 @@
       },
       "danger-fg": {
         "$value": "{color.white}"
+      },
+      "secondary-lip": {
+        "$value": "{color.neutral.250}"
       }
     },
     "accent": {
@@ -243,16 +246,16 @@
     },
     "action": {
       "primary-bg": {
-        "$value": "#F3F3F3"
+        "$value": "{color.orange.500}"
       },
       "primary-bg-hover": {
-        "$value": "{color.white}"
+        "$value": "{color.orange.600}"
       },
       "primary-fg": {
-        "$value": "{color.neutral.950}"
+        "$value": "{color.neutral.900}"
       },
       "primary-border": {
-        "$value": "#F3F3F3"
+        "$value": "{color.orange.700}"
       },
       "disabled-bg": {
         "$value": "{color.neutral.780}"
@@ -277,6 +280,9 @@
       },
       "danger-fg": {
         "$value": "{color.white}"
+      },
+      "secondary-lip": {
+        "$value": "{color.neutral.700}"
       }
     },
     "accent": {

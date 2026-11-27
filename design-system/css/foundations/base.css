@@ -61,3 +61,7 @@ html.is-theming *, html.is-theming *::before, html.is-theming *::after {
    so the background never shifts when an overlay opens or closes. */
 html { scrollbar-gutter: stable; }
 html:has(dialog[open]) { overflow: hidden; }
+
+/* Long content: text wraps instead of overflowing; compact labels (badges, chips) truncate with an ellipsis */
+:where(p, h1, h2, h3, dd, li, td, label, .u-mono) { overflow-wrap: break-word; }
+:where(.badge, .chip) { max-width: 100%; overflow: hidden; text-overflow: ellipsis; }

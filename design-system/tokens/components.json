@@ -106,7 +106,7 @@
       "$value": "{control.height-md}"
     },
     "radius": {
-      "$value": "{control.radius}"
+      "$value": "{radius.10}"
     },
     "pad-x": {
       "$value": "{space.12}"
@@ -118,7 +118,7 @@
       "$value": "{font.size.13}"
     },
     "font-weight": {
-      "$value": "{font.weight.medium}"
+      "$value": "{font.weight.semibold}"
     },
     "primary-bg": {
       "$value": "{action.primary-bg}"
@@ -166,7 +166,16 @@
       "$value": "0.97"
     },
     "lip": {
-      "$value": "2px"
+      "$value": "3px"
+    },
+    "secondary-lip": {
+      "$value": "{action.secondary-lip}"
+    },
+    "primary-lip": {
+      "$value": "{color.orange.700}"
+    },
+    "danger-lip": {
+      "$value": "{color.red.800}"
     }
   },
   "input": {

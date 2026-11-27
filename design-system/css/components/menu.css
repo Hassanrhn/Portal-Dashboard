@@ -24,3 +24,5 @@
   .menu { inset: auto var(--space-8) var(--space-8) var(--space-8) !important; max-width: none; padding: var(--space-8); animation: sheet-in var(--motion-base) var(--motion-sheet) both; }
   .menu__item { padding: var(--space-12); }
 }
+/* Zero-size anchor at the pointer for the context menu */
+.context-anchor { position: fixed; width: 0; height: 0; }

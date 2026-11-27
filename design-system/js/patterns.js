@@ -5,6 +5,7 @@
  *   Portal.confirm({ title, message, details, confirmLabel, tone }) → Promise<boolean>
  *   Portal.menu.button(items, label) → ⋯ button that opens a menu of { label, icon, description, tone, onSelect }
  *   Portal.dataTable(host, { columns, pageSize, empty, onRowClick, rowLabel }) → { setRows(rows) }
+ *     A column may add filter: { type: 'text'|'number'|'date'|'options', value: (row) => primitive, options?, label?, placeholder? }
  *   Portal.downloadCsv(filename, columns, rows)
  *   Portal.fieldError(input, message)
  *   Portal.trackDirty(form, saveBar, { onSave }) → { reset() }
@@ -96,6 +97,15 @@
   };
 
   /* Menu ----------------------------------------------------------------------------- */
+  /** Places a fixed popover under its anchor (or above it when there is no room), right-aligned and kept on screen. */
+  function placePopover(node, anchor) {
+    const box = anchor.getBoundingClientRect();
+    const popBox = node.getBoundingClientRect();
+    const top = box.bottom + 4 + popBox.height > window.innerHeight ? box.top - popBox.height - 4 : box.bottom + 4;
+    node.style.top = `${Math.max(8, top)}px`;
+    node.style.left = `${Math.max(8, Math.min(box.right - popBox.width, window.innerWidth - popBox.width - 8))}px`;
+  }
+
   let openMenu = null;
   function closeMenu({ restoreFocus = true } = {}) {
     if (!openMenu) return;
@@ -121,11 +131,7 @@
       ]));
     });
     document.body.appendChild(node);
-    const box = anchor.getBoundingClientRect();
-    const menuBox = node.getBoundingClientRect();
-    const top = box.bottom + 4 + menuBox.height > window.innerHeight ? box.top - menuBox.height - 4 : box.bottom + 4;
-    node.style.top = `${Math.max(8, top)}px`;
-    node.style.left = `${Math.max(8, Math.min(box.right - menuBox.width, window.innerWidth - menuBox.width - 8))}px`;
+    placePopover(node, anchor);
     anchor.setAttribute('aria-expanded', 'true');
     openMenu = { node, anchor };
     node.querySelector('.menu__item:not(:disabled)')?.focus();

@@ -47,7 +47,7 @@
   const label = (text) => el('span', { className: 'nav__label', text });
 
   function link(item, { withIcon = true } = {}) {
-    return el('a', { className: 'nav__item', attrs: { href: item.href, 'aria-current': item.id === current ? 'page' : false } },
+    return el('a', { className: 'nav__item', attrs: { href: item.href, 'aria-current': item.id === current ? 'page' : false, 'data-tooltip': item.label } },
       [withIcon && item.icon && iconEl(item.icon), label(item.label)]);
   }
 
@@ -56,7 +56,7 @@
     const containsCurrent = item.children.some((c) => c.id === current);
     const open = containsCurrent || (item.group === 'payments' && current === 'overview');
     return [
-      el('button', { className: 'nav__item', attrs: { type: 'button', 'data-disclosure': '', 'aria-expanded': String(open), 'aria-controls': id } },
+      el('button', { className: 'nav__item', attrs: { type: 'button', 'data-disclosure': '', 'aria-expanded': String(open), 'aria-controls': id, 'data-tooltip': item.label } },
         [iconEl(item.icon), label(item.label), iconEl('chevron-down', 'nav__chevron')]),
       el('div', { className: 'nav__group', attrs: { id } }, [el('div', { className: 'nav' }, item.children.map((c) => link(c, { withIcon: false })))]),
     ];
@@ -79,10 +79,7 @@
   ]);
 
   const sidebar = el('aside', { className: 'sidebar', attrs: { 'aria-label': 'Main' } }, [
-    el('div', { className: 'sidebar__brand' }, [
-      logo,
-      el('button', { className: 'btn btn--ghost btn--icon btn--sm collapse-toggle', attrs: { type: 'button', 'data-collapse-toggle': '', 'aria-pressed': 'false', 'aria-label': 'Collapse sidebar' } }, [iconEl('sidebar')]),
-    ]),
+    el('div', { className: 'sidebar__brand' }, [logo]),
     el('div', { className: 'sidebar__scroll' }, [
       el('nav', { className: 'nav', attrs: { 'aria-label': 'Primary' } }, NAV.primary.flatMap((item) => (item.group ? group(item) : [link(item)]))),
       el('p', { className: 'nav__section', text: 'Developers' }),
@@ -114,7 +111,7 @@
   }
   const trail = crumbTrail();
   const appbar = el('header', { className: 'appbar' }, [
-    el('button', { className: 'btn btn--ghost btn--icon appbar__menu', attrs: { type: 'button', 'data-nav-open': '', 'aria-expanded': 'false', 'aria-label': 'Open navigation' } }, [iconEl('menu')]),
+    el('button', { className: 'btn btn--ghost btn--icon appbar__toggle', attrs: { type: 'button', 'data-sidebar-toggle': '', 'aria-label': 'Toggle sidebar' } }, [iconEl('sidebar')]),
     el('nav', { className: 'crumbs', attrs: { 'aria-label': 'Breadcrumb' } }, [
       el('a', { className: 'crumbs__parent', text: trail.section, attrs: { href: 'overview.html' } }),
       iconEl('chevron-right'),

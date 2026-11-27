@@ -10,28 +10,31 @@
   const app = document.querySelector('[data-app]');
   if (!app) return;
 
-  /* Sidebar collapse (desktop) ---------------------------------------------- */
-  const collapseToggle = app.querySelector('[data-collapse-toggle]');
+  /* Sidebar toggle (one header button): collapses to icons on desktop, opens the drawer below 860px */
+  const toggle = document.querySelector('[data-sidebar-toggle]');
+  const sidebar = app.querySelector('.sidebar');
+  const isCompact = () => window.matchMedia('(max-width: 860px)').matches;
   const setCollapsed = (collapsed) => {
     app.classList.toggle('is-collapsed', collapsed);
-    collapseToggle?.setAttribute('aria-pressed', String(collapsed));
-    collapseToggle?.setAttribute('aria-label', collapsed ? 'Expand sidebar' : 'Collapse sidebar');
     Portal.store.set('sidebar', collapsed ? 'collapsed' : 'expanded');
+    syncToggle();
   };
-  setCollapsed(Portal.store.get('sidebar') === 'collapsed');
-  collapseToggle?.addEventListener('click', () => setCollapsed(!app.classList.contains('is-collapsed')));
-
-  /* Drawer (mobile) ---------------------------------------------------------- */
-  const menuButton = app.querySelector('[data-nav-open]');
-  const sidebar = app.querySelector('.sidebar');
   const setNavOpen = (open) => {
     app.classList.toggle('is-nav-open', open);
-    menuButton?.setAttribute('aria-expanded', String(open));
+    syncToggle();
     if (open) sidebar.querySelector('a, button')?.focus();
-    else if (document.activeElement && sidebar.contains(document.activeElement)) menuButton?.focus();
+    else if (sidebar.contains(document.activeElement)) toggle?.focus();
   };
-  menuButton?.addEventListener('click', () => setNavOpen(true));
+  function syncToggle() {
+    if (!toggle) return;
+    const expanded = isCompact() ? app.classList.contains('is-nav-open') : !app.classList.contains('is-collapsed');
+    toggle.setAttribute('aria-expanded', String(expanded));
+    toggle.setAttribute('aria-label', expanded ? 'Hide sidebar' : 'Show sidebar');
+  }
+  setCollapsed(Portal.store.get('sidebar') === 'collapsed');
+  toggle?.addEventListener('click', () => (isCompact() ? setNavOpen(!app.classList.contains('is-nav-open')) : setCollapsed(!app.classList.contains('is-collapsed'))));
   app.querySelector('[data-nav-close]')?.addEventListener('click', () => setNavOpen(false));
+  window.matchMedia('(max-width: 860px)').addEventListener('change', syncToggle);
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape' && app.classList.contains('is-nav-open')) setNavOpen(false);
   });
@@ -167,5 +170,58 @@
       event.preventDefault();
       dialog.open ? Portal.dialog.close(dialog) : openPalette();
     }
+  });
+})();
+
+/*
+ * Custom context menu (right-click / long-press) replacing the browser menu on dashboard pages.
+ * Offers actions that fit what was clicked: copy a value or selection, open a row or link, page actions.
+ * Text fields keep the native menu so paste/spellcheck still work.
+ */
+(function () {
+  'use strict';
+
+  const Portal = window.Portal;
+  if (!document.querySelector('[data-app]') || !Portal.menu) return;
+
+  const copy = async (value, toast) => {
+    try { await navigator.clipboard.writeText(value); Portal.toast(toast); } catch { Portal.toast('Copy is blocked in this browser.', { icon: 'alert' }); }
+  };
+
+  function itemsFor(target) {
+    const items = [];
+    const selection = String(window.getSelection() || '').trim();
+    const copyable = target.closest('.copy')?.querySelector('[data-copy]') || target.closest('[data-copy]');
+    const link = target.closest('a[href]');
+    const row = target.closest('tr.is-clickable');
+    if (selection) items.push({ label: 'Copy selection', icon: 'copy', onSelect: () => copy(selection, 'Selection copied') });
+    if (copyable) items.push({ label: 'Copy value', icon: 'copy', description: copyable.dataset.copy.length > 36 ? `${copyable.dataset.copy.slice(0, 34)}…` : copyable.dataset.copy, onSelect: () => copy(copyable.dataset.copy, 'Copied to clipboard') });
+    if (row) items.push({ label: 'Open details', icon: 'arrow-right', onSelect: () => row.click() });
+    if (link) {
+      items.push({ label: 'Open in new tab', icon: 'external', onSelect: () => window.open(link.href, '_blank', 'noopener') });
+      items.push({ label: 'Copy link', icon: 'link', onSelect: () => copy(link.href, 'Link copied') });
+    }
+    if (items.length) items.push('separator');
+    items.push(
+      { label: 'Copy page link', icon: 'link', onSelect: () => copy(window.location.href, 'Page link copied') },
+      { label: 'Search', icon: 'search', description: '⌘K', onSelect: () => document.querySelector('[data-command-open]')?.click() },
+      { label: Portal.theme.get() === 'dark' ? 'Light mode' : 'Dark mode', icon: Portal.theme.get() === 'dark' ? 'sun' : 'moon', onSelect: () => Portal.theme.toggle() },
+      { label: 'Reload', icon: 'rotate', onSelect: () => window.location.reload() },
+    );
+    return items;
+  }
+
+  document.addEventListener('contextmenu', (event) => {
+    if (event.target.closest('input, textarea, [contenteditable="true"]') || event.shiftKey) return; // Shift+right-click = native menu
+    event.preventDefault();
+    const anchor = document.createElement('span');
+    anchor.className = 'context-anchor';
+    anchor.tabIndex = -1;
+    anchor.style.left = `${event.clientX}px`;
+    anchor.style.top = `${event.clientY}px`;
+    document.body.appendChild(anchor);
+    Portal.menu.open(anchor, itemsFor(event.target));
+    const cleanup = new MutationObserver(() => { if (!document.querySelector('.menu')) { anchor.remove(); cleanup.disconnect(); } });
+    cleanup.observe(document.body, { childList: true });
   });
 })();

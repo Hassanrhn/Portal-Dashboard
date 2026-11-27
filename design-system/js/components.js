@@ -119,21 +119,31 @@
     });
   }
 
-  /* Copy to clipboard ------------------------------------------------------ */
+  /* Copy to clipboard: icon swaps to a green check (and a text button reads "Copied") for 1.6 s */
   document.addEventListener('click', async (event) => {
     const button = event.target.closest('[data-copy]');
     if (!button) return;
     const value = button.dataset.copy;
     try {
       await navigator.clipboard.writeText(value);
-      // Never echo long values (secrets, URLs) on screen; data-copy-toast overrides the message.
-      Portal.toast(button.dataset.copyToast || (value.length <= 40 ? `Copied ${value}` : 'Copied to clipboard'));
     } catch {
       Portal.toast('Copy is blocked in this browser. Select the text instead.', { icon: 'alert' });
       return;
     }
+    // Never echo long values (secrets, URLs) on screen; data-copy-toast overrides the message.
+    Portal.toast(button.dataset.copyToast || (value.length <= 40 ? `Copied ${value}` : 'Copied to clipboard'));
+    if (button.classList.contains('is-copied')) return;
+    const restore = [];
+    if (!button.querySelector('.icon-check')) {
+      const icon = button.querySelector('svg');
+      const check = Portal.icon('check');
+      check.classList.add('icon-check-inline');
+      if (icon) { icon.replaceWith(check); restore.push(() => check.replaceWith(icon)); }
+      const label = Array.from(button.childNodes).find((n) => n.nodeType === Node.TEXT_NODE && n.textContent.trim());
+      if (label) { const text = label.textContent; label.textContent = 'Copied'; restore.push(() => { label.textContent = text; }); }
+    }
     button.classList.add('is-copied');
-    window.setTimeout(() => button.classList.remove('is-copied'), 1600);
+    window.setTimeout(() => { button.classList.remove('is-copied'); restore.forEach((fn) => fn()); }, 1600);
   });
 
   /* Dialog ------------------------------------------------------------------ */
@@ -176,6 +186,112 @@
   };
   Portal.initComponents();
 
+  /* Custom select: replaces the OS dropdown with a listbox styled like our menus while the native
+     <select> stays in the DOM (hidden) as the source of truth, so forms, validation and page code keep working.
+     Opt out with data-native. */
+  const nativeValue = Object.getOwnPropertyDescriptor(HTMLSelectElement.prototype, 'value');
+  Object.defineProperty(HTMLSelectElement.prototype, 'value', {
+    configurable: true,
+    get() { return nativeValue.get.call(this); },
+    set(v) { nativeValue.set.call(this, v); this.dispatchEvent(new Event('portal:sync')); },
+  });
+  let openList = null;
+  function closeList(focusButton = true) {
+    if (!openList) return;
+    const { list, button } = openList;
+    list.remove();
+    button.setAttribute('aria-expanded', 'false');
+    if (focusButton) button.focus();
+    openList = null;
+  }
+  function enhanceSelect(select) {
+    if (select.dataset.enhanced || select.multiple || select.hasAttribute('data-native')) return;
+    select.dataset.enhanced = 'true';
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = `${select.className} cselect`;
+    button.setAttribute('aria-haspopup', 'listbox');
+    button.setAttribute('aria-expanded', 'false');
+    const label = document.createElement('span');
+    label.className = 'cselect__label';
+    button.appendChild(label);
+    const sync = () => {
+      const option = select.options[select.selectedIndex];
+      label.textContent = option ? option.textContent : '';
+      button.disabled = select.disabled;
+      button.setAttribute('aria-label', `${select.getAttribute('aria-label') || select.labels?.[0]?.textContent || 'Select'}: ${label.textContent}`);
+      button.setAttribute('aria-invalid', select.getAttribute('aria-invalid') || 'false');
+    };
+    select.classList.add('cselect__native');
+    select.tabIndex = -1;
+    select.setAttribute('aria-hidden', 'true');
+    select.after(button);
+    select.labels?.forEach((l) => l.addEventListener('click', (e) => { e.preventDefault(); button.focus(); }));
+    ['change', 'portal:sync'].forEach((type) => select.addEventListener(type, sync));
+    new MutationObserver(sync).observe(select, { childList: true, subtree: true, attributes: true, attributeFilter: ['disabled', 'aria-invalid'] });
+    sync();
+
+    const choose = (option) => {
+      if (option.disabled) return;
+      nativeValue.set.call(select, option.value);
+      sync();
+      select.dispatchEvent(new Event('input', { bubbles: true }));
+      select.dispatchEvent(new Event('change', { bubbles: true }));
+      closeList();
+    };
+    const open = () => {
+      if (openList?.button === button) { closeList(); return; }
+      closeList(false);
+      const list = document.createElement('div');
+      list.className = 'menu cselect__list';
+      list.setAttribute('role', 'listbox');
+      Array.from(select.options).forEach((option) => {
+        const item = document.createElement('button');
+        item.type = 'button';
+        item.className = 'menu__item cselect__option';
+        item.setAttribute('role', 'option');
+        item.setAttribute('aria-selected', String(option.selected));
+        item.disabled = option.disabled;
+        const text = document.createElement('span');
+        text.textContent = option.textContent;
+        item.append(text, Portal.icon('check'));
+        item.addEventListener('click', () => choose(option));
+        list.appendChild(item);
+      });
+      document.body.appendChild(list);
+      const box = button.getBoundingClientRect();
+      list.style.minWidth = `${box.width}px`;
+      const below = box.bottom + 4 + list.offsetHeight <= window.innerHeight;
+      list.style.top = `${Math.max(8, below ? box.bottom + 4 : box.top - list.offsetHeight - 4)}px`;
+      list.style.left = `${Math.max(8, Math.min(box.left, window.innerWidth - list.offsetWidth - 8))}px`;
+      button.setAttribute('aria-expanded', 'true');
+      openList = { list, button };
+      (list.querySelector('[aria-selected="true"]') || list.querySelector('.menu__item:not(:disabled)'))?.focus();
+    };
+    button.addEventListener('click', open);
+    button.addEventListener('keydown', (event) => {
+      if (['ArrowDown', 'ArrowUp', 'Enter', ' '].includes(event.key)) { event.preventDefault(); open(); }
+    });
+  }
+  document.addEventListener('keydown', (event) => {
+    if (!openList) return;
+    const items = Array.from(openList.list.querySelectorAll('.menu__item:not(:disabled)'));
+    const index = items.indexOf(document.activeElement);
+    if (event.key === 'Escape') { event.preventDefault(); closeList(); }
+    else if (event.key === 'ArrowDown') { event.preventDefault(); items[Math.min(items.length - 1, index + 1)]?.focus(); }
+    else if (event.key === 'ArrowUp') { event.preventDefault(); items[Math.max(0, index - 1)]?.focus(); }
+    else if (event.key === 'Tab') closeList(false);
+    else if (event.key.length === 1) items.find((i) => i.textContent.trim().toLowerCase().startsWith(event.key.toLowerCase()))?.focus();
+  });
+  document.addEventListener('click', (event) => {
+    if (openList && !openList.list.contains(event.target) && !openList.button.contains(event.target)) closeList(false);
+  });
+  document.addEventListener('scroll', (event) => { if (openList && !openList.list.contains(event.target)) closeList(false); }, true);
+  window.addEventListener('resize', () => closeList(false));
+  const enhanceAll = (scope = document) => scope.querySelectorAll('select.select').forEach(enhanceSelect);
+  Portal.enhanceSelects = enhanceAll;
+  enhanceAll();
+
   /* Table labels: copy each column header onto its cells (data-label) so rows can stack on phones. */
   function labelTables(scope = document) {
     scope.querySelectorAll('table.table').forEach((table) => {
@@ -190,7 +306,7 @@
   new MutationObserver(() => {
     if (labelQueued) return;
     labelQueued = true;
-    requestAnimationFrame(() => { labelQueued = false; labelTables(); });
+    requestAnimationFrame(() => { labelQueued = false; labelTables(); enhanceAll(); });
   }).observe(document.body, { childList: true, subtree: true });
   labelTables();
 })();

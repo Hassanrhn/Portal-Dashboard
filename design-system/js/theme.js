@@ -32,14 +32,14 @@
     });
   }
 
-  function setTheme(theme, { animate = true } = {}) {
+  function setTheme(theme, { animate = true, persist = true } = {}) {
     if (!THEMES.includes(theme)) return;
     if (animate) {
       root.classList.add('is-theming');
       window.setTimeout(() => root.classList.remove('is-theming'), 260);
     }
     root.dataset.theme = theme;
-    Portal.store.set('theme', theme);
+    if (persist) Portal.store.set('theme', theme); // preview-only changes (design system tabs) must not change the app
     syncSwitches(theme);
   }
 

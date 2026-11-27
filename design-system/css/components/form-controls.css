@@ -70,3 +70,15 @@
 .phone-field { display: flex; min-width: 0; }
 .phone-field .select { width: auto; flex-shrink: 0; border-radius: var(--input-radius) 0 0 var(--input-radius); border-right: 0; }
 .phone-field .input { flex: 1; min-width: 0; border-radius: 0 var(--input-radius) var(--input-radius) 0; }
+
+/* Custom select (components.js): button looks like .select, list reuses .menu */
+.cselect__native { position: absolute !important; width: 1px !important; height: 1px !important; opacity: 0; pointer-events: none; }
+.cselect { display: inline-flex; align-items: center; min-width: 0; text-align: left; }
+.cselect__label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cselect[aria-expanded="true"] { border-color: var(--input-border-focus); }
+.cselect:disabled { opacity: 0.5; cursor: not-allowed; }
+.cselect__list { max-height: min(320px, 60vh); overflow-y: auto; }
+.cselect__option { align-items: center; justify-content: space-between; }
+.cselect__option svg { opacity: 0; color: var(--accent-solid); }
+.cselect__option[aria-selected="true"] { font-weight: var(--font-weight-medium); }
+.cselect__option[aria-selected="true"] svg { opacity: 1; }

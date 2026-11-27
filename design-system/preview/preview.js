@@ -95,7 +95,7 @@
   /* Theme tabs */
   const themeTabs = $('[data-preview-theme]');
   themeTabs.portalSelect?.(Portal.theme.get());
-  themeTabs.addEventListener('segmented:change', (event) => Portal.theme.set(event.detail.value));
+  themeTabs.addEventListener('segmented:change', (event) => Portal.theme.set(event.detail.value, { persist: false }));
 
   /* Header demo: Test mode switch */
   const env = $('[data-pv-env]');
