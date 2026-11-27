@@ -22,6 +22,13 @@
   const filters = { q: '', status: 'all', method: '', eventQ: '' };
   const kv = (pairs) => el('dl', { className: 'kv' }, pairs.flatMap(([k, v]) => [el('dt', { text: k }), el('dd', {}, [v])]));
   const maskKey = (id) => `${id.slice(0, id.lastIndexOf('_') + 1)}…${id.slice(-4)}`;
+  /** Masked key ID on screen; the copy button copies the full key ID (never a secret). */
+  function keyIdCopy(id) {
+    const node = Portal.copyable(id, { label: 'Copy key ID' });
+    node.firstChild.textContent = maskKey(id);
+    node.firstChild.classList.add('u-muted');
+    return node;
+  }
   const inClass = (code, cls) => code >= STATUS_CLASS[cls][0] && code < STATUS_CLASS[cls][1];
 
   function codeBadge(code) {
@@ -129,8 +136,8 @@
           ['Request ID', Portal.copyable(r.id)],
           ['Status', codeBadge(r.status)],
           ['Duration', `${fmt.count(r.duration)} ms`],
-          ['API key', el('span', {}, [r.keyName, el('span', { className: 'u-mono u-muted', text: ` ${maskKey(r.keyId)}` })])],
-          ['Source IP', el('span', { className: 'u-mono', text: r.ip })],
+          ['API key', el('span', { className: 'key-id' }, [r.keyName, keyIdCopy(r.keyId)])],
+          ['Source IP', Portal.copyable(r.ip, { label: 'Copy IP address' })],
           ['Time', `${fmt.dateTime(r.time)} UTC`],
         ]),
       ]),

@@ -34,6 +34,16 @@
   const newSecret = () => `whsec_${randomString(32)}`;
   const maskSecret = (secret) => `whsec_${'•'.repeat(12)}${secret.slice(-4)}`;
   const kv = (pairs) => el('dl', { className: 'kv' }, pairs.flatMap(([k, v]) => [el('dt', { text: k }), el('dd', {}, [v])]));
+  /** Copy button for a secret: shared copy animation, and a toast that never echoes the value. */
+  const secretCopyButton = (secret) => el('button', {
+    className: 'copy__btn', attrs: { type: 'button', 'data-copy': secret, 'data-copy-toast': 'Signing secret copied to the clipboard', 'aria-label': 'Copy signing secret' },
+  }, [iconEl('copy', 'icon-copy'), iconEl('check', 'icon-check')]);
+  function urlCopy(url) {
+    const node = Portal.copyable(url, { label: 'Copy endpoint URL' });
+    node.firstChild.classList.add('endpoint-url');
+    node.firstChild.title = url;
+    return node;
+  }
   const statusBadge = (status) => (status === 'failing' ? Portal.badge('failed', 'Failing') : Portal.badge(status));
   const deliveryBadge = (status) => (status === 'dead' ? Portal.badge('dead', 'Dead-lettered') : Portal.badge(status));
 
@@ -90,7 +100,7 @@
     rowLabel: (e) => `endpoint ${e.url}`,
     empty: { icon: 'webhook', title: 'No endpoints yet', text: 'Add an https endpoint to get payment and card events pushed to your server.', action: btn('Add endpoint', { variant: 'primary', iconName: 'plus', onClick: () => openForm() }) },
     columns: [
-      { label: 'Endpoint', render: (e) => el('span', { className: 'endpoint-cell' }, [el('span', { className: 'u-mono endpoint-url', text: e.url, attrs: { title: e.url } }), e.description ? el('span', { className: 'cell-sub', text: e.description }) : null]) },
+      { label: 'Endpoint', render: (e) => el('span', { className: 'endpoint-cell' }, [urlCopy(e.url), e.description ? el('span', { className: 'cell-sub', text: e.description }) : null]) },
       { label: 'Events', render: (e) => eventChips(e.events) },
       { label: 'Status', render: (e) => statusBadge(e.status) },
       { label: '7-day success', num: true, render: (e) => { const r = stats(e).rate; return el('span', { className: r === null ? 'u-muted' : '', text: r === null ? 'No deliveries' : `${r.toFixed(1)}%` }); } },
@@ -156,8 +166,8 @@
 
   function openForm(endpoint) {
     const editing = Boolean(endpoint);
-    const url = el('input', { className: 'input input--mono', attrs: { id: 'wh-url', type: 'url', inputmode: 'url', maxlength: '2048', autocomplete: 'off', spellcheck: 'false', placeholder: 'https://api.example.com/webhooks', value: endpoint?.url } });
-    const description = el('input', { className: 'input', attrs: { id: 'wh-desc', maxlength: '120', autocomplete: 'off', placeholder: 'e.g. Production order service', value: endpoint?.description } });
+    const url = el('input', { className: 'input input--mono', attrs: { id: 'wh-url', type: 'url', inputmode: 'url', maxlength: '2048', autocomplete: 'off', spellcheck: 'false', placeholder: 'https://api.yourcompany.com/webhooks/portal', value: endpoint?.url } });
+    const description = el('input', { className: 'input', attrs: { id: 'wh-desc', maxlength: '120', autocomplete: 'off', placeholder: 'Production order service', value: endpoint?.description } });
     const groups = el('div', { className: 'event-groups' }, Object.keys(EVENT_GROUPS).map((name) => eventGroup(name, endpoint?.events || [])));
     const drawer = Portal.drawer.open({ title: editing ? 'Edit endpoint' : 'Add endpoint', subtitle: editing ? endpoint.url : 'Events are signed with a secret you can verify on your server.' });
     drawer.setBody(el('div', { className: 'form-grid' }, [
@@ -197,6 +207,7 @@
   /** Shows the new endpoint's signing secret once inside the drawer; Done unlocks after acknowledging. */
   function showNewSecret(drawer, endpoint) {
     const field = el('input', { className: 'input input--mono', attrs: { readonly: true, value: endpoint.secret, autocomplete: 'off', spellcheck: 'false', 'aria-label': 'Signing secret' } });
+    const copy = secretCopyButton(endpoint.secret);
     const ack = el('input', { attrs: { type: 'checkbox' } });
     const done = btn('Done', { variant: 'primary', attrs: { disabled: true }, onClick: () => drawer.close() });
     const guard = (event) => {
@@ -207,7 +218,7 @@
     };
     window.addEventListener('cancel', guard, true);
     drawer.el.addEventListener('click', guard);
-    drawer.el.addEventListener('close', () => { window.removeEventListener('cancel', guard, true); field.value = ''; });
+    drawer.el.addEventListener('close', () => { window.removeEventListener('cancel', guard, true); field.value = ''; copy.removeAttribute('data-copy'); });
     drawer.el.querySelector('.drawer__head [data-dialog-close]').hidden = true;
     ack.addEventListener('change', () => { done.disabled = !ack.checked; });
     drawer.setTitle('Endpoint added');
@@ -215,23 +226,13 @@
       el('p', { className: 'note note--success' }, [iconEl('check-circle'), el('span', { text: `Events will be sent to ${endpoint.url}.` })]),
       el('section', { className: 'drawer__section' }, [
         el('h3', { className: 'drawer__section-title', text: 'Signing secret' }),
-        el('div', { className: 'secret-field' }, [field, btn('Copy', { iconName: 'copy', onClick: () => copySecret(endpoint.secret, field) })]),
+        el('div', { className: 'input-group input-group--trailing' }, [field, el('span', { className: 'input-group__action' }, [copy])]),
         el('p', { className: 'field__help', text: 'Verify the Webhook-Signature header of every request with this secret.' }),
       ]),
       el('p', { className: 'banner' }, [iconEl('alert'), el('span', { text: 'This is the only time the full secret is shown here. You can reveal it briefly later from the endpoint.' })]),
       el('label', { className: 'check' }, [ack, el('span', { text: "I've stored this secret safely" })]),
     ]);
     drawer.setFooter([done]);
-  }
-
-  async function copySecret(secret, field) {
-    try {
-      await navigator.clipboard.writeText(secret);
-      Portal.toast('Signing secret copied to the clipboard');
-    } catch {
-      field?.select();
-      Portal.toast('Copy is blocked in this browser. Select the text instead.', { icon: 'alert' });
-    }
   }
 
   /* Endpoint detail drawer ---------------------------------------------------------------------- */
@@ -260,12 +261,13 @@
 
   function renderOverview(ctx) {
     const { endpoint } = ctx;
-    const secretText = el('span', { className: 'u-mono', text: maskSecret(endpoint.secret) });
-    const reveal = btn('Reveal', { size: 'sm', variant: 'ghost', iconName: 'eye', onClick: () => revealFor(ctx, secretText, reveal) });
+    const secretText = el('span', { className: 'secret-row__value u-mono', text: maskSecret(endpoint.secret) });
+    const reveal = btn('Reveal', { size: 'sm', variant: 'ghost', iconName: 'eye', attrs: { 'data-reveal': '' }, onClick: () => revealFor(ctx, secretText, reveal) });
     const rotate = btn('Rotate', { size: 'sm', variant: 'ghost', iconName: 'rotate', onClick: () => rotateSecret(ctx) });
     ctx.overview.replaceChildren(
       kv([
-        ['URL', el('span', { className: 'u-mono', text: endpoint.url })],
+        ['URL', Portal.copyable(endpoint.url, { label: 'Copy endpoint URL' })],
+        ['Endpoint ID', Portal.copyable(endpoint.id, { label: 'Copy endpoint ID' })],
         ['Status', statusBadge(endpoint.status)],
         ['Created', fmt.date(endpoint.created)],
         ['Signing secret', el('span', { className: 'secret-row' }, [secretText, el('span', { className: 'secret-row__actions' }, [reveal, rotate])])],
@@ -278,10 +280,10 @@
     );
   }
 
-  /** Shows the full signing secret for REVEAL_SECONDS, then masks it again. */
-  function revealFor(ctx, textNode, button) {
+  /** Shows the full signing secret (with a copy button) for REVEAL_SECONDS, then masks it again. */
+  function revealFor(ctx, slot, button) {
     let left = REVEAL_SECONDS;
-    textNode.textContent = ctx.endpoint.secret;
+    slot.replaceChildren(ctx.endpoint.secret, secretCopyButton(ctx.endpoint.secret));
     button.disabled = true;
     const tick = () => { button.lastChild.textContent = `Hides in ${left} s`; };
     tick();
@@ -290,7 +292,7 @@
       left -= 1;
       if (left > 0) { tick(); return; }
       window.clearInterval(ctx.timer);
-      textNode.textContent = maskSecret(ctx.endpoint.secret);
+      slot.replaceChildren(maskSecret(ctx.endpoint.secret));
       button.lastChild.textContent = 'Reveal';
       button.disabled = false;
     }, 1000);
@@ -307,7 +309,7 @@
     window.clearInterval(ctx.timer);
     renderOverview(ctx);
     const row = ctx.overview.querySelector('.secret-row');
-    revealFor(ctx, row.firstChild, row.querySelector('button'));
+    revealFor(ctx, row.querySelector('.secret-row__value'), row.querySelector('[data-reveal]'));
     Portal.toast('Signing secret rotated. Copy the new one now.');
   }
 

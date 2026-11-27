@@ -1,19 +1,19 @@
-/* Contact support: two-column layout, ticket rows, conversation thread. Tokens only. */
-.support { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: var(--layout-grid-gap); align-items: start; }
-.support > .card .card__head + .card__body, .support .stack .card__body { padding-top: var(--space-16); }
-.support__priority { width: fit-content; }
-.support__submit { display: flex; justify-content: flex-end; }
-.support__ticket { padding: 0; }
-.support__ticket-btn { display: flex; align-items: center; justify-content: space-between; gap: var(--space-12); width: 100%; min-height: var(--table-row-height); padding: var(--space-8) var(--space-12); text-align: left; transition: background-color var(--motion-fast) var(--motion-ease); }
+/* Contact support: one column of cards, ticket rows, contact tiles, conversation thread. Tokens only. */
+.support .card__body { padding-top: var(--space-12); }
+.support .rows__item { padding-inline: 0; }
+.support__ticket-btn { display: flex; align-items: center; justify-content: space-between; gap: var(--space-12); width: calc(100% + var(--space-16)); min-height: var(--table-row-height); margin: calc(var(--space-8) * -1); padding: var(--space-8); border-radius: var(--radius-8); text-align: left; transition: background-color var(--motion-fast) var(--motion-ease); }
 .support__ticket-btn:hover { background: var(--bg-hover); }
 .support__ticket-btn:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: calc(var(--focus-ring-width) * -1); }
 .support__ticket-btn .rows__meta { flex-wrap: nowrap; color: var(--text-tertiary); }
 .support__subject { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: var(--font-weight-medium); }
+.support__contact-title { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-8); }
+.support__office { display: inline-flex; align-items: center; gap: var(--space-6); }
 .support__ticket-meta { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-8); }
-.support__thread { display: grid; gap: var(--space-12); margin: 0; padding: 0; list-style: none; }
-.support__message { display: grid; gap: var(--space-6); padding: var(--space-12); border: var(--border-width) solid var(--border-default); border-radius: var(--radius-8); }
-.support__message--staff { background: var(--bg-sidebar); }
+.support__thread { display: grid; margin: 0; padding: 0; list-style: none; }
+.support__message { display: grid; gap: var(--space-6); padding: var(--space-12) 0; border-top: var(--border-width) solid var(--border-subtle); }
+.support__message:first-child { padding-top: 0; border-top: 0; }
 .support__message-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-8); flex-wrap: wrap; }
 .support__message-text { font-size: var(--font-size-14); white-space: pre-wrap; overflow-wrap: anywhere; }
-@media (max-width: 1100px) { .support { grid-template-columns: minmax(0, 1fr); } }
-@media (max-width: 600px) { .support__priority { width: 100%; } .support__priority .segmented__option { flex: 1; justify-content: center; } .support__submit .btn { width: 100%; } }
+@media (max-width: 600px) {
+  .support .rows__item:has(.table__lead) { flex-wrap: wrap; }
+}

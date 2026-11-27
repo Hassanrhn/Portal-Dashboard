@@ -45,15 +45,25 @@
           <section class="card settings" aria-label="Organization">
             <div class="setting">
               <div><label class="setting__title" for="org-display">Display name</label><p class="setting__desc">Shown to your team in Portal and on receipts.</p></div>
-              <div class="setting__control field"><input class="input" id="org-display" name="displayName" maxlength="60" value="The Orange Card"></div>
+              <div class="setting__control field"><input class="input" id="org-display" name="displayName" maxlength="60" value="The Orange Card" placeholder="The Orange Card"></div>
             </div>
             <div class="setting">
               <div><label class="setting__title" for="org-legal">Legal name</label><p class="setting__desc">Used on statements and invoices.</p></div>
-              <div class="setting__control field"><input class="input" id="org-legal" name="legalName" maxlength="120" value="Orange Card Payments FZ-LLC"></div>
+              <div class="setting__control field"><input class="input" id="org-legal" name="legalName" maxlength="120" value="Orange Card Payments FZ-LLC" placeholder="Orange Card Payments FZ-LLC"></div>
             </div>
             <div class="setting">
               <div><label class="setting__title" for="org-email">Support email</label><p class="setting__desc">Customers see this on hosted payment pages.</p></div>
-              <div class="setting__control field"><input class="input" id="org-email" name="supportEmail" type="email" inputmode="email" maxlength="120" value="help@theorangecard.com"></div>
+              <div class="setting__control field"><input class="input" id="org-email" name="supportEmail" type="email" inputmode="email" maxlength="120" value="help@theorangecard.com" placeholder="help@yourcompany.com"></div>
+            </div>
+            <div class="setting">
+              <div><label class="setting__title" for="org-country">Country of registration</label><p class="setting__desc">Where the legal entity is registered. Shown on statements and invoices.</p></div>
+              <div class="setting__control field"><select class="select" id="org-country" name="country" data-country-select data-value="AE"></select></div>
+            </div>
+            <div class="setting">
+              <div><label class="setting__title" for="org-phone">Support phone</label><p class="setting__desc">Shown next to the support email on hosted payment pages.</p></div>
+              <div class="setting__control field">
+                <div class="phone-row"><select class="select" id="org-dial" name="phoneCountry" aria-label="Country code" data-dial-select data-value="AE"></select><input class="input" id="org-phone" name="phone" type="tel" inputmode="tel" maxlength="15" autocomplete="off" value="4 556 2100" placeholder="4 556 2100"></div>
+              </div>
             </div>
             <div class="setting">
               <div><label class="setting__title" for="org-tz">Timezone</label><p class="setting__desc">Used for reports and daily summaries. Timestamps in the API are always UTC.</p></div>
@@ -102,7 +112,7 @@
             </div>
             <div class="setting setting--stack">
               <div><label class="setting__title" for="sec-ips">IP allowlist</label><p class="setting__desc">One IPv4 address or CIDR range per line. Leave empty to allow sign-in from anywhere. Applies to Portal, not the API.</p></div>
-              <div class="setting__control field"><textarea class="input textarea input--mono" id="sec-ips" name="ipAllowlist" rows="4" maxlength="2000" spellcheck="false" autocomplete="off" placeholder="94.200.18.0/24">94.200.18.0/24
+              <div class="setting__control field"><textarea class="input textarea input--mono" id="sec-ips" name="ipAllowlist" rows="4" maxlength="2000" spellcheck="false" autocomplete="off" placeholder="94.200.18.0/24&#10;81.2.69.160">94.200.18.0/24
 81.2.69.160</textarea></div>
             </div>
           </section>
@@ -124,20 +134,20 @@
           <section class="card settings" aria-label="Checkout redirects">
             <div class="setting">
               <div><label class="setting__title" for="co-success">Success redirect URL</label><p class="setting__desc">Where customers land after a hosted payment page succeeds. HTTPS only.</p></div>
-              <div class="setting__control field"><input class="input" id="co-success" name="successUrl" type="url" inputmode="url" maxlength="300" value="https://shop.theorangecard.com/checkout/success"></div>
+              <div class="setting__control field"><input class="input" id="co-success" name="successUrl" type="url" inputmode="url" maxlength="300" value="https://shop.theorangecard.com/checkout/success" placeholder="https://shop.yourcompany.com/checkout/success"></div>
             </div>
             <div class="setting">
               <div><label class="setting__title" for="co-cancel">Cancel redirect URL</label><p class="setting__desc">Where customers go if they leave or the payment fails. HTTPS only.</p></div>
-              <div class="setting__control field"><input class="input" id="co-cancel" name="cancelUrl" type="url" inputmode="url" maxlength="300" value="https://shop.theorangecard.com/checkout/cancelled"></div>
+              <div class="setting__control field"><input class="input" id="co-cancel" name="cancelUrl" type="url" inputmode="url" maxlength="300" value="https://shop.theorangecard.com/checkout/cancelled" placeholder="https://shop.yourcompany.com/checkout/cancelled"></div>
             </div>
             <div class="setting setting--stack">
               <div><label class="setting__title" for="co-domains">Allowed return domains</label><p class="setting__desc">A per-payment <code class="u-mono">returnUrl</code> must use one of these domains. One per line.</p></div>
-              <div class="setting__control field"><textarea class="input textarea input--mono" id="co-domains" name="returnDomains" rows="3" maxlength="1000" spellcheck="false" autocomplete="off">shop.theorangecard.com
+              <div class="setting__control field"><textarea class="input textarea input--mono" id="co-domains" name="returnDomains" rows="3" maxlength="1000" spellcheck="false" autocomplete="off" placeholder="shop.yourcompany.com&#10;app.yourcompany.com">shop.theorangecard.com
 app.theorangecard.com</textarea></div>
             </div>
             <div class="setting setting--stack">
               <div><p class="setting__title">Redirect preview</p><p class="setting__desc">After a successful payment, the customer is sent to:</p></div>
-              <div class="setting__control"><span class="code redirect-preview u-mono" data-redirect-preview></span></div>
+              <div class="setting__control"><span class="redirect-preview u-mono" data-redirect-preview></span></div>
             </div>
           </section>
         </div>
@@ -149,7 +159,7 @@ app.theorangecard.com</textarea></div>
             <div class="setting">
               <div><p class="setting__title" id="rule-rate-label">Success rate drops</p><p class="setting__desc">Alert when the success rate over the last hour falls below the threshold.</p></div>
               <div class="setting__control">
-                <div class="field"><div class="input-affix input-affix--suffix"><input class="input u-num" id="rule-rate" name="successThreshold" type="text" inputmode="numeric" maxlength="2" value="90" aria-label="Success rate threshold in percent"><span class="input-affix__addon" aria-hidden="true">%</span></div></div>
+                <div class="field"><div class="input-affix input-affix--suffix"><input class="input u-num" id="rule-rate" name="successThreshold" type="text" inputmode="numeric" maxlength="2" value="90" placeholder="90" aria-label="Success rate threshold in percent"><span class="input-affix__addon" aria-hidden="true">%</span></div></div>
                 <button class="switch" type="button" role="switch" aria-checked="true" aria-labelledby="rule-rate-label" data-switch data-name="ruleRate"></button>
               </div>
             </div>
@@ -179,7 +189,7 @@ app.theorangecard.com</textarea></div>
             </div>
             <div class="setting">
               <div><label class="setting__title" for="ch-recipients">Recipients</label><p class="setting__desc">Comma-separated emails, up to 10.</p></div>
-              <div class="setting__control field"><input class="input" id="ch-recipients" name="recipients" inputmode="email" maxlength="600" value="pocket@pocket.com, ops@theorangecard.com"></div>
+              <div class="setting__control field"><input class="input" id="ch-recipients" name="recipients" inputmode="email" maxlength="600" value="pocket@pocket.com, ops@theorangecard.com" placeholder="ops@yourcompany.com, finance@yourcompany.com"></div>
             </div>
           </section>
         </div>

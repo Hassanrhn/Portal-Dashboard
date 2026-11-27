@@ -20,9 +20,9 @@
   ];
 
   const sessions = [
-    { id: 'ses_01', device: 'Chrome on macOS', location: 'Dubai, AE', ip: '94.200.18.4', lastActive: '2026-11-27T11:58:00Z', current: true },
-    { id: 'ses_02', device: 'Safari on iPhone', location: 'Dubai, AE', ip: '94.200.18.77', lastActive: '2026-11-27T07:40:00Z', current: false },
-    { id: 'ses_03', device: 'Firefox on Windows', location: 'London, GB', ip: '81.2.69.160', lastActive: '2026-11-24T16:12:00Z', current: false },
+    { id: 'ses_01', device: 'Chrome on macOS', city: 'Dubai', country: 'AE', ip: '94.200.18.4', lastActive: '2026-11-27T11:58:00Z', current: true },
+    { id: 'ses_02', device: 'Safari on iPhone', city: 'Dubai', country: 'AE', ip: '94.200.18.77', lastActive: '2026-11-27T07:40:00Z', current: false },
+    { id: 'ses_03', device: 'Firefox on Windows', city: 'London', country: 'GB', ip: '81.2.69.160', lastActive: '2026-11-24T16:12:00Z', current: false },
   ];
 
   window.Portal.data = Object.assign(window.Portal.data || {}, { team: { members, invites, sessions } });

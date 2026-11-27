@@ -12,13 +12,13 @@
 .kv .copy { min-width: 0; }
 .kv .copy > span { min-width: 0; overflow-wrap: anywhere; }
 .toolbar > .segmented { max-width: 100%; overflow-x: auto; scrollbar-width: none; }
-.link { color: var(--text-primary); text-decoration: underline; text-decoration-color: var(--border-strong); text-underline-offset: 3px; }
-.link:hover { text-decoration-color: currentColor; }
 
 /* Step 1 of "Refund a payment": selectable result list */
-.pick-list { display: grid; border: var(--border-width) solid var(--border-default); border-radius: var(--radius-8); overflow: hidden; }
-.pick { position: relative; display: flex; align-items: center; gap: var(--space-12); min-height: 56px; padding: var(--space-8) var(--space-12); border-top: var(--border-width) solid var(--border-subtle); font-size: var(--font-size-13); cursor: pointer; transition: background-color var(--motion-fast) var(--motion-ease); }
+.pick-list { display: grid; }
+.pick { position: relative; display: flex; align-items: center; gap: var(--space-12); min-height: 56px; padding: var(--space-8); border-top: var(--border-width) solid var(--border-subtle); border-radius: var(--radius-6); font-size: var(--font-size-13); cursor: pointer; transition: background-color var(--motion-fast) var(--motion-ease); }
 .pick:first-child { border-top: 0; }
+.pick:hover, .pick:has(input:checked) { border-top-color: transparent; }
+.pick:hover + .pick, .pick:has(input:checked) + .pick { border-top-color: transparent; }
 .pick:hover { background: var(--bg-hover); }
 .pick:has(input:checked) { background: var(--accent-subtle); }
 .pick:has(input:focus-visible) { outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: -2px; }

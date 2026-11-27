@@ -381,7 +381,7 @@
       b.items.length ? section(`Unmatched items (${b.items.length})`, [el('ul', { className: 'rows' }, b.items.map((item) => el('li', { className: 'rows__item' }, [
         el('span', { className: 'rows__main' }, [
           el('span', { text: item.kind }),
-          el('span', { className: 'rows__sub' }, [el('a', { className: 'link u-mono', text: item.paymentId, attrs: { href: `transactions.html?payment=${encodeURIComponent(item.paymentId)}` } }), ` · ${item.ref}`]),
+          el('span', { className: 'rows__sub' }, [el('a', { className: 'inline-link u-mono', text: item.paymentId, attrs: { href: `transactions.html?payment=${encodeURIComponent(item.paymentId)}` } }), ` · ${item.ref}`]),
         ]),
         el('span', { className: 'rows__meta' }, [el('span', { className: 'u-num', text: `−${money(item.amount, b.currency)}` })]),
       ])))]) : el('p', { className: 't-meta', text: 'Every payment in this batch matched what the provider settled.' }),

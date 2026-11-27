@@ -40,7 +40,7 @@
       <div role="tabpanel" id="panel-requests" aria-labelledby="tab-requests">
         <section class="card table-card" data-lazy="requests" aria-busy="true" aria-label="API requests">
           <div class="toolbar">
-            <div class="input-group toolbar__search"><i data-icon="search" class="input-group__icon"></i><input class="input" type="search" placeholder="Path or request ID" aria-label="Search API requests" maxlength="80" data-filter="q"></div>
+            <div class="input-group toolbar__search"><i data-icon="search" class="input-group__icon"></i><input class="input" type="search" placeholder="/payments or req_8f3a91c2e7" aria-label="Search API requests" maxlength="80" data-filter="q"></div>
             <div class="segmented segmented--sm" role="radiogroup" aria-label="Status class" data-segmented data-filter="status">
               <button class="segmented__option" type="button" role="radio" aria-checked="true" data-value="all">All <span class="segmented__count" data-count="all"></span></button>
               <button class="segmented__option" type="button" role="radio" aria-checked="false" data-value="2xx">2xx <span class="segmented__count" data-count="2xx"></span></button>
@@ -65,7 +65,7 @@
       <div role="tabpanel" id="panel-events" aria-labelledby="tab-events" hidden>
         <section class="card table-card" data-lazy="events" aria-busy="true" aria-label="Events">
           <div class="toolbar">
-            <div class="input-group toolbar__search"><i data-icon="search" class="input-group__icon"></i><input class="input" type="search" placeholder="Event type or object ID" aria-label="Search events" maxlength="80" data-filter="event-q"></div>
+            <div class="input-group toolbar__search"><i data-icon="search" class="input-group__icon"></i><input class="input" type="search" placeholder="payment.status_updated or req_…" aria-label="Search events" maxlength="80" data-filter="event-q"></div>
             <span class="toolbar__spacer"></span>
             <a class="btn btn--ghost btn--sm" href="webhooks.html">Manage webhooks<i data-icon="arrow-right"></i></a>
           </div>

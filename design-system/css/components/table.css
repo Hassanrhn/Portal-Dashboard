@@ -58,7 +58,7 @@
   .table tbody tr:last-child { border-bottom: 0; }
   .table tbody td, .table-card .table tbody td:first-child, .table-card .table tbody td:last-child { display: flex; align-items: center; justify-content: space-between; gap: var(--space-12); height: auto; min-height: 28px; padding: var(--space-2) 0; border: 0; white-space: normal; text-align: right; }
   .table td[data-label]::before { content: attr(data-label); flex-shrink: 0; color: var(--text-secondary); font-size: var(--font-size-12); text-align: left; }
-  .table td.cell-actions { justify-content: flex-end; width: auto; }
+  .table td.cell-actions, .table-card .table tbody td.cell-actions { justify-content: flex-end; width: auto; }
   .table td.cell-actions::before { display: none; }
   .table-wrap { overflow: visible; }
 }

@@ -187,7 +187,7 @@
   }
 
   function refundForm(p, drawer) {
-    const amount = el('input', { className: 'input u-num', attrs: { id: 'rf-amount', inputmode: 'decimal', value: p.amount, maxlength: '12', disabled: true } });
+    const amount = el('input', { className: 'input u-num', attrs: { id: 'rf-amount', inputmode: 'decimal', value: p.amount, placeholder: p.amount, maxlength: '12', disabled: true } });
     const reason = el('select', { className: 'select select--block', attrs: { id: 'rf-reason' } }, ['Requested by customer', 'Duplicate payment', 'Fraudulent', 'Other'].map((r) => el('option', { text: r })));
     const type = el('div', { className: 'radio-cards radio-cards--2', attrs: { role: 'radiogroup', 'aria-label': 'Refund type' } }, [['full', 'Full refund', `${fmt.money(p.amount)} ${p.currency}`], ['partial', 'Partial refund', 'Choose an amount']].map(([v, t, d]) => el('label', { className: 'radio-card' }, [
       el('input', { attrs: { type: 'radio', name: 'refund-type', value: v, checked: v === 'full' } }),

@@ -19,6 +19,22 @@
   const form = $('[data-settings-form]');
   const tabs = $('[data-tabs]');
   const lines = (value) => value.split(/[\n,]+/).map((v) => v.trim()).filter(Boolean);
+  const PHONE = /^[0-9 ]{6,15}$/;
+
+  /* Country and phone selects (flag + name, flag + dial code), filled before the dirty snapshot -- */
+  function fillSelect(select, label) {
+    select.replaceChildren(...Portal.countries.map((c) => el('option', { text: label(c), attrs: { value: c.code, selected: c.code === select.dataset.value } })));
+  }
+  fillSelect($('[data-country-select]'), (c) => `${c.flag} ${c.name}`);
+  fillSelect($('[data-dial-select]'), (c) => `${c.flag} ${c.dial}`);
+
+  /** Flag + text; the flag is decorative because the text already names the country. */
+  function withFlag(code, text) {
+    const flag = Portal.flag(code);
+    flag.setAttribute('aria-hidden', 'true');
+    return el('span', { className: 'with-flag' }, [flag, text]);
+  }
+  const place = (s) => `${s.city}, ${Portal.countries.find((c) => c.code === s.country)?.name || s.country}`;
 
   /* Validation ------------------------------------------------------------------------- */
   function isIpv4OrCidr(value) {
@@ -47,6 +63,7 @@
     ['org', 'org-display', (v) => (v.trim() ? '' : 'Enter a display name.')],
     ['org', 'org-legal', (v) => (v.trim().length >= 2 ? '' : 'Enter the legal name of your company.')],
     ['org', 'org-email', (v) => (EMAIL.test(v.trim()) ? '' : 'Enter a valid email, such as help@company.com.')],
+    ['org', 'org-phone', (v) => (PHONE.test(v.trim()) ? '' : 'Enter 6 to 15 digits, without the country code.')],
     ['security', 'sec-ips', (v) => {
       const bad = lines(v).filter((line) => !isIpv4OrCidr(line));
       return bad.length ? `Not a valid IPv4 address or CIDR range: ${bad.slice(0, 3).join(', ')}${bad.length > 3 ? '…' : ''}` : '';
@@ -88,7 +105,11 @@
     if (httpsUrlError(value)) { preview.replaceChildren(el('span', { className: 'u-muted', text: 'Enter a valid https success URL to see the redirect.' })); return; }
     const url = new URL(value);
     const query = `${url.search ? '&' : '?'}requestId=${SAMPLE_REQUEST_ID}&status=PAID`;
-    preview.replaceChildren(`${url.origin}${url.pathname}${url.search}`, el('span', { className: 'redirect-preview__query', text: query }));
+    const full = `${url.origin}${url.pathname}${url.search}${query}`;
+    preview.replaceChildren(
+      el('span', {}, [`${url.origin}${url.pathname}${url.search}`, el('span', { className: 'redirect-preview__query', text: query })]),
+      el('button', { className: 'copy__btn', attrs: { type: 'button', 'data-copy': full, 'aria-label': 'Copy redirect URL' } }, [Portal.iconEl('copy', 'icon-copy'), Portal.iconEl('check', 'icon-check')]),
+    );
   }
   $('#co-success').addEventListener('input', renderPreview);
   $('[data-save-bar] [data-discard]').addEventListener('click', renderPreview);
@@ -101,11 +122,11 @@
     $('[data-sessions]').replaceChildren(...sessions.map((s) => el('li', { className: 'rows__item' }, [
       el('span', { className: 'rows__main' }, [
         el('span', { text: s.device }),
-        el('span', { className: 'rows__sub', text: `${s.location} · ${s.ip}` }),
+        el('span', { className: 'rows__sub' }, [withFlag(s.country, place(s)), ` · ${s.ip}`]),
       ]),
       el('span', { className: 'rows__meta' }, [
         el('span', { className: 'u-muted', text: s.current ? 'Active now' : fmt.relative(s.lastActive, NOW) }),
-        s.current ? Portal.badge('active', 'This device') : btn('Sign out', { size: 'sm', onClick: () => signOut(s), attrs: { 'aria-label': `Sign out ${s.device} in ${s.location}` } }),
+        s.current ? Portal.badge('active', 'This device') : btn('Sign out', { size: 'sm', onClick: () => signOut(s), attrs: { 'aria-label': `Sign out ${s.device} in ${place(s)}` } }),
       ]),
     ])));
   }
@@ -114,7 +135,7 @@
     const ok = await Portal.confirm({
       title: 'Sign out this session?', confirmLabel: 'Sign out',
       message: 'Whoever is using it has to sign in again with their password and two-factor code.',
-      details: [['Device', session.device], ['Location', `${session.location} · ${session.ip}`]],
+      details: [['Device', session.device], ['Location', `${Portal.flagEmoji(session.country)} ${place(session)} · ${session.ip}`]],
     });
     if (!ok) return;
     sessions.splice(sessions.indexOf(session), 1);

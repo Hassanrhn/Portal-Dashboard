@@ -16,7 +16,7 @@
 .date-range[hidden] { display: none; }
 .switch-row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-16); }
 .kv .copy { min-width: 0; }
-.link { color: var(--text-primary); text-decoration: underline; text-decoration-color: var(--border-strong); text-underline-offset: 3px; }
-.link:hover { text-decoration-color: currentColor; }
 /* Work-around: shared .drawer__body grid rows shrink to fit instead of scrolling when content is taller than the drawer. */
 .drawer__body { grid-auto-rows: max-content; }
+/* Work-around: shared stacked-table rule outranks td.cell-actions, so row actions sit left on phones. */
+@media (max-width: 600px) { .table-card .table tbody td.cell-actions { justify-content: flex-end; } }
