@@ -468,7 +468,7 @@
     ['route', 'currency'].forEach((kind) => {
       const host = $(`[data-share="${kind}"]`);
       if (!host.shareRows) { Portal.lazy.reload(`share-${kind}`); return; }
-      request(Number(range.total)).then((total) => { if (token === rangeRequest) renderShare(host, data.shares[kind], total); });
+      request(Number(range.total)).then((total) => { if (token === rangeRequest) renderShare(host, (currentRange().shares || data.shares)[kind], total); });
     });
   }
 
@@ -484,7 +484,7 @@
   });
   ['route', 'currency'].forEach((kind) => Portal.lazy.register(`share-${kind}`, {
     fetch: () => request(Number(currentRange().total)),
-    render: (total) => renderShare($(`[data-share="${kind}"]`), data.shares[kind], total),
+    render: (total) => renderShare($(`[data-share="${kind}"]`), (currentRange().shares || data.shares)[kind], total),
   }));
   Portal.lazy.register('payments', { fetch: () => request(data.payments), render: () => renderPayments(state.status) });
 
