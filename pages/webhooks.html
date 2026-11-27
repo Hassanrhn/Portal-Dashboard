@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en" data-theme="light" data-env="live">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Webhooks · Portal</title>
+  <link rel="stylesheet" href="../design-system/css/portal.css">
+  <link rel="stylesheet" href="css/webhooks.css">
+  <script src="../design-system/js/theme.js"></script>
+  <script src="../design-system/js/icons.js" defer></script>
+  <script src="../design-system/js/dom.js" defer></script>
+  <script src="js/layout.js" defer></script>
+  <script src="../design-system/js/components.js" defer></script>
+  <script src="../design-system/js/patterns.js" defer></script>
+  <script src="../design-system/js/lazy.js" defer></script>
+  <script src="js/data/developers.js" defer></script>
+  <script src="js/webhooks.js" defer></script>
+  <script src="js/create-payment.js" defer></script>
+  <script src="../design-system/js/shell.js" defer></script>
+</head>
+<body data-page="webhooks">
+<div class="app" data-app>
+  <div class="main">
+    <main class="page" id="main">
+      <div class="page__head">
+        <div>
+          <h1 class="t-title">Webhooks</h1>
+          <p class="page__sub">Each event is sent once to every enabled endpoint subscribed to it. Select an endpoint to see deliveries and retry failed ones.</p>
+        </div>
+        <div class="page__actions">
+          <span class="toolbar__count" data-endpoint-count aria-live="polite"></span>
+          <button class="btn btn--primary btn--lg" type="button" data-add-endpoint aria-describedby="endpoint-limit"><i data-icon="plus"></i>Add endpoint</button>
+        </div>
+        <p class="t-meta endpoint-limit" id="endpoint-limit" data-limit-note hidden>You have reached the limit of 10 endpoints. Delete one to add another.</p>
+      </div>
+
+      <div class="stack">
+        <section class="kpi-strip" aria-label="Deliveries in the last 24 hours" data-lazy="webhook-kpis" aria-busy="true">
+          <div class="kpi">
+            <p class="kpi__label">Deliveries (24 h)</p>
+            <div class="skeleton-stack kpi__skeleton" data-skeleton><span class="skeleton skeleton--figure"></span><span class="skeleton skeleton--text"></span></div>
+            <div data-lazy-content>
+              <p class="kpi__value t-figure" data-kpi="total">0</p>
+              <p class="kpi__meta" data-kpi-meta="total"></p>
+            </div>
+          </div>
+          <div class="kpi">
+            <p class="kpi__label">Success rate (24 h)</p>
+            <div class="skeleton-stack kpi__skeleton" data-skeleton><span class="skeleton skeleton--figure"></span><span class="skeleton skeleton--text"></span></div>
+            <div data-lazy-content>
+              <p class="kpi__value t-figure" data-kpi="rate">0</p>
+              <p class="kpi__meta" data-kpi-meta="rate"></p>
+            </div>
+          </div>
+          <div class="kpi">
+            <p class="kpi__label">Retrying</p>
+            <div class="skeleton-stack kpi__skeleton" data-skeleton><span class="skeleton skeleton--figure"></span><span class="skeleton skeleton--text"></span></div>
+            <div data-lazy-content>
+              <p class="kpi__value t-figure" data-kpi="retrying">0</p>
+              <p class="kpi__meta" data-kpi-meta="retrying"></p>
+            </div>
+          </div>
+          <div class="kpi">
+            <p class="kpi__label">Dead-lettered</p>
+            <div class="skeleton-stack kpi__skeleton" data-skeleton><span class="skeleton skeleton--figure"></span><span class="skeleton skeleton--text"></span></div>
+            <div data-lazy-content>
+              <p class="kpi__value t-figure" data-kpi="dead">0</p>
+              <p class="kpi__meta" data-kpi-meta="dead"></p>
+            </div>
+          </div>
+        </section>
+
+        <section class="card table-card" data-lazy="endpoints" aria-busy="true" aria-labelledby="endpoints-title">
+          <div class="toolbar">
+            <h2 class="card__title" id="endpoints-title">Endpoints</h2>
+            <span class="toolbar__spacer"></span>
+            <span class="toolbar__count">Up to 5 attempts per delivery, then dead-lettered</span>
+          </div>
+          <div data-skeleton class="skeleton-list" data-rows="3"></div>
+          <div data-lazy-content data-table></div>
+        </section>
+      </div>
+    </main>
+  </div>
+</div>
+</body>
+</html>

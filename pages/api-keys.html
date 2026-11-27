@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en" data-theme="light" data-env="live">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex, nofollow">
+  <title>API keys · Portal</title>
+  <link rel="stylesheet" href="../design-system/css/portal.css">
+  <link rel="stylesheet" href="css/api-keys.css">
+  <script src="../design-system/js/theme.js"></script>
+  <script src="../design-system/js/icons.js" defer></script>
+  <script src="../design-system/js/dom.js" defer></script>
+  <script src="js/layout.js" defer></script>
+  <script src="../design-system/js/components.js" defer></script>
+  <script src="../design-system/js/patterns.js" defer></script>
+  <script src="../design-system/js/lazy.js" defer></script>
+  <script src="js/data/developers.js" defer></script>
+  <script src="js/api-keys.js" defer></script>
+  <script src="js/create-payment.js" defer></script>
+  <script src="../design-system/js/shell.js" defer></script>
+</head>
+<body data-page="api-keys">
+<div class="app" data-app>
+  <div class="main">
+    <main class="page" id="main">
+      <div class="page__head">
+        <div>
+          <h1 class="t-title">API keys</h1>
+          <p class="page__sub">Keys authenticate server-to-server calls with <span class="u-mono">X-Api-Key: &lt;keyId&gt;.&lt;secret&gt;</span>. Secrets are shown once, when you create or rotate a key.</p>
+        </div>
+        <div class="page__actions">
+          <a class="btn btn--lg" href="docs.html"><i data-icon="docs"></i>Authentication docs</a>
+          <button class="btn btn--primary btn--lg" type="button" data-create-key><i data-icon="plus"></i>Create key</button>
+        </div>
+      </div>
+
+      <div class="stack">
+        <p class="note"><i data-icon="info"></i><span>Members with the Finance role cannot see this page. Admins and Developers can create, rotate and revoke keys.</span></p>
+
+        <section class="card table-card" data-lazy="keys" aria-busy="true" aria-label="API keys">
+          <div class="toolbar">
+            <div class="segmented segmented--sm" role="radiogroup" aria-label="Environment" data-segmented data-filter="env">
+              <button class="segmented__option" type="button" role="radio" aria-checked="true" data-value="live">Live <span class="segmented__count" data-count="live"></span></button>
+              <button class="segmented__option" type="button" role="radio" aria-checked="false" data-value="test">Test <span class="segmented__count" data-count="test"></span></button>
+            </div>
+            <div class="input-group toolbar__search"><i data-icon="search" class="input-group__icon"></i><input class="input" type="search" placeholder="Key name or ID" aria-label="Search API keys" maxlength="80" data-filter="q"></div>
+            <span class="toolbar__spacer"></span>
+            <span class="toolbar__count" data-active-count></span>
+          </div>
+          <div data-skeleton class="skeleton-list" data-rows="6"></div>
+          <div data-lazy-content data-table></div>
+        </section>
+      </div>
+    </main>
+  </div>
+</div>
+</body>
+</html>

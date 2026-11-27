@@ -1,0 +1,18 @@
+/* Settings page: tabbed setting rows, % suffix input, redirect preview, sessions and danger zone. Tokens only. */
+.settings-tabs { margin-bottom: var(--space-24); }
+.setting__control.field { display: grid; gap: var(--space-6); justify-items: stretch; }
+.setting--stack .setting__control.field { width: 100%; }
+.setting--stack .textarea { width: 100%; }
+.setting__desc code { font-size: var(--font-size-12); }
+.input-affix--suffix .input { width: calc(var(--size-48) + var(--space-24)); border-radius: var(--input-radius) 0 0 var(--input-radius); }
+.input-affix--suffix .input-affix__addon { border-right: var(--border-width) solid var(--input-border); border-left: 0; border-radius: 0 var(--input-radius) var(--input-radius) 0; }
+.input-affix--suffix:has(.input[aria-invalid="true"]) .input-affix__addon { border-color: var(--input-border-error); }
+.setting__control .field .field__error { max-width: calc(var(--size-256) * 0.9); }
+.redirect-preview { display: block; width: 100%; padding: var(--space-10) var(--space-12); overflow-wrap: anywhere; color: var(--text-primary); }
+.redirect-preview__query { color: var(--code-string); }
+.danger-zone .setting__title { color: var(--status-danger-fg); }
+@media (max-width: 600px) {
+  .input-affix--suffix { flex: 1; }
+  .setting__control .input-affix--suffix .input { width: 100%; }
+}
+.settings > .card__head { padding-bottom: var(--space-12); }

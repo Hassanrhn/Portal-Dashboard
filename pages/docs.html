@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en" data-theme="light" data-env="live">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Docs · Portal</title>
+  <link rel="stylesheet" href="../design-system/css/portal.css">
+  <link rel="stylesheet" href="css/docs.css">
+  <script src="../design-system/js/theme.js"></script>
+  <script src="../design-system/js/icons.js" defer></script>
+  <script src="../design-system/js/dom.js" defer></script>
+  <script src="js/layout.js" defer></script>
+  <script src="../design-system/js/components.js" defer></script>
+  <script src="../design-system/js/patterns.js" defer></script>
+  <script src="../design-system/js/lazy.js" defer></script>
+  <script src="js/data/payments.js" defer></script>
+  <script src="js/docs.js" defer></script>
+  <script src="js/create-payment.js" defer></script>
+  <script src="../design-system/js/shell.js" defer></script>
+</head>
+<body data-page="docs">
+<div class="app" data-app>
+  <div class="main">
+    <main class="page" id="main">
+      <div class="page__head">
+        <div>
+          <h1 class="t-title">Docs</h1>
+          <p class="page__sub">Everything you need to integrate the Payments API, from your first test call to going live.</p>
+        </div>
+        <div class="page__actions">
+          <a class="btn btn--lg" href="api-keys.html"><i data-icon="key"></i>API keys</a>
+          <a class="btn btn--lg" href="#explorer" data-toc-jump><i data-icon="terminal"></i>Try the API</a>
+        </div>
+      </div>
+
+      <div class="docs">
+        <aside class="docs__toc" aria-label="On this page">
+          <label class="u-sr-only" for="toc-select">Jump to section</label>
+          <select class="select select--block docs__toc-select" id="toc-select" data-toc-select></select>
+          <p class="docs__toc-title">On this page</p>
+          <nav aria-label="Sections">
+            <ol class="docs__toc-list" data-toc>
+              <li><a class="docs__toc-link" href="#go-live">Go-live checklist</a></li>
+              <li><a class="docs__toc-link" href="#authentication">Authentication</a></li>
+              <li><a class="docs__toc-link" href="#offerings">Offerings</a></li>
+              <li><a class="docs__toc-link" href="#create-payment">Create a payment</a></li>
+              <li><a class="docs__toc-link" href="#statuses">Statuses</a></li>
+              <li><a class="docs__toc-link" href="#webhooks">Webhooks</a></li>
+              <li><a class="docs__toc-link" href="#cards">Cards</a></li>
+              <li><a class="docs__toc-link" href="#errors">Errors</a></li>
+              <li><a class="docs__toc-link" href="#explorer">API explorer</a></li>
+            </ol>
+          </nav>
+        </aside>
+
+        <div class="docs__content">
+          <!-- 1. Go-live checklist ------------------------------------------------------------>
+          <section class="docs__section" id="go-live" aria-labelledby="go-live-title">
+            <h2 class="t-heading" id="go-live-title">Go-live checklist</h2>
+            <p>Finish these steps in Test mode. When the first three are done, request a go-live review and your account manager switches on Live payments.</p>
+            <div class="card" data-lazy="checklist" aria-busy="true">
+              <div class="card__body skeleton-stack" data-skeleton>
+                <span class="skeleton skeleton--bar"></span>
+                <span class="skeleton skeleton--text"></span>
+                <span class="skeleton skeleton--short"></span>
+                <span class="skeleton skeleton--text"></span>
+                <span class="skeleton skeleton--short"></span>
+              </div>
+              <div data-lazy-content>
+                <div class="card__body checklist__head">
+                  <div class="field__row"><span class="t-label" data-progress-label></span><span class="t-meta" data-progress-meta></span></div>
+                  <div class="progress" role="progressbar" aria-label="Go-live progress" aria-valuemin="0" aria-valuemax="4" data-progress-bar><div class="progress__fill" data-progress-fill></div></div>
+                </div>
+                <ol class="checklist" data-checklist></ol>
+              </div>
+            </div>
+          </section>
+
+          <!-- 2. Authentication --------------------------------------------------------------->
+          <section class="docs__section" id="authentication" aria-labelledby="auth-title">
+            <h2 class="t-heading" id="auth-title">Authentication</h2>
+            <p>Every call goes to one base URL and carries your API key in the <code>X-Api-Key</code> header. The key is your key ID and secret joined by a dot. Requests and responses are JSON, and money is always a decimal string such as <code>"25.00"</code>, never a JSON number.</p>
+            <dl class="kv">
+              <dt>Base URL</dt><dd><span class="u-mono">https://pay-api.the-block.com</span></dd>
+              <dt>Header</dt><dd><span class="u-mono">X-Api-Key: &lt;keyId&gt;.&lt;secret&gt;</span></dd>
+              <dt>Content type</dt><dd><span class="u-mono">application/json</span></dd>
+            </dl>
+            <p class="t-meta">Test and Live keys are separate. Create them on <a class="docs__link" href="api-keys.html">API keys</a>. Keep secrets on your server; never ship them in a browser or mobile app.</p>
+          </section>
+
+          <!-- 3. Offerings -------------------------------------------------------------------->
+          <section class="docs__section" id="offerings" aria-labelledby="offerings-title">
+            <h2 class="t-heading" id="offerings-title">Offerings</h2>
+            <p>Everything you can do is an offering, named <code>PROVIDER.PRODUCT.VARIANT.ACTION</code>. The action is one of PAYIN, PAYOUT, CANCEL, REFUND or QUERY.</p>
+            <div class="note"><i data-icon="info"></i><span>An offering is the whole contract: currencies, minimums and extra fields. Read offerings from <code>GET /offerings</code> at runtime and never hard-code them.</span></div>
+            <div class="card table-card" data-lazy="offerings" aria-busy="true" aria-label="Offerings">
+              <div data-skeleton class="skeleton-list" data-rows="5"></div>
+              <div data-lazy-content data-offerings></div>
+            </div>
+          </section>
+
+          <!-- 4. Create a payment ------------------------------------------------------------->
+          <section class="docs__section" id="create-payment" aria-labelledby="create-title">
+            <h2 class="t-heading" id="create-title">Create a payment</h2>
+            <p>Send <code>POST /payments</code> with an offering, your own unique <code>requestId</code>, an amount and a currency. The response tells you what the customer does next, such as opening a hosted card page or paying to a deposit address.</p>
+            <div class="docs__tabs">
+              <div class="tabs" role="tablist" aria-label="Language" data-tabs>
+                <button class="tabs__tab" type="button" role="tab" id="tab-curl" aria-controls="panel-curl" aria-selected="true" data-value="curl">cURL</button>
+                <button class="tabs__tab" type="button" role="tab" id="tab-js" aria-controls="panel-js" aria-selected="false" data-value="js">JavaScript</button>
+                <button class="tabs__tab" type="button" role="tab" id="tab-py" aria-controls="panel-py" aria-selected="false" data-value="py">Python</button>
+              </div>
+              <div role="tabpanel" id="panel-curl" aria-labelledby="tab-curl" data-sample="curl"></div>
+              <div role="tabpanel" id="panel-js" aria-labelledby="tab-js" data-sample="js" hidden></div>
+              <div role="tabpanel" id="panel-py" aria-labelledby="tab-py" data-sample="py" hidden></div>
+            </div>
+            <p class="t-meta">Reusing a <code>requestId</code> returns 409. A prefix such as <code>ORD-</code> or <code>WD-</code> keeps them unique across pay-ins and payouts.</p>
+            <div><button class="btn" type="button" data-create-payment><i data-icon="plus"></i>Create a test payment in Portal</button></div>
+          </section>
+
+          <!-- 5. Statuses --------------------------------------------------------------------->
+          <section class="docs__section" id="statuses" aria-labelledby="statuses-title">
+            <h2 class="t-heading" id="statuses-title">Statuses</h2>
+            <p>Every payment has one status. Treat only PAID as money received, and stop polling once a status can no longer change.</p>
+            <div class="card table-card">
+              <div class="table-wrap">
+                <table class="table">
+                  <thead><tr><th scope="col">Status</th><th scope="col">Meaning</th><th scope="col">Can it still change?</th></tr></thead>
+                  <tbody>
+                    <tr><td><span class="badge badge--warning">PENDING</span></td><td>Created; the outcome is not known yet</td><td>Yes</td></tr>
+                    <tr><td><span class="badge badge--success">PAID</span></td><td>Funds received and confirmed by the provider</td><td>Only by a refund</td></tr>
+                    <tr><td><span class="badge badge--danger">FAILED</span></td><td>The provider refused it or it expired</td><td>No</td></tr>
+                    <tr><td><span class="badge">CANCELLED</span></td><td>Cancelled by you or by the provider</td><td>No</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <!-- 6. Webhooks --------------------------------------------------------------------->
+          <section class="docs__section" id="webhooks" aria-labelledby="webhooks-title">
+            <h2 class="t-heading" id="webhooks-title">Webhooks</h2>
+            <p>We send <code>payment.status_updated</code> to each subscribed endpoint when a status changes. Each delivery is signed with your endpoint's signing secret in the <code>X-Signature</code> header (HMAC SHA-256 of the timestamp and raw body). We retry up to 5 times, then dead-letter the event. You can have up to 10 endpoints.</p>
+            <div data-sample="verify"></div>
+            <p class="t-meta">Manage endpoints and send test events on <a class="docs__link" href="webhooks.html">Webhooks</a>.</p>
+          </section>
+
+          <!-- 7. Cards ------------------------------------------------------------------------>
+          <section class="docs__section" id="cards" aria-labelledby="cards-title">
+            <h2 class="t-heading" id="cards-title">Cards</h2>
+            <p>Card programs run through three issuers: Axys, Hypercard and Interlace. To create cardholders and order cards, your API key needs the <code>CARDS</code> scope; a key without it gets 403 <code>FORBIDDEN_SCOPE</code>.</p>
+            <ul class="docs__list">
+              <li><code>card_order.status_updated</code> follows a card order from submitted to shipped.</li>
+              <li><code>cardholder.status_updated</code> reports KYC review results.</li>
+            </ul>
+            <p class="t-meta">Add the scope when you create a key on <a class="docs__link" href="api-keys.html">API keys</a>. Finance members never see API keys.</p>
+          </section>
+
+          <!-- 8. Errors ----------------------------------------------------------------------->
+          <section class="docs__section" id="errors" aria-labelledby="errors-title">
+            <h2 class="t-heading" id="errors-title">Errors</h2>
+            <p>Errors return an HTTP status and a JSON body with a stable <code>code</code> and a readable <code>message</code>. Retry only 429 and 5xx, with backoff.</p>
+            <div class="card table-card">
+              <div class="table-wrap">
+                <table class="table">
+                  <thead><tr><th scope="col">HTTP</th><th scope="col">Code</th><th scope="col">What to do</th></tr></thead>
+                  <tbody>
+                    <tr><td class="u-num">400</td><td><span class="u-mono">VALIDATION_ERROR</span></td><td>Fix the field named in <span class="u-mono">details</span></td></tr>
+                    <tr><td class="u-num">401</td><td><span class="u-mono">UNAUTHORIZED</span></td><td>Check the X-Api-Key header and the key's mode</td></tr>
+                    <tr><td class="u-num">403</td><td><span class="u-mono">FORBIDDEN_SCOPE</span></td><td>Add the missing scope to the key</td></tr>
+                    <tr><td class="u-num">404</td><td><span class="u-mono">PAYMENT_NOT_FOUND</span></td><td>Check the requestId</td></tr>
+                    <tr><td class="u-num">409</td><td><span class="u-mono">DUPLICATE_REQUEST_ID</span></td><td>Use a new requestId, or read the existing payment</td></tr>
+                    <tr><td class="u-num">409</td><td><span class="u-mono">PAYMENT_NOT_CANCELLABLE</span></td><td>Only PENDING payments can be cancelled</td></tr>
+                    <tr><td class="u-num">422</td><td><span class="u-mono">OFFERING_UNAVAILABLE</span></td><td>Re-read offerings; this one is off for your account</td></tr>
+                    <tr><td class="u-num">429</td><td><span class="u-mono">RATE_LIMITED</span></td><td>Wait for Retry-After, then retry</td></tr>
+                    <tr><td class="u-num">502</td><td><span class="u-mono">PROVIDER_UNAVAILABLE</span></td><td>Retry with backoff; check System status on Contact support</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <!-- 9. API explorer ----------------------------------------------------------------->
+          <section class="docs__section" id="explorer" aria-labelledby="explorer-title">
+            <h2 class="t-heading" id="explorer-title">API explorer</h2>
+            <p>Send requests to the Test environment from here. The explorer uses your Test key automatically, so you never paste a key.</p>
+            <form class="card" data-explorer novalidate>
+              <div class="card__body form-grid">
+                <div class="note" data-explorer-live hidden><i data-icon="lock"></i><span>The explorer only works in Test mode. Switch to Test in the sidebar to send requests; Live data is never touched from here.</span></div>
+                <div class="form-grid form-grid--2">
+                  <div class="field">
+                    <label class="field__label" for="ex-endpoint">Endpoint</label>
+                    <select class="select select--block" id="ex-endpoint" data-explorer-endpoint>
+                      <option value="create">POST /payments</option>
+                      <option value="get">GET /payments/{requestId}</option>
+                      <option value="cancel">POST /payments/cancel</option>
+                      <option value="offerings">GET /offerings</option>
+                    </select>
+                  </div>
+                  <div class="field" data-explorer-path hidden>
+                    <label class="field__label" for="ex-request">requestId</label>
+                    <input class="input input--mono" id="ex-request" maxlength="40" autocomplete="off" spellcheck="false" value="req_77b0d415aa">
+                  </div>
+                </div>
+                <div class="field" data-explorer-body-field>
+                  <div class="field__row"><label class="field__label" for="ex-body">Request body (JSON)</label><button class="btn btn--ghost btn--sm" type="button" data-explorer-reset>Reset example</button></div>
+                  <textarea class="input textarea input--mono docs__body" id="ex-body" rows="10" maxlength="4000" spellcheck="false"></textarea>
+                </div>
+                <div class="field__row">
+                  <span class="t-meta">Simulated response. No money moves and nothing is sent over the network.</span>
+                  <button class="btn btn--primary" type="submit" data-explorer-send><i data-icon="send"></i>Send request</button>
+                </div>
+                <div data-explorer-response aria-live="polite"></div>
+              </div>
+            </form>
+          </section>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+</body>
+</html>

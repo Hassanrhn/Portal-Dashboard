@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en" data-theme="light" data-env="live">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Reports · Portal</title>
+  <link rel="stylesheet" href="../design-system/css/portal.css">
+  <link rel="stylesheet" href="css/reports.css">
+  <script src="../design-system/js/theme.js"></script>
+  <script src="../design-system/js/icons.js" defer></script>
+  <script src="../design-system/js/dom.js" defer></script>
+  <script src="js/layout.js" defer></script>
+  <script src="../design-system/js/components.js" defer></script>
+  <script src="../design-system/js/patterns.js" defer></script>
+  <script src="../design-system/js/lazy.js" defer></script>
+  <script src="js/data/payments.js" defer></script>
+  <script src="js/data/payouts.js" defer></script>
+  <script src="js/data/refunds.js" defer></script>
+  <script src="js/data/reports.js" defer></script>
+  <script src="js/reports.js" defer></script>
+  <script src="js/create-payment.js" defer></script>
+  <script src="../design-system/js/shell.js" defer></script>
+</head>
+<body data-page="reports">
+<div class="app" data-app>
+  <div class="main">
+    <main class="page" id="main">
+      <div class="page__head">
+        <div>
+          <h1 class="t-title">Reports</h1>
+          <p class="page__sub">Exports, monthly statements and settlement reconciliation for finance.</p>
+        </div>
+        <div class="page__actions">
+          <button class="btn btn--primary btn--lg" type="button" data-new-export><i data-icon="plus"></i>New export</button>
+        </div>
+      </div>
+
+      <div class="tabs reports-tabs" role="tablist" aria-label="Reports" data-tabs>
+        <button class="tabs__tab" type="button" role="tab" id="tab-exports" aria-controls="panel-exports" aria-selected="true" data-value="exports">Exports</button>
+        <button class="tabs__tab" type="button" role="tab" id="tab-statements" aria-controls="panel-statements" aria-selected="false" data-value="statements">Statements</button>
+        <button class="tabs__tab" type="button" role="tab" id="tab-reconciliation" aria-controls="panel-reconciliation" aria-selected="false" data-value="reconciliation">Reconciliation</button>
+      </div>
+
+      <div role="tabpanel" id="panel-exports" aria-labelledby="tab-exports" tabindex="0">
+        <section class="card table-card" data-lazy="exports" aria-busy="true" aria-label="Exports">
+          <div class="toolbar">
+            <div class="section-head"><h2 class="card__title">Exports</h2><p class="t-meta">Files stay available for 7 days after they are ready.</p></div>
+            <span class="toolbar__spacer"></span>
+          </div>
+          <div data-skeleton class="skeleton-list" data-rows="4"></div>
+          <div data-lazy-content data-exports></div>
+        </section>
+      </div>
+
+      <div role="tabpanel" id="panel-statements" aria-labelledby="tab-statements" tabindex="0" hidden>
+        <section class="card table-card" data-lazy="statements" aria-busy="true" aria-label="Monthly statements">
+          <div class="toolbar">
+            <div class="section-head"><h2 class="card__title">Monthly statements</h2><p class="t-meta">All amounts in USD equivalent. Net is gross minus fees and refunds.</p></div>
+            <span class="toolbar__spacer"></span>
+            <button class="btn btn--sm" type="button" data-statements-csv><i data-icon="download"></i>Download all as CSV</button>
+          </div>
+          <div data-skeleton class="skeleton-list" data-rows="6"></div>
+          <div data-lazy-content data-statements></div>
+        </section>
+      </div>
+
+      <div role="tabpanel" id="panel-reconciliation" aria-labelledby="tab-reconciliation" tabindex="0" hidden>
+        <div class="stack">
+          <section class="kpi-strip kpi-strip--3" aria-label="Reconciliation summary" data-lazy="recon-kpis" aria-busy="true">
+            <div class="kpi">
+              <p class="kpi__label">Matched batches</p>
+              <div class="skeleton-stack page-kpi-skeleton" data-skeleton><span class="skeleton skeleton--figure"></span><span class="skeleton skeleton--text"></span></div>
+              <div data-lazy-content>
+                <p class="kpi__value t-figure"><span data-kpi="matched">0</span></p>
+                <p class="kpi__meta" data-kpi-meta="matched"></p>
+              </div>
+            </div>
+            <div class="kpi">
+              <p class="kpi__label">Unmatched items</p>
+              <div class="skeleton-stack page-kpi-skeleton" data-skeleton><span class="skeleton skeleton--figure"></span><span class="skeleton skeleton--text"></span></div>
+              <div data-lazy-content>
+                <p class="kpi__value t-figure"><span data-kpi="unmatched">0</span></p>
+                <p class="kpi__meta" data-kpi-meta="unmatched"></p>
+              </div>
+            </div>
+            <div class="kpi">
+              <p class="kpi__label">Unexplained difference</p>
+              <div class="skeleton-stack page-kpi-skeleton" data-skeleton><span class="skeleton skeleton--figure"></span><span class="skeleton skeleton--text"></span></div>
+              <div data-lazy-content>
+                <p class="kpi__value t-figure"><span data-kpi="difference">0</span><span class="kpi__unit">USD eq.</span></p>
+                <p class="kpi__meta" data-kpi-meta="difference"></p>
+              </div>
+            </div>
+          </section>
+          <section class="card table-card" data-lazy="batches" aria-busy="true" aria-label="Settlement batches">
+          <div class="toolbar">
+            <div class="section-head"><h2 class="card__title">Settlement batches</h2><p class="t-meta">What each provider settled against what Portal expected. Select a mismatch to review it.</p></div>
+            <span class="toolbar__spacer"></span>
+          </div>
+            <div data-skeleton class="skeleton-list" data-rows="8"></div>
+            <div data-lazy-content data-batches></div>
+          </section>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+</body>
+</html>
