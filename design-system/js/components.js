@@ -119,14 +119,33 @@
     });
   }
 
+  /** Clipboard write with a fallback for sandboxed frames where the async Clipboard API is blocked. */
+  Portal.copyText = async function copyText(text) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch {
+      const area = document.createElement('textarea');
+      area.value = text;
+      area.setAttribute('readonly', '');
+      area.setAttribute('aria-hidden', 'true');
+      area.style.setProperty('position', 'fixed');
+      area.style.setProperty('opacity', '0');
+      (document.querySelector('dialog[open]') || document.body).appendChild(area);
+      area.select();
+      let ok = false;
+      try { ok = document.execCommand('copy'); } catch { ok = false; }
+      area.parentNode.removeChild(area);
+      return ok;
+    }
+  };
+
   /* Copy to clipboard: icon swaps to a green check (and a text button reads "Copied") for 1.6 s */
   document.addEventListener('click', async (event) => {
     const button = event.target.closest('[data-copy]');
     if (!button) return;
     const value = button.dataset.copy;
-    try {
-      await navigator.clipboard.writeText(value);
-    } catch {
+    if (!(await Portal.copyText(value))) {
       Portal.toast('Copy is blocked in this browser. Select the text instead.', { icon: 'alert' });
       return;
     }
@@ -199,6 +218,40 @@
     node.addEventListener('animationend', () => node.classList.remove('is-swapping'), { once: true });
   };
 
+  /** Puts a floating layer (menu, listbox, popover) in the browser top layer so it shows above open dialogs. */
+  Portal.showOnTop = function showOnTop(node) {
+    document.body.appendChild(node);
+    if (typeof node.showPopover === 'function') {
+      node.popover = 'manual';
+      node.showPopover();
+    }
+  };
+
+  /* Option icons: currencies get their mark or flag, issuers their card network, and known
+     routes, methods, topics and roles a matching icon. Override with <option data-icon> or data-flag. */
+  const CURRENCY_FLAGS = { USD: 'US', AED: 'AE', EUR: 'EU', GBP: 'GB', SAR: 'SA' };
+  const OPTION_ICONS = {
+    usdt: 'usdt', usdc: 'usdc', axys: 'visa', hypercard: 'mastercard', interlace: 'visa', visa: 'visa', mastercard: 'mastercard',
+    crossmint: 'payments', forumpay: 'wallet', 'blockchain rail': 'link', card: 'payments', fiat_card: 'payments', crypto: 'wallet',
+    trc20: 'link', erc20: 'link', polygon: 'link', virtual: 'zap', physical: 'cards',
+    payments: 'payments', payouts: 'payout', refunds: 'refund', cards: 'cards', webhooks: 'webhook', 'api and keys': 'key', account: 'user', reports: 'reports',
+    admin: 'shield', developer: 'code', finance: 'reports', viewer: 'eye',
+    transactions: 'payments', fees: 'scale', 'card orders': 'truck', csv: 'file', json: 'code',
+  };
+  function optionIcon(option) {
+    if (option.dataset.flag) return Portal.flag?.(option.dataset.flag);
+    if (option.dataset.icon) return Portal.icon(option.dataset.icon);
+    const key = option.textContent.trim().toLowerCase();
+    const code = (option.value || key).toUpperCase();
+    if (CURRENCY_FLAGS[code]) return Portal.flag?.(CURRENCY_FLAGS[code]);
+    const name = OPTION_ICONS[key] || OPTION_ICONS[String(option.value).toLowerCase()];
+    if (!name) return null;
+    const svg = Portal.icon(name);
+    if (svg && ['visa', 'mastercard'].includes(name)) svg.classList.add('network-mark');
+    return svg;
+  }
+  Portal.optionIcon = optionIcon;
+
   /* Custom select: replaces the OS dropdown with a listbox styled like our menus while the native
      <select> stays in the DOM (hidden) as the source of truth, so forms, validation and page code keep working.
      Opt out with data-native. */
@@ -230,7 +283,10 @@
     button.appendChild(label);
     const sync = () => {
       const option = select.options[select.selectedIndex];
-      label.textContent = option ? option.textContent : '';
+      label.replaceChildren();
+      const icon = option && optionIcon(option);
+      if (icon) { icon.classList.add('cselect__icon'); label.appendChild(icon); }
+      label.appendChild(document.createTextNode(option ? option.textContent : ''));
       button.disabled = select.disabled;
       button.setAttribute('aria-label', `${select.getAttribute('aria-label') || select.labels?.[0]?.textContent || 'Select'}: ${label.textContent}`);
       button.setAttribute('aria-invalid', select.getAttribute('aria-invalid') || 'false');
@@ -266,12 +322,15 @@
         item.setAttribute('aria-selected', String(option.selected));
         item.disabled = option.disabled;
         const text = document.createElement('span');
-        text.textContent = option.textContent;
+        text.className = 'cselect__text';
+        const icon = optionIcon(option);
+        if (icon) { icon.classList.add('cselect__icon'); text.appendChild(icon); }
+        text.appendChild(document.createTextNode(option.textContent));
         item.append(text, Portal.icon('check'));
         item.addEventListener('click', () => choose(option));
         list.appendChild(item);
       });
-      document.body.appendChild(list);
+      Portal.showOnTop(list);
       const box = button.getBoundingClientRect();
       list.style.minWidth = `${box.width}px`;
       const below = box.bottom + 4 + list.offsetHeight <= window.innerHeight;

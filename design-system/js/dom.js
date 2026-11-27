@@ -56,7 +56,6 @@
   /** Copyable monospace identifier (same markup as Overview). */
   function copyable(value, { mono = true, label = 'Copy' } = {}) {
     const button = el('button', { className: 'copy__btn', attrs: { type: 'button', 'data-copy': value, 'aria-label': `${label} ${value}` } }, [icon('copy', 'icon-copy'), icon('check', 'icon-check')]);
-    button.addEventListener('click', (event) => event.stopPropagation());
     return el('span', { className: 'copy' }, [el('span', { className: mono ? 'u-mono' : '', text: value }), button]);
   }
 

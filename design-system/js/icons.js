@@ -73,6 +73,15 @@
     'x-circle': [['circle', { cx: 12, cy: 12, r: 10 }], ['path', { d: 'm15 9-6 6M9 9l6 6' }]],
     snowflake: [['path', { d: 'M2 12h20M12 2v20m-8-6 16-8M4 8l16 8M9 4l3 3 3-3M9 20l3-3 3 3' }]],
     scale: [['path', { d: 'M12 3v18M7 21h10M3 7h18M6 7l-3 7a3 3 0 0 0 6 0zM18 7l-3 7a3 3 0 0 0 6 0z' }]],
+    usdt: { fill: true, parts: [
+      ['circle', { cx: 12, cy: 12, r: 11, fill: '#26A17B' }],
+      ['path', { d: 'M6.5 6.8h11v2.6h-4.1v1.3c3 .2 5.2.8 5.2 1.6s-2.2 1.4-5.2 1.6v4.8h-2.8v-4.8c-3-.2-5.2-.8-5.2-1.6s2.2-1.4 5.2-1.6V9.4H6.5zm5.5 5.6c2.8 0 4.6-.3 4.6-.5s-1.8-.5-4.6-.5-4.6.3-4.6.5 1.8.5 4.6.5z', fill: '#FFFFFF' }],
+    ] },
+    usdc: { fill: true, parts: [
+      ['circle', { cx: 12, cy: 12, r: 11, fill: '#2775CA' }],
+      ['text', { x: 12, y: 16.2, 'text-anchor': 'middle', 'font-size': 12, 'font-weight': 700, 'font-family': 'Arial, sans-serif', fill: '#FFFFFF', text: '$' }],
+      ['path', { d: 'M8.2 6.6a7 7 0 0 0 0 10.8M15.8 6.6a7 7 0 0 1 0 10.8', fill: 'none', stroke: '#FFFFFF', 'stroke-width': 1.3 }],
+    ] },
     visa: { fill: true, parts: [
       ['rect', { x: 0, y: 4, width: 24, height: 16, rx: 2.5, fill: '#1A1F71' }],
       ['text', { x: 12, y: 15.2, 'text-anchor': 'middle', 'font-size': 7.6, 'font-weight': 800, 'font-style': 'italic', 'font-family': 'Arial, sans-serif', fill: '#FFFFFF', 'letter-spacing': 0.2, text: 'VISA' }],

@@ -102,3 +102,6 @@
   .chart__line.is-drawing, .chart__area.is-drawing, .chart__axes.is-entering, .chart__axes.is-leaving { animation: none; }
   .chart__line.is-drawing { stroke-dasharray: none; }
 }
+.share__name { display: inline-flex; align-items: center; gap: var(--space-8); min-width: 0; }
+.share__logo { width: 18px; height: 18px; flex-shrink: 0; color: var(--text-secondary); }
+.share__logo.flag { width: auto; height: auto; font-size: var(--font-size-16); }

@@ -352,6 +352,16 @@
 
   /* Share bars ---------------------------------------------------------------- *
    * Built once; later renders update widths (flex-grow transitions) and tween the values in place. */
+  /** Currency logos (USDT/USDC marks, flags for fiat) and route icons in the share lists. */
+  function shareLogo(name) {
+    const option = document.createElement('option');
+    option.textContent = name;
+    option.value = name;
+    const logo = Portal.optionIcon?.(option);
+    if (logo) logo.classList.add('share__logo');
+    return logo;
+  }
+
   function renderShare(host, rows, total) {
     if (host.shareRows?.length === rows.length) {
       rows.forEach(([, share], i) => {
@@ -373,7 +383,7 @@
       pct.dataset.current = String(share * 100);
       const row = el('li', { className: `share__row ${color}` }, [
         el('span', { className: 'share__swatch', attrs: { 'aria-hidden': 'true' } }),
-        el('span', { text: name }),
+        el('span', { className: 'share__name' }, [shareLogo(name) || null, document.createTextNode(name)]),
         value,
         pct,
       ]);

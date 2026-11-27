@@ -136,7 +136,7 @@
         el('span', { className: 'menu__text' }, [el('span', { text: item.label }), item.description && el('span', { className: 'menu__desc', text: item.description })]),
       ]));
     });
-    document.body.appendChild(node);
+    Portal.showOnTop(node);
     placePopover(node, anchor);
     anchor.setAttribute('aria-expanded', 'true');
     openMenu = { node, anchor };
@@ -365,7 +365,7 @@
   function showFilterPopover(anchor, node) {
     closeMenu({ restoreFocus: false });
     closeFilterPopover({ restoreFocus: false });
-    document.body.appendChild(node);
+    Portal.showOnTop(node);
     placePopover(node, anchor);
     anchor.setAttribute('aria-expanded', 'true');
     openPopover = { node, anchor };
