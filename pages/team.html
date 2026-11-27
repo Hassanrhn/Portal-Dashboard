@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en" data-theme="light" data-env="live">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Invite your team · Portal</title>
+  <link rel="stylesheet" href="../design-system/css/portal.css">
+  <link rel="stylesheet" href="css/team.css">
+  <script src="../design-system/js/theme.js"></script>
+  <script src="../design-system/js/icons.js" defer></script>
+  <script src="../design-system/js/dom.js" defer></script>
+  <script src="js/layout.js" defer></script>
+  <script src="../design-system/js/components.js" defer></script>
+  <script src="../design-system/js/patterns.js" defer></script>
+  <script src="../design-system/js/lazy.js" defer></script>
+  <script src="js/data/team.js" defer></script>
+  <script src="js/team.js" defer></script>
+  <script src="js/create-payment.js" defer></script>
+  <script src="../design-system/js/shell.js" defer></script>
+</head>
+<body data-page="team">
+<div class="app" data-app>
+  <div class="main">
+    <main class="page" id="main">
+      <div class="page__head">
+        <div>
+          <h1 class="t-title">Invite your team</h1>
+          <p class="page__sub">Give each person the access their job needs. Finance members never see API keys.</p>
+        </div>
+        <div class="page__actions">
+          <button class="btn btn--primary btn--lg" type="button" data-invite><i data-icon="invite"></i>Invite members</button>
+        </div>
+      </div>
+
+      <div class="stack">
+        <section class="card table-card" data-lazy="members" aria-busy="true" aria-labelledby="members-title">
+          <div class="card__head team__head"><h2 class="card__title" id="members-title">Members <span class="u-muted" data-member-count></span></h2></div>
+          <div data-skeleton class="skeleton-list" data-rows="6"></div>
+          <div data-lazy-content data-members></div>
+        </section>
+
+        <section class="card table-card" data-lazy="invites" aria-busy="true" aria-labelledby="invites-title">
+          <div class="card__head team__head"><h2 class="card__title" id="invites-title">Pending invites <span class="u-muted" data-invite-count></span></h2><span class="t-meta">Invites expire after 7 days</span></div>
+          <div data-skeleton class="skeleton-list" data-rows="2"></div>
+          <div data-lazy-content data-invites></div>
+        </section>
+
+        <section class="card table-card" data-lazy="roles" aria-busy="true" aria-labelledby="roles-title">
+          <div class="card__head team__head"><h2 class="card__title" id="roles-title">Roles and permissions</h2><span class="t-meta">What each role can change</span></div>
+          <div data-skeleton class="skeleton-list" data-rows="8"></div>
+          <div data-lazy-content data-roles></div>
+        </section>
+      </div>
+    </main>
+  </div>
+</div>
+</body>
+</html>

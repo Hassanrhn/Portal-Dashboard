@@ -1,0 +1,22 @@
+/* Reports page specifics. Tokens only. */
+.reports-tabs { margin-bottom: var(--space-24); }
+.section-head { display: grid; gap: 2px; min-width: 0; }
+.page-kpi-skeleton { margin-top: var(--space-12); gap: var(--space-12); }
+.kpi-strip--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 1100px) {
+  .kpi-strip--3 .kpi:nth-child(3) { border-left: var(--border-width) solid var(--card-border); border-top: 0; }
+}
+@media (max-width: 700px) {
+  .kpi-strip--3 { grid-template-columns: minmax(0, 1fr); }
+  .kpi-strip--3 .kpi + .kpi, .kpi-strip--3 .kpi:nth-child(3) { border-left: 0; border-top: var(--border-width) solid var(--card-border); }
+}
+.export-status { display: grid; gap: var(--space-6); min-width: 104px; }
+.row-actions { display: inline-flex; align-items: center; gap: var(--space-4); }
+.diff--negative { color: var(--status-danger-fg); }
+.date-range[hidden] { display: none; }
+.switch-row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-16); }
+.kv .copy { min-width: 0; }
+.link { color: var(--text-primary); text-decoration: underline; text-decoration-color: var(--border-strong); text-underline-offset: 3px; }
+.link:hover { text-decoration-color: currentColor; }
+/* Work-around: shared .drawer__body grid rows shrink to fit instead of scrolling when content is taller than the drawer. */
+.drawer__body { grid-auto-rows: max-content; }

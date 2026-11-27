@@ -1,0 +1,69 @@
+/* Button — every visual value comes from --button-* tokens (components.json → button). */
+.btn {
+  --_bg: var(--button-secondary-bg);
+  --_bg-hover: var(--button-secondary-bg-hover);
+  --_fg: var(--button-secondary-fg);
+  --_border: var(--button-secondary-border);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--button-gap);
+  height: var(--button-height);
+  padding: 0 var(--button-pad-x);
+  border: var(--border-width) solid var(--_border);
+  border-radius: var(--button-radius);
+  background: var(--_bg);
+  color: var(--_fg);
+  font-size: var(--button-font-size);
+  font-weight: var(--button-font-weight);
+  white-space: nowrap;
+  user-select: none;
+  transition: background-color var(--motion-fast) var(--motion-ease),
+              border-color var(--motion-fast) var(--motion-ease),
+              color var(--motion-fast) var(--motion-ease),
+              transform var(--motion-fast) var(--motion-ease);
+}
+.btn:hover:not(:disabled) { background: var(--_bg-hover); }
+.btn:active:not(:disabled) { transform: scale(var(--button-press-scale)); }
+.btn:disabled { opacity: 0.45; }
+.btn--primary:disabled { opacity: 1; --_bg: var(--button-disabled-bg); --_bg-hover: var(--button-disabled-bg); --_fg: var(--button-disabled-fg); --_border: transparent; }
+.btn svg { width: var(--size-16); height: var(--size-16); }
+
+.btn--primary {
+  --_bg: var(--button-primary-bg);
+  --_bg-hover: var(--button-primary-bg-hover);
+  --_fg: var(--button-primary-fg);
+  --_border: var(--button-primary-border);
+}
+.btn--ghost {
+  --_bg: transparent;
+  --_bg-hover: var(--button-ghost-bg-hover);
+  --_fg: var(--button-ghost-fg);
+  --_border: transparent;
+}
+.btn--ghost:hover:not(:disabled) { color: var(--text-primary); }
+.btn--danger { --_bg: var(--button-danger-bg); --_bg-hover: var(--button-danger-bg); --_fg: var(--button-danger-fg); --_border: var(--button-danger-bg); }
+
+.btn--sm { height: var(--control-height-sm); padding: 0 var(--space-8); }
+.btn--lg { height: var(--control-height-lg); padding: 0 var(--space-16); font-size: var(--font-size-14); }
+.btn--xl { height: var(--control-height-xl); padding: 0 var(--space-16); border-radius: var(--control-radius-xl); font-size: var(--font-size-14); }
+.btn--block { width: 100%; }
+.btn--icon { width: var(--button-height); padding: 0; }
+.btn--icon.btn--sm { width: var(--control-height-sm); }
+
+/* Loading: label fades, spinner takes its place without changing width. */
+.btn[aria-busy="true"] { color: transparent; pointer-events: none; }
+.btn[aria-busy="true"]::after {
+  content: "";
+  position: absolute;
+  width: 14px; height: 14px;
+  border-radius: var(--radius-full);
+  border: 2px solid var(--_fg);
+  border-right-color: transparent;
+  animation: btn-spin 0.7s linear infinite;
+}
+@keyframes btn-spin { to { transform: rotate(360deg); } }
+
+/* Keyboard hint inside a button, e.g. ⌘K */
+.btn__kbd { margin-left: auto; font-size: var(--font-size-11); color: var(--text-tertiary); font-family: var(--type-family); }

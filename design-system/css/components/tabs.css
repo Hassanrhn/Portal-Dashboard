@@ -1,0 +1,9 @@
+/* Underline tabs. Indicator slides (patterns.js). */
+.tabs { position: relative; display: flex; gap: var(--space-20); border-bottom: var(--border-width) solid var(--border-default); overflow-x: auto; scrollbar-width: none; }
+.tabs__tab { position: relative; height: 40px; color: var(--text-secondary); font-size: var(--font-size-14); font-weight: var(--font-weight-medium); white-space: nowrap; transition: color var(--motion-fast) var(--motion-ease); }
+.tabs__tab:hover, .tabs__tab[aria-selected="true"] { color: var(--text-primary); }
+.tabs__count { margin-left: var(--space-4); color: var(--text-tertiary); font-variant-numeric: tabular-nums; }
+.tabs__indicator { position: absolute; bottom: -1px; left: 0; height: 2px; width: 0; background: var(--text-primary); transition: transform var(--motion-base) var(--motion-spring), width var(--motion-base) var(--motion-spring); }
+.tabs:not(.is-ready) .tabs__indicator { transition: none; }
+[role="tabpanel"][hidden] { display: none; }
+[role="tabpanel"] { animation: lazy-in var(--motion-base) var(--motion-ease) both; }

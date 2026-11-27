@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en" data-theme="light" data-env="live">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Overview · Portal</title>
+  <link rel="stylesheet" href="../design-system/css/portal.css">
+  <link rel="stylesheet" href="css/overview.css">
+  <script src="../design-system/js/theme.js"></script>
+  <script src="../design-system/js/icons.js" defer></script>
+  <script src="../design-system/js/dom.js" defer></script>
+  <script src="js/layout.js" defer></script>
+  <script src="../design-system/js/components.js" defer></script>
+  <script src="../design-system/js/patterns.js" defer></script>
+  <script src="../design-system/js/lazy.js" defer></script>
+  <script src="js/overview-data.js" defer></script>
+  <script src="js/overview.js" defer></script>
+  <script src="js/create-payment.js" defer></script>
+  <script src="../design-system/js/shell.js" defer></script>
+</head>
+<body data-page="overview">
+<div class="app" data-app>
+  <!-- Main ---------------------------------------------------------------- -->
+  <div class="main">
+    <main class="page" id="main">
+      <div class="page__head">
+        <div>
+          <h1 class="t-title">Overview</h1>
+          <p class="page__sub">Payments across every route for The Orange Card.</p>
+        </div>
+        <div class="page__actions">
+          <div class="segmented" role="radiogroup" aria-label="Time range" data-segmented data-range-control>
+            <button class="segmented__option" type="button" role="radio" aria-checked="false" data-value="7d">7 days</button>
+            <button class="segmented__option" type="button" role="radio" aria-checked="true" data-value="30d">30 days</button>
+            <button class="segmented__option" type="button" role="radio" aria-checked="false" data-value="90d">90 days</button>
+          </div>
+          <button class="btn btn--primary btn--lg" type="button" data-create-payment><i data-icon="plus"></i>Create payment</button>
+        </div>
+      </div>
+
+      <div class="stack">
+        <section class="kpi-strip" aria-label="Key metrics" data-lazy="kpis" aria-busy="true">
+          <div class="kpi">
+            <p class="kpi__label">Gross volume</p>
+            <div class="skeleton-stack kpi__skeleton" data-skeleton><span class="skeleton skeleton--figure"></span><span class="skeleton skeleton--text"></span></div>
+            <div data-lazy-content>
+            <p class="kpi__value t-figure"><span data-kpi="volume">0.00</span><span class="kpi__unit">USD eq.</span></p>
+            <p class="kpi__meta"><span class="delta" data-kpi-delta="volume"></span><span data-kpi-period>vs previous 30 days</span></p>
+                      </div>
+          </div>
+          <div class="kpi">
+            <p class="kpi__label">Success rate</p>
+            <div class="skeleton-stack kpi__skeleton" data-skeleton><span class="skeleton skeleton--figure"></span><span class="skeleton skeleton--text"></span></div>
+            <div data-lazy-content>
+            <p class="kpi__value t-figure"><span data-kpi="rate">0.0</span><span class="kpi__unit">%</span></p>
+            <p class="kpi__meta"><span class="delta" data-kpi-delta="rate"></span><span data-kpi="rate-detail"></span></p>
+                      </div>
+          </div>
+          <div class="kpi">
+            <p class="kpi__label">Successful payments</p>
+            <div class="skeleton-stack kpi__skeleton" data-skeleton><span class="skeleton skeleton--figure"></span><span class="skeleton skeleton--text"></span></div>
+            <div data-lazy-content>
+            <p class="kpi__value t-figure"><span data-kpi="paid">0</span></p>
+            <p class="kpi__meta"><span class="delta" data-kpi-delta="paid"></span><span data-kpi="paid-detail"></span></p>
+                      </div>
+          </div>
+          <div class="kpi">
+            <p class="kpi__label">API status</p>
+            <div class="skeleton-stack kpi__skeleton" data-skeleton><span class="skeleton skeleton--figure"></span><span class="skeleton skeleton--text"></span></div>
+            <div data-lazy-content>
+            <p class="kpi__value t-figure"><span class="status-dot">Connected</span></p>
+            <p class="kpi__meta">Keys verified, last call 2 min ago</p>
+                      </div>
+          </div>
+        </section>
+
+        <section class="card" aria-labelledby="volume-title" data-lazy="volume" aria-busy="true">
+          <div class="card__head volume-head">
+            <div>
+              <h2 class="card__title" id="volume-title">Volume over time</h2>
+              <div class="skeleton-stack volume-skeleton" data-skeleton><span class="skeleton skeleton--figure"></span></div>
+              <p class="volume-readout" data-lazy-content><span class="t-figure" data-chart-value>0.00</span> <span class="t-meta" data-chart-label></span></p>
+            </div>
+            <span class="t-meta">Daily, USD equivalent</span>
+          </div>
+          <div class="card__body">
+            <div class="chart chart--skeleton" data-skeleton><span class="skeleton skeleton--block"></span></div>
+            <div class="chart" data-lazy-content data-chart tabindex="0" role="img" aria-label="Daily volume chart. Use the left and right arrow keys to read each day."></div>
+          </div>
+        </section>
+
+        <div class="grid-2">
+          <section class="card" aria-labelledby="route-title" data-lazy="share-route" aria-busy="true">
+            <div class="card__head"><h2 class="card__title" id="route-title">Volume by route</h2><span class="t-meta" data-range-label>Last 30 days</span></div>
+            <div class="card__body"><div class="skeleton-stack share-skeleton" data-skeleton><span class="skeleton skeleton--bar"></span><div><div class="skeleton-row"><span class="skeleton skeleton--short"></span><span class="skeleton skeleton--pill"></span></div><div class="skeleton-row"><span class="skeleton skeleton--short"></span><span class="skeleton skeleton--pill"></span></div><div class="skeleton-row"><span class="skeleton skeleton--short"></span><span class="skeleton skeleton--pill"></span></div></div></div><div class="share" data-lazy-content data-share="route"></div></div>
+          </section>
+          <section class="card" aria-labelledby="currency-title" data-lazy="share-currency" aria-busy="true">
+            <div class="card__head"><h2 class="card__title" id="currency-title">Volume by currency</h2><span class="t-meta" data-range-label>Last 30 days</span></div>
+            <div class="card__body"><div class="skeleton-stack share-skeleton" data-skeleton><span class="skeleton skeleton--bar"></span><div><div class="skeleton-row"><span class="skeleton skeleton--short"></span><span class="skeleton skeleton--pill"></span></div><div class="skeleton-row"><span class="skeleton skeleton--short"></span><span class="skeleton skeleton--pill"></span></div><div class="skeleton-row"><span class="skeleton skeleton--short"></span><span class="skeleton skeleton--pill"></span></div></div></div><div class="share" data-lazy-content data-share="currency"></div></div>
+          </section>
+        </div>
+
+        <section class="card" aria-labelledby="payments-title" data-lazy="payments" aria-busy="true">
+          <div class="card__head">
+            <h2 class="card__title" id="payments-title">Recent payments</h2>
+            <div class="segmented segmented--sm" role="radiogroup" aria-label="Filter by status" data-segmented data-status-filter>
+              <button class="segmented__option" type="button" role="radio" aria-checked="true" data-value="all">All</button>
+              <button class="segmented__option" type="button" role="radio" aria-checked="false" data-value="paid">Paid</button>
+              <button class="segmented__option" type="button" role="radio" aria-checked="false" data-value="pending">Pending</button>
+              <button class="segmented__option" type="button" role="radio" aria-checked="false" data-value="failed">Failed</button>
+            </div>
+          </div>
+          <div class="payments-skeleton" data-skeleton><div class="skeleton-row"><span class="skeleton skeleton--short"></span><span class="skeleton skeleton--pill"></span><span class="skeleton skeleton--short"></span></div><div class="skeleton-row"><span class="skeleton skeleton--short"></span><span class="skeleton skeleton--pill"></span><span class="skeleton skeleton--short"></span></div><div class="skeleton-row"><span class="skeleton skeleton--short"></span><span class="skeleton skeleton--pill"></span><span class="skeleton skeleton--short"></span></div><div class="skeleton-row"><span class="skeleton skeleton--short"></span><span class="skeleton skeleton--pill"></span><span class="skeleton skeleton--short"></span></div><div class="skeleton-row"><span class="skeleton skeleton--short"></span><span class="skeleton skeleton--pill"></span><span class="skeleton skeleton--short"></span></div></div>
+          <div class="table-wrap payments-table" data-lazy-content>
+            <table class="table">
+              <thead>
+                <tr><th scope="col">Request ID</th><th scope="col">Reference</th><th scope="col">Route</th><th scope="col">Status</th><th scope="col" class="is-num">Amount</th><th scope="col" class="is-num">Date</th></tr>
+              </thead>
+              <tbody data-payments></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+</div>
+
+</body>
+</html>

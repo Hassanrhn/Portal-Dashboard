@@ -1,0 +1,369 @@
+{
+  "$description": "Tier 2 \u2014 meaning, per theme. Values reference primitives as {path}. Both modes must define the same keys (the build fails otherwise).",
+  "light": {
+    "bg": {
+      "app": {
+        "$value": "{color.neutral.25}"
+      },
+      "sidebar": {
+        "$value": "{color.neutral.50}"
+      },
+      "surface": {
+        "$value": "{color.white}"
+      },
+      "raised": {
+        "$value": "{color.white}"
+      },
+      "hover": {
+        "$value": "{color.neutral.100}"
+      },
+      "selected": {
+        "$value": "{color.neutral.100}"
+      },
+      "muted": {
+        "$value": "{color.slate.50}"
+      },
+      "inset": {
+        "$value": "{color.white}"
+      },
+      "overlay": {
+        "$value": "rgba(253, 253, 253, 0.6)"
+      },
+      "mark": {
+        "$value": "{color.neutral.900}"
+      }
+    },
+    "border": {
+      "default": {
+        "$value": "{color.neutral.200}"
+      },
+      "strong": {
+        "$value": "{color.neutral.250}"
+      },
+      "subtle": {
+        "$value": "{color.neutral.150}"
+      }
+    },
+    "text": {
+      "primary": {
+        "$value": "{color.neutral.950}"
+      },
+      "secondary": {
+        "$value": "{color.neutral.500}"
+      },
+      "tertiary": {
+        "$value": "{color.neutral.400}"
+      },
+      "inverse": {
+        "$value": "{color.white}"
+      }
+    },
+    "action": {
+      "primary-bg": {
+        "$value": "{color.neutral.790}"
+      },
+      "primary-bg-hover": {
+        "$value": "{color.neutral.950}"
+      },
+      "primary-fg": {
+        "$value": "{color.white}"
+      },
+      "primary-border": {
+        "$value": "{color.neutral.900}"
+      },
+      "disabled-bg": {
+        "$value": "{color.neutral.450}"
+      },
+      "disabled-fg": {
+        "$value": "{color.white}"
+      },
+      "secondary-bg": {
+        "$value": "{color.white}"
+      },
+      "secondary-bg-hover": {
+        "$value": "{color.neutral.75}"
+      },
+      "secondary-fg": {
+        "$value": "{color.neutral.950}"
+      },
+      "secondary-border": {
+        "$value": "{color.neutral.250}"
+      },
+      "danger-bg": {
+        "$value": "{color.red.600}"
+      },
+      "danger-fg": {
+        "$value": "{color.white}"
+      }
+    },
+    "accent": {
+      "solid": {
+        "$value": "{color.orange.500}"
+      },
+      "solid-fg": {
+        "$value": "{color.neutral.900}"
+      },
+      "subtle": {
+        "$value": "{color.orange.50}"
+      },
+      "text": {
+        "$value": "{color.orange.700}"
+      },
+      "ring": {
+        "$value": "rgba(255, 111, 0, 0.45)"
+      }
+    },
+    "status": {
+      "success-fg": {
+        "$value": "{color.green.700}"
+      },
+      "success-bg": {
+        "$value": "{color.green.50}"
+      },
+      "success-icon": {
+        "$value": "{color.green.500}"
+      },
+      "warning-fg": {
+        "$value": "{color.amber.800}"
+      },
+      "warning-bg": {
+        "$value": "{color.amber.50}"
+      },
+      "warning-border": {
+        "$value": "{color.amber.200}"
+      },
+      "danger-fg": {
+        "$value": "{color.red.600}"
+      },
+      "danger-bg": {
+        "$value": "{color.red.50}"
+      },
+      "info-fg": {
+        "$value": "{color.blue.700}"
+      },
+      "info-bg": {
+        "$value": "{color.blue.50}"
+      },
+      "neutral-fg": {
+        "$value": "{color.neutral.500}"
+      },
+      "neutral-bg": {
+        "$value": "{color.neutral.100}"
+      }
+    },
+    "chart": {
+      "1": {
+        "$value": "{color.blue.600}"
+      },
+      "2": {
+        "$value": "{color.pink.500}"
+      },
+      "3": {
+        "$value": "{color.orange.500}"
+      },
+      "4": {
+        "$value": "{color.green.500}"
+      },
+      "grid": {
+        "$value": "{color.slate.100}"
+      }
+    },
+    "code": {
+      "bg": {
+        "$value": "{color.neutral.50}"
+      },
+      "key": {
+        "$value": "{color.blue.700}"
+      },
+      "string": {
+        "$value": "{color.green.700}"
+      },
+      "number": {
+        "$value": "{color.orange.700}"
+      }
+    }
+  },
+  "dark": {
+    "bg": {
+      "app": {
+        "$value": "{color.neutral.850}"
+      },
+      "sidebar": {
+        "$value": "{color.neutral.900}"
+      },
+      "surface": {
+        "$value": "{color.neutral.850}"
+      },
+      "raised": {
+        "$value": "{color.neutral.820}"
+      },
+      "hover": {
+        "$value": "{color.neutral.800}"
+      },
+      "selected": {
+        "$value": "{color.neutral.800}"
+      },
+      "muted": {
+        "$value": "{color.slate.800}"
+      },
+      "inset": {
+        "$value": "{color.neutral.850}"
+      },
+      "overlay": {
+        "$value": "rgba(23, 23, 23, 0.6)"
+      },
+      "mark": {
+        "$value": "{color.black}"
+      }
+    },
+    "border": {
+      "default": {
+        "$value": "{color.neutral.760}"
+      },
+      "strong": {
+        "$value": "{color.neutral.720}"
+      },
+      "subtle": {
+        "$value": "{color.neutral.780}"
+      }
+    },
+    "text": {
+      "primary": {
+        "$value": "#F3F3F3"
+      },
+      "secondary": {
+        "$value": "{color.neutral.400}"
+      },
+      "tertiary": {
+        "$value": "{color.neutral.600}"
+      },
+      "inverse": {
+        "$value": "{color.neutral.950}"
+      }
+    },
+    "action": {
+      "primary-bg": {
+        "$value": "#F3F3F3"
+      },
+      "primary-bg-hover": {
+        "$value": "{color.white}"
+      },
+      "primary-fg": {
+        "$value": "{color.neutral.950}"
+      },
+      "primary-border": {
+        "$value": "#F3F3F3"
+      },
+      "disabled-bg": {
+        "$value": "{color.neutral.780}"
+      },
+      "disabled-fg": {
+        "$value": "{color.neutral.600}"
+      },
+      "secondary-bg": {
+        "$value": "{color.neutral.850}"
+      },
+      "secondary-bg-hover": {
+        "$value": "{color.neutral.800}"
+      },
+      "secondary-fg": {
+        "$value": "#F3F3F3"
+      },
+      "secondary-border": {
+        "$value": "{color.neutral.720}"
+      },
+      "danger-bg": {
+        "$value": "{color.red.600}"
+      },
+      "danger-fg": {
+        "$value": "{color.white}"
+      }
+    },
+    "accent": {
+      "solid": {
+        "$value": "{color.orange.500}"
+      },
+      "solid-fg": {
+        "$value": "{color.neutral.900}"
+      },
+      "subtle": {
+        "$value": "{color.orange.900}"
+      },
+      "text": {
+        "$value": "{color.orange.300}"
+      },
+      "ring": {
+        "$value": "rgba(255, 140, 51, 0.55)"
+      }
+    },
+    "status": {
+      "success-fg": {
+        "$value": "{color.green.400}"
+      },
+      "success-bg": {
+        "$value": "{color.green.900}"
+      },
+      "success-icon": {
+        "$value": "{color.green.400}"
+      },
+      "warning-fg": {
+        "$value": "{color.amber.300}"
+      },
+      "warning-bg": {
+        "$value": "{color.amber.900}"
+      },
+      "warning-border": {
+        "$value": "{color.amber.950}"
+      },
+      "danger-fg": {
+        "$value": "{color.red.400}"
+      },
+      "danger-bg": {
+        "$value": "{color.red.900}"
+      },
+      "info-fg": {
+        "$value": "{color.blue.400}"
+      },
+      "info-bg": {
+        "$value": "{color.blue.900}"
+      },
+      "neutral-fg": {
+        "$value": "{color.neutral.400}"
+      },
+      "neutral-bg": {
+        "$value": "{color.neutral.800}"
+      }
+    },
+    "chart": {
+      "1": {
+        "$value": "{color.blue.400}"
+      },
+      "2": {
+        "$value": "{color.pink.400}"
+      },
+      "3": {
+        "$value": "{color.orange.300}"
+      },
+      "4": {
+        "$value": "{color.green.400}"
+      },
+      "grid": {
+        "$value": "{color.neutral.780}"
+      }
+    },
+    "code": {
+      "bg": {
+        "$value": "{color.neutral.900}"
+      },
+      "key": {
+        "$value": "{color.blue.400}"
+      },
+      "string": {
+        "$value": "{color.green.400}"
+      },
+      "number": {
+        "$value": "{color.orange.300}"
+      }
+    }
+  }
+}

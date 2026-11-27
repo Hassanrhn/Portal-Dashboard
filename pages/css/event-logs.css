@@ -1,0 +1,6 @@
+/* Event logs page specifics. Tokens only. */
+.log-tabs { margin-bottom: var(--space-16); }
+.live-tail { display: inline-flex; align-items: center; gap: var(--space-8); color: var(--text-secondary); font-size: var(--font-size-13); }
+.live-tail__dot { width: 8px; height: 8px; border-radius: var(--radius-full); background: var(--border-strong); transition: background-color var(--motion-fast) var(--motion-ease); }
+.live-tail__dot.is-on { background: var(--status-success-icon); animation: status-breathe 2.4s var(--motion-ease) infinite; }
+@media (prefers-reduced-motion: reduce) { .live-tail__dot.is-on { animation: none; } }

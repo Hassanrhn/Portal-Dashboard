@@ -1,0 +1,7 @@
+/* API keys page specifics. Tokens only. */
+.stack--tight { display: grid; gap: var(--space-12); }
+.secret-field { display: flex; gap: var(--space-8); }
+.secret-field .input { flex: 1; min-width: 0; }
+.offering-list { display: grid; gap: var(--space-8); margin-top: var(--space-12); padding: var(--space-12); border: var(--border-width) solid var(--border-default); border-radius: var(--radius-8); background: var(--bg-sidebar); }
+.offering-list[hidden] { display: none; }
+.offering-list .u-mono { overflow-wrap: anywhere; }

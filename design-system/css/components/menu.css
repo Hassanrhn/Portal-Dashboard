@@ -1,0 +1,22 @@
+/* Row/overflow menu (popover). Positioned by patterns.js. Flat: border only. */
+.menu {
+  position: fixed;
+  z-index: 200;
+  min-width: 200px;
+  max-width: 300px;
+  padding: var(--space-4);
+  border: var(--border-width) solid var(--surface-raised-border);
+  border-radius: var(--radius-10);
+  background: var(--surface-raised-bg);
+  animation: menu-in var(--motion-fast) var(--motion-ease) both;
+  transform-origin: top right;
+}
+@keyframes menu-in { from { opacity: 0; transform: translateY(-4px) scale(0.98); } }
+.menu__item { display: flex; align-items: flex-start; gap: var(--space-10); width: 100%; padding: var(--space-8); border-radius: var(--radius-6); text-align: left; font-size: var(--font-size-13); color: var(--text-primary); }
+.menu__item svg { width: var(--size-16); height: var(--size-16); margin-top: 1px; color: var(--text-secondary); }
+.menu__item:hover, .menu__item:focus-visible { background: var(--bg-hover); outline: none; }
+.menu__item--danger, .menu__item--danger svg { color: var(--status-danger-fg); }
+.menu__item:disabled { opacity: 0.45; }
+.menu__text { display: grid; gap: 1px; }
+.menu__desc { color: var(--text-secondary); font-size: var(--font-size-12); }
+.menu__sep { height: 1px; margin: var(--space-4) 0; background: var(--border-default); }

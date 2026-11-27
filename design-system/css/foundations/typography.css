@@ -1,0 +1,26 @@
+/* Type roles. Sizes, weights and tracking come from tokens (components.json → type.*). */
+.t-title {
+  font-size: var(--type-title-size);
+  font-weight: var(--type-title-weight);
+  line-height: var(--type-title-leading);
+  letter-spacing: var(--type-title-tracking);
+}
+.t-heading {
+  font-size: var(--type-heading-size);
+  font-weight: var(--type-heading-weight);
+  line-height: var(--font-leading-snug);
+}
+.t-body { font-size: var(--type-body-size); line-height: var(--type-body-leading); }
+.t-label { font-size: var(--type-label-size); font-weight: var(--font-weight-medium); }
+.t-meta { font-size: var(--type-meta-size); color: var(--text-secondary); }
+.t-figure {
+  font-size: var(--type-figure-size);
+  font-weight: var(--type-figure-weight);
+  line-height: var(--font-leading-tight);
+  letter-spacing: var(--font-tracking-tight);
+  font-variant-numeric: tabular-nums;
+}
+.t-secondary { color: var(--text-secondary); }
+/* Inline text link */
+.inline-link { color: var(--accent-text); text-decoration: underline; text-decoration-color: var(--border-strong); text-underline-offset: 3px; transition: text-decoration-color var(--motion-fast) var(--motion-ease); }
+.inline-link:hover { text-decoration-color: currentColor; }

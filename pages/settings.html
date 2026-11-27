@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en" data-theme="light" data-env="live">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Settings · Portal</title>
+  <link rel="stylesheet" href="../design-system/css/portal.css">
+  <link rel="stylesheet" href="css/settings.css">
+  <script src="../design-system/js/theme.js"></script>
+  <script src="../design-system/js/icons.js" defer></script>
+  <script src="../design-system/js/dom.js" defer></script>
+  <script src="js/layout.js" defer></script>
+  <script src="../design-system/js/components.js" defer></script>
+  <script src="../design-system/js/patterns.js" defer></script>
+  <script src="../design-system/js/lazy.js" defer></script>
+  <script src="js/data/team.js" defer></script>
+  <script src="js/settings.js" defer></script>
+  <script src="js/create-payment.js" defer></script>
+  <script src="../design-system/js/shell.js" defer></script>
+</head>
+<body data-page="settings">
+<div class="app" data-app>
+  <div class="main">
+    <main class="page" id="main">
+      <div class="page__head">
+        <div>
+          <h1 class="t-title">Settings</h1>
+          <p class="page__sub">Organization details, security, checkout redirects and alerts for The Orange Card.</p>
+        </div>
+      </div>
+
+      <div class="tabs settings-tabs" role="tablist" aria-label="Settings sections" data-tabs>
+        <button class="tabs__tab" type="button" role="tab" id="tab-org" aria-controls="panel-org" aria-selected="true" data-value="org">Organization</button>
+        <button class="tabs__tab" type="button" role="tab" id="tab-security" aria-controls="panel-security" aria-selected="false" data-value="security">Security</button>
+        <button class="tabs__tab" type="button" role="tab" id="tab-checkout" aria-controls="panel-checkout" aria-selected="false" data-value="checkout">Checkout</button>
+        <button class="tabs__tab" type="button" role="tab" id="tab-notifications" aria-controls="panel-notifications" aria-selected="false" data-value="notifications">Notifications</button>
+      </div>
+
+      <form data-settings-form novalidate>
+        <!-- Organization ------------------------------------------------------------------>
+        <div class="stack" role="tabpanel" id="panel-org" aria-labelledby="tab-org">
+          <section class="card settings" aria-label="Organization">
+            <div class="setting">
+              <div><label class="setting__title" for="org-display">Display name</label><p class="setting__desc">Shown to your team in Portal and on receipts.</p></div>
+              <div class="setting__control field"><input class="input" id="org-display" name="displayName" maxlength="60" value="The Orange Card"></div>
+            </div>
+            <div class="setting">
+              <div><label class="setting__title" for="org-legal">Legal name</label><p class="setting__desc">Used on statements and invoices.</p></div>
+              <div class="setting__control field"><input class="input" id="org-legal" name="legalName" maxlength="120" value="Orange Card Payments FZ-LLC"></div>
+            </div>
+            <div class="setting">
+              <div><label class="setting__title" for="org-email">Support email</label><p class="setting__desc">Customers see this on hosted payment pages.</p></div>
+              <div class="setting__control field"><input class="input" id="org-email" name="supportEmail" type="email" inputmode="email" maxlength="120" value="help@theorangecard.com"></div>
+            </div>
+            <div class="setting">
+              <div><label class="setting__title" for="org-tz">Timezone</label><p class="setting__desc">Used for reports and daily summaries. Timestamps in the API are always UTC.</p></div>
+              <div class="setting__control field">
+                <select class="select" id="org-tz" name="timezone">
+                  <option value="UTC">UTC</option>
+                  <option value="Asia/Dubai" selected>Dubai (UTC+4)</option>
+                  <option value="Europe/London">London (UTC+0)</option>
+                  <option value="Asia/Singapore">Singapore (UTC+8)</option>
+                  <option value="America/New_York">New York (UTC−5)</option>
+                </select>
+              </div>
+            </div>
+            <div class="setting">
+              <div><label class="setting__title" for="org-currency">Default reporting currency</label><p class="setting__desc">Totals on Overview and Reports convert to this currency.</p></div>
+              <div class="setting__control field">
+                <select class="select" id="org-currency" name="reportingCurrency">
+                  <option selected>USD</option><option>USDC</option><option>USDT</option><option>AED</option>
+                </select>
+              </div>
+            </div>
+          </section>
+
+          <section class="card settings danger-zone" aria-labelledby="danger-title">
+            <div class="setting">
+              <div><h2 class="setting__title" id="danger-title">Close account</h2><p class="setting__desc">Stops all payments and payouts and starts final settlement. Your account manager confirms with you before anything closes.</p></div>
+              <div class="setting__control"><button class="btn btn--danger" type="button" data-close-account><i data-icon="power"></i>Close account</button></div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Security ---------------------------------------------------------------------->
+        <div class="stack" role="tabpanel" id="panel-security" aria-labelledby="tab-security" hidden>
+          <section class="card settings" aria-label="Security">
+            <div class="setting">
+              <div><p class="setting__title" id="sec-2fa-label">Require two-factor for all members</p><p class="setting__desc">Members without two-factor must set it up at their next sign-in.</p></div>
+              <div class="setting__control"><button class="switch" type="button" role="switch" aria-checked="false" aria-labelledby="sec-2fa-label" data-switch data-name="require2fa"></button></div>
+            </div>
+            <div class="setting">
+              <div><label class="setting__title" for="sec-timeout">Session timeout</label><p class="setting__desc">Signs members out after this much inactivity.</p></div>
+              <div class="setting__control field">
+                <select class="select" id="sec-timeout" name="sessionTimeout">
+                  <option value="15">15 minutes</option><option value="30">30 minutes</option><option value="60" selected>1 hour</option><option value="240">4 hours</option><option value="480">8 hours</option>
+                </select>
+              </div>
+            </div>
+            <div class="setting setting--stack">
+              <div><label class="setting__title" for="sec-ips">IP allowlist</label><p class="setting__desc">One IPv4 address or CIDR range per line. Leave empty to allow sign-in from anywhere. Applies to Portal, not the API.</p></div>
+              <div class="setting__control field"><textarea class="input textarea input--mono" id="sec-ips" name="ipAllowlist" rows="4" maxlength="2000" spellcheck="false" autocomplete="off" placeholder="94.200.18.0/24">94.200.18.0/24
+81.2.69.160</textarea></div>
+            </div>
+          </section>
+
+          <section class="card" data-lazy="sessions" aria-busy="true" aria-labelledby="sessions-title">
+            <div class="card__head">
+              <h2 class="card__title" id="sessions-title">Active sessions</h2>
+              <button class="btn btn--sm" type="button" data-signout-all>Sign out all other sessions</button>
+            </div>
+            <div class="card__body">
+              <div class="skeleton-stack" data-skeleton><div class="skeleton-row"><span class="skeleton skeleton--short"></span><span class="skeleton skeleton--pill"></span></div><div class="skeleton-row"><span class="skeleton skeleton--short"></span><span class="skeleton skeleton--pill"></span></div><div class="skeleton-row"><span class="skeleton skeleton--short"></span><span class="skeleton skeleton--pill"></span></div></div>
+              <ul class="rows" data-lazy-content data-sessions></ul>
+            </div>
+          </section>
+        </div>
+
+        <!-- Checkout ---------------------------------------------------------------------->
+        <div class="stack" role="tabpanel" id="panel-checkout" aria-labelledby="tab-checkout" hidden>
+          <section class="card settings" aria-label="Checkout redirects">
+            <div class="setting">
+              <div><label class="setting__title" for="co-success">Success redirect URL</label><p class="setting__desc">Where customers land after a hosted payment page succeeds. HTTPS only.</p></div>
+              <div class="setting__control field"><input class="input" id="co-success" name="successUrl" type="url" inputmode="url" maxlength="300" value="https://shop.theorangecard.com/checkout/success"></div>
+            </div>
+            <div class="setting">
+              <div><label class="setting__title" for="co-cancel">Cancel redirect URL</label><p class="setting__desc">Where customers go if they leave or the payment fails. HTTPS only.</p></div>
+              <div class="setting__control field"><input class="input" id="co-cancel" name="cancelUrl" type="url" inputmode="url" maxlength="300" value="https://shop.theorangecard.com/checkout/cancelled"></div>
+            </div>
+            <div class="setting setting--stack">
+              <div><label class="setting__title" for="co-domains">Allowed return domains</label><p class="setting__desc">A per-payment <code class="u-mono">returnUrl</code> must use one of these domains. One per line.</p></div>
+              <div class="setting__control field"><textarea class="input textarea input--mono" id="co-domains" name="returnDomains" rows="3" maxlength="1000" spellcheck="false" autocomplete="off">shop.theorangecard.com
+app.theorangecard.com</textarea></div>
+            </div>
+            <div class="setting setting--stack">
+              <div><p class="setting__title">Redirect preview</p><p class="setting__desc">After a successful payment, the customer is sent to:</p></div>
+              <div class="setting__control"><span class="code redirect-preview u-mono" data-redirect-preview></span></div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Notifications ----------------------------------------------------------------->
+        <div class="stack" role="tabpanel" id="panel-notifications" aria-labelledby="tab-notifications" hidden>
+          <section class="card settings" aria-labelledby="rules-title">
+            <div class="card__head"><h2 class="card__title" id="rules-title">Alert rules</h2></div>
+            <div class="setting">
+              <div><p class="setting__title" id="rule-rate-label">Success rate drops</p><p class="setting__desc">Alert when the success rate over the last hour falls below the threshold.</p></div>
+              <div class="setting__control">
+                <div class="field"><div class="input-affix input-affix--suffix"><input class="input u-num" id="rule-rate" name="successThreshold" type="text" inputmode="numeric" maxlength="2" value="90" aria-label="Success rate threshold in percent"><span class="input-affix__addon" aria-hidden="true">%</span></div></div>
+                <button class="switch" type="button" role="switch" aria-checked="true" aria-labelledby="rule-rate-label" data-switch data-name="ruleRate"></button>
+              </div>
+            </div>
+            <div class="setting">
+              <div><p class="setting__title" id="rule-webhook-label">Webhook endpoint failing</p><p class="setting__desc">An endpoint failed 5 delivery attempts and an event was dead-lettered.</p></div>
+              <div class="setting__control"><button class="switch" type="button" role="switch" aria-checked="true" aria-labelledby="rule-webhook-label" data-switch data-name="ruleWebhook"></button></div>
+            </div>
+            <div class="setting">
+              <div><p class="setting__title" id="rule-payout-label">Payout awaiting approval</p><p class="setting__desc">A payout needs an Admin or Finance member to approve it.</p></div>
+              <div class="setting__control"><button class="switch" type="button" role="switch" aria-checked="true" aria-labelledby="rule-payout-label" data-switch data-name="rulePayout"></button></div>
+            </div>
+            <div class="setting">
+              <div><p class="setting__title" id="rule-summary-label">Daily summary</p><p class="setting__desc">Volume, success rate and failures, sent at 08:00 in your timezone.</p></div>
+              <div class="setting__control"><button class="switch" type="button" role="switch" aria-checked="false" aria-labelledby="rule-summary-label" data-switch data-name="ruleSummary"></button></div>
+            </div>
+          </section>
+
+          <section class="card settings" aria-labelledby="channels-title">
+            <div class="card__head"><h2 class="card__title" id="channels-title">Channels</h2></div>
+            <div class="setting">
+              <div><p class="setting__title" id="ch-email-label">Email</p><p class="setting__desc">Send alerts to the recipients below.</p></div>
+              <div class="setting__control"><button class="switch" type="button" role="switch" aria-checked="true" aria-labelledby="ch-email-label" data-switch data-name="channelEmail"></button></div>
+            </div>
+            <div class="setting">
+              <div><p class="setting__title" id="ch-app-label">In-app</p><p class="setting__desc">Show alerts on Overview and in the bell menu.</p></div>
+              <div class="setting__control"><button class="switch" type="button" role="switch" aria-checked="true" aria-labelledby="ch-app-label" data-switch data-name="channelApp"></button></div>
+            </div>
+            <div class="setting">
+              <div><label class="setting__title" for="ch-recipients">Recipients</label><p class="setting__desc">Comma-separated emails, up to 10.</p></div>
+              <div class="setting__control field"><input class="input" id="ch-recipients" name="recipients" inputmode="email" maxlength="600" value="pocket@pocket.com, ops@theorangecard.com"></div>
+            </div>
+          </section>
+        </div>
+      </form>
+
+      <div class="save-bar" role="region" aria-label="Unsaved changes" data-save-bar>
+        <span class="save-bar__dot" aria-hidden="true"></span>
+        <span>Unsaved changes</span>
+        <button class="btn btn--ghost btn--sm" type="button" data-discard>Discard</button>
+        <button class="btn btn--primary btn--sm" type="button" data-save>Save</button>
+      </div>
+    </main>
+  </div>
+</div>
+</body>
+</html>

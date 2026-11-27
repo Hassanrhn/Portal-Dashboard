@@ -1,0 +1,49 @@
+/* Data table. Tokens: --table-*. Amounts right-aligned with tabular figures. */
+.table-wrap { overflow-x: auto; }
+.table { width: 100%; border-collapse: collapse; font-size: var(--font-size-14); }
+.table th {
+  height: var(--table-header-height);
+  padding: 0 var(--table-cell-pad-x);
+  border-bottom: var(--border-width) solid var(--card-border);
+  color: var(--table-header-fg);
+  font-size: var(--font-size-13);
+  font-weight: var(--font-weight-regular);
+  text-align: left;
+  white-space: nowrap;
+}
+.table td {
+  height: var(--table-row-height);
+  padding: 0 var(--table-cell-pad-x);
+  border-bottom: var(--border-width) solid var(--table-divider);
+  white-space: nowrap;
+}
+.table tbody tr:last-child td { border-bottom: 0; }
+.table tbody tr { transition: background-color var(--motion-fast) var(--motion-ease); }
+.table tbody tr:hover { background: var(--table-row-hover); }
+.table .is-num { text-align: right; font-variant-numeric: tabular-nums; }
+.table__empty { padding: var(--space-32) var(--table-cell-pad-x); text-align: center; color: var(--text-secondary); }
+
+/* Row entering after a filter change */
+.table tbody tr.is-entering { animation: row-in var(--motion-base) var(--motion-ease) both; }
+@keyframes row-in { from { opacity: 0; transform: translateY(4px); } }
+
+/* Copyable identifier */
+.copy { display: inline-flex; align-items: center; gap: var(--space-4); }
+.copy__btn {
+  display: grid; place-items: center;
+  width: 24px; height: 24px;
+  border-radius: var(--radius-6);
+  color: var(--text-tertiary);
+  opacity: 0;
+  transition: opacity var(--motion-fast) var(--motion-ease), background-color var(--motion-fast) var(--motion-ease), color var(--motion-fast) var(--motion-ease);
+}
+.copy__btn svg { width: 13px; height: 13px; }
+tr:hover .copy__btn, .copy__btn:focus-visible, .copy__btn.is-copied { opacity: 1; }
+.copy__btn:hover { background: var(--bg-hover); color: var(--text-primary); }
+.copy__btn.is-copied { color: var(--status-success-icon); }
+.copy__btn .icon-check { display: none; }
+.copy__btn.is-copied .icon-copy { display: none; }
+.copy__btn.is-copied .icon-check { display: block; animation: pop-in var(--motion-base) var(--motion-spring); }
+@keyframes pop-in { from { transform: scale(0.4); opacity: 0; } }
+@media (hover: none) { .copy__btn { opacity: 1; } }
+.amount__currency { margin-left: var(--space-4); color: var(--text-secondary); }

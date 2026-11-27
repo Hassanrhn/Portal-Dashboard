@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en" data-theme="light" data-env="live">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Cardholders · Portal</title>
+  <link rel="stylesheet" href="../design-system/css/portal.css">
+  <link rel="stylesheet" href="css/cardholders.css">
+  <script src="../design-system/js/theme.js"></script>
+  <script src="../design-system/js/icons.js" defer></script>
+  <script src="../design-system/js/dom.js" defer></script>
+  <script src="js/layout.js" defer></script>
+  <script src="../design-system/js/components.js" defer></script>
+  <script src="../design-system/js/patterns.js" defer></script>
+  <script src="../design-system/js/lazy.js" defer></script>
+  <script src="js/data/cards.js" defer></script>
+  <script src="js/cardholders.js" defer></script>
+  <script src="js/create-payment.js" defer></script>
+  <script src="../design-system/js/shell.js" defer></script>
+</head>
+<body data-page="cardholders">
+<div class="app" data-app>
+  <div class="main">
+    <main class="page" id="main">
+      <div class="page__head">
+        <div>
+          <h1 class="t-title">Cardholders</h1>
+          <p class="page__sub">People in your card program across Axys, Hypercard and Interlace. Select a row to see KYC, cards and actions.</p>
+        </div>
+        <div class="page__actions">
+          <a class="btn btn--lg" href="card-orders.html"><i data-icon="truck"></i>Card orders</a>
+          <button class="btn btn--primary btn--lg" type="button" data-add-cardholder><i data-icon="plus"></i>Add cardholder</button>
+        </div>
+      </div>
+
+      <div class="stack">
+        <section class="kpi-strip" aria-label="Cardholder metrics" data-lazy="cardholder-kpis" aria-busy="true">
+          <div class="kpi">
+            <p class="kpi__label">Total cardholders</p>
+            <div class="skeleton-stack kpi-skeleton" data-skeleton><span class="skeleton skeleton--figure"></span><span class="skeleton skeleton--text"></span></div>
+            <div data-lazy-content><p class="kpi__value t-figure" data-kpi="total">0</p><p class="kpi__meta" data-kpi-meta="total"></p></div>
+          </div>
+          <div class="kpi">
+            <p class="kpi__label">Verified</p>
+            <div class="skeleton-stack kpi-skeleton" data-skeleton><span class="skeleton skeleton--figure"></span><span class="skeleton skeleton--text"></span></div>
+            <div data-lazy-content><p class="kpi__value t-figure" data-kpi="verified">0</p><p class="kpi__meta" data-kpi-meta="verified"></p></div>
+          </div>
+          <div class="kpi">
+            <p class="kpi__label">KYC pending</p>
+            <div class="skeleton-stack kpi-skeleton" data-skeleton><span class="skeleton skeleton--figure"></span><span class="skeleton skeleton--text"></span></div>
+            <div data-lazy-content><p class="kpi__value t-figure" data-kpi="pending">0</p><p class="kpi__meta" data-kpi-meta="pending"></p></div>
+          </div>
+          <div class="kpi">
+            <p class="kpi__label">Active cards</p>
+            <div class="skeleton-stack kpi-skeleton" data-skeleton><span class="skeleton skeleton--figure"></span><span class="skeleton skeleton--text"></span></div>
+            <div data-lazy-content><p class="kpi__value t-figure" data-kpi="cards">0</p><p class="kpi__meta" data-kpi-meta="cards"></p></div>
+          </div>
+        </section>
+
+        <section class="card table-card" data-lazy="cardholders" aria-busy="true" aria-label="Cardholders">
+          <div class="toolbar">
+            <div class="input-group toolbar__search"><i data-icon="search" class="input-group__icon"></i><input class="input" type="search" placeholder="Name, email or cardholder ID" aria-label="Search cardholders" maxlength="80" data-filter="q"></div>
+            <div class="segmented segmented--sm" role="radiogroup" aria-label="KYC status" data-segmented data-filter="kyc">
+              <button class="segmented__option" type="button" role="radio" aria-checked="true" data-value="all">All <span class="segmented__count" data-count="all"></span></button>
+              <button class="segmented__option" type="button" role="radio" aria-checked="false" data-value="verified">Verified <span class="segmented__count" data-count="verified"></span></button>
+              <button class="segmented__option" type="button" role="radio" aria-checked="false" data-value="pending">Pending <span class="segmented__count" data-count="pending"></span></button>
+              <button class="segmented__option" type="button" role="radio" aria-checked="false" data-value="rejected">Rejected <span class="segmented__count" data-count="rejected"></span></button>
+            </div>
+            <select class="select select--sm" aria-label="Issuer" data-filter="issuer">
+              <option value="">All issuers</option><option>Axys</option><option>Hypercard</option><option>Interlace</option>
+            </select>
+            <span class="toolbar__spacer"></span>
+            <button class="btn btn--ghost btn--sm" type="button" data-clear hidden>Clear filters</button>
+          </div>
+          <div data-skeleton class="skeleton-list"></div>
+          <div data-lazy-content data-table></div>
+        </section>
+      </div>
+    </main>
+  </div>
+</div>
+</body>
+</html>

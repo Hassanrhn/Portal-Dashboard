@@ -1,0 +1,24 @@
+/*
+ * The Orange Card wordmark (Figma node 151:74): Archivo at 125% width.
+ * "THE" ExtraBold small caps above "ORANGE" Black + "CARD" Light. Colour follows text, so it works in both themes.
+ * Size with --logo-size (cap line of ORANGE/CARD). Proportions are from the Figma frame (25.7px → 241px wide).
+ */
+.logo {
+  --logo-size: 17px;
+  display: inline-grid;
+  justify-items: start;
+  color: var(--text-primary);
+  font-family: "Archivo Variable", var(--type-family);
+  font-stretch: 125%;
+  font-variation-settings: "wdth" 125;
+  line-height: 1;
+  white-space: nowrap;
+  user-select: none;
+}
+.logo__the { font-size: calc(var(--logo-size) * 0.22); font-weight: 800; letter-spacing: 0.02em; line-height: 0.82; margin-bottom: calc(var(--logo-size) * 0.04); }
+.logo__word { display: flex; font-size: var(--logo-size); letter-spacing: -0.03em; line-height: 0.82; }
+.logo__orange { font-weight: 900; }
+.logo__card { font-weight: 300; letter-spacing: -0.01em; }
+
+/* Compact mark for the collapsed sidebar */
+.logo-mark { display: grid; place-items: center; width: 28px; height: 28px; border: var(--border-width) solid var(--border-default); border-radius: var(--radius-6); background: var(--bg-mark); color: var(--color-white); font-family: "Archivo Variable", var(--type-family); font-stretch: 125%; font-weight: 900; font-size: 15px; line-height: 1; }

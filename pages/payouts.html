@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en" data-theme="light" data-env="live">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Payouts · Portal</title>
+  <link rel="stylesheet" href="../design-system/css/portal.css">
+  <link rel="stylesheet" href="css/payouts.css">
+  <script src="../design-system/js/theme.js"></script>
+  <script src="../design-system/js/icons.js" defer></script>
+  <script src="../design-system/js/dom.js" defer></script>
+  <script src="js/layout.js" defer></script>
+  <script src="../design-system/js/components.js" defer></script>
+  <script src="../design-system/js/patterns.js" defer></script>
+  <script src="../design-system/js/lazy.js" defer></script>
+  <script src="js/data/payouts.js" defer></script>
+  <script src="js/payouts.js" defer></script>
+  <script src="js/create-payment.js" defer></script>
+  <script src="../design-system/js/shell.js" defer></script>
+</head>
+<body data-page="payouts">
+<div class="app" data-app>
+  <div class="main">
+    <main class="page" id="main">
+      <div class="page__head">
+        <div>
+          <h1 class="t-title">Payouts</h1>
+          <p class="page__sub">Withdrawals from your balance to crypto wallets through ForumPay. Select a row for details.</p>
+        </div>
+        <div class="page__actions">
+          <button class="btn btn--lg" type="button" data-export><i data-icon="download"></i>Export CSV</button>
+          <button class="btn btn--primary btn--lg" type="button" data-new-payout><i data-icon="plus"></i>New payout</button>
+        </div>
+      </div>
+
+      <div class="stack">
+        <section class="kpi-strip" aria-label="Payout summary" data-lazy="payout-kpis" aria-busy="true">
+          <div class="kpi">
+            <p class="kpi__label">Available USDT</p>
+            <div class="skeleton-stack page-kpi-skeleton" data-skeleton><span class="skeleton skeleton--figure"></span><span class="skeleton skeleton--text"></span></div>
+            <div data-lazy-content>
+              <p class="kpi__value t-figure"><span data-kpi="USDT">0.00</span><span class="kpi__unit">USDT</span></p>
+              <p class="kpi__meta" data-kpi-meta="USDT"></p>
+            </div>
+          </div>
+          <div class="kpi">
+            <p class="kpi__label">Available USDC</p>
+            <div class="skeleton-stack page-kpi-skeleton" data-skeleton><span class="skeleton skeleton--figure"></span><span class="skeleton skeleton--text"></span></div>
+            <div data-lazy-content>
+              <p class="kpi__value t-figure"><span data-kpi="USDC">0.00</span><span class="kpi__unit">USDC</span></p>
+              <p class="kpi__meta" data-kpi-meta="USDC"></p>
+            </div>
+          </div>
+          <div class="kpi">
+            <p class="kpi__label">Awaiting approval</p>
+            <div class="skeleton-stack page-kpi-skeleton" data-skeleton><span class="skeleton skeleton--figure"></span><span class="skeleton skeleton--text"></span></div>
+            <div data-lazy-content>
+              <p class="kpi__value t-figure"><span data-kpi="awaiting">0</span></p>
+              <p class="kpi__meta" data-kpi-meta="awaiting"></p>
+            </div>
+          </div>
+          <div class="kpi">
+            <p class="kpi__label">Paid out, last 30 days</p>
+            <div class="skeleton-stack page-kpi-skeleton" data-skeleton><span class="skeleton skeleton--figure"></span><span class="skeleton skeleton--text"></span></div>
+            <div data-lazy-content>
+              <p class="kpi__value t-figure"><span data-kpi="paid">0.00</span><span class="kpi__unit">USD eq.</span></p>
+              <p class="kpi__meta" data-kpi-meta="paid"></p>
+            </div>
+          </div>
+        </section>
+
+        <section class="card table-card" data-lazy="payouts" aria-busy="true" aria-label="Payouts">
+          <div class="toolbar">
+            <div class="input-group toolbar__search"><i data-icon="search" class="input-group__icon"></i><input class="input" type="search" placeholder="ID, reference, address or tx hash" aria-label="Search payouts" maxlength="80" data-filter="q"></div>
+            <div class="segmented segmented--sm" role="radiogroup" aria-label="Status" data-segmented data-filter="status">
+              <button class="segmented__option" type="button" role="radio" aria-checked="true" data-value="all">All <span class="segmented__count" data-count="all"></span></button>
+              <button class="segmented__option" type="button" role="radio" aria-checked="false" data-value="awaiting_approval">Awaiting approval <span class="segmented__count" data-count="awaiting_approval"></span></button>
+              <button class="segmented__option" type="button" role="radio" aria-checked="false" data-value="processing">Processing <span class="segmented__count" data-count="processing"></span></button>
+              <button class="segmented__option" type="button" role="radio" aria-checked="false" data-value="paid">Paid <span class="segmented__count" data-count="paid"></span></button>
+              <button class="segmented__option" type="button" role="radio" aria-checked="false" data-value="failed">Failed <span class="segmented__count" data-count="failed"></span></button>
+              <button class="segmented__option" type="button" role="radio" aria-checked="false" data-value="cancelled">Cancelled <span class="segmented__count" data-count="cancelled"></span></button>
+            </div>
+            <select class="select select--sm" aria-label="Currency" data-filter="currency">
+              <option value="">All currencies</option><option>USDT</option><option>USDC</option>
+            </select>
+            <span class="toolbar__spacer"></span>
+            <button class="btn btn--ghost btn--sm" type="button" data-clear hidden>Clear filters</button>
+          </div>
+          <div data-skeleton class="skeleton-list"></div>
+          <div data-lazy-content data-table></div>
+        </section>
+      </div>
+    </main>
+  </div>
+</div>
+</body>
+</html>

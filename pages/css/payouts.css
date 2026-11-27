@@ -1,0 +1,11 @@
+/* Payouts page specifics. Tokens only. */
+.page-kpi-skeleton { margin-top: var(--space-12); gap: var(--space-12); }
+.payout-dest { display: inline-flex; align-items: center; gap: var(--space-8); }
+.timeline__item--upcoming:not(.timeline__item--warning) .timeline__title,
+.timeline__item--upcoming .timeline__time { color: var(--text-tertiary); }
+.timeline__item--upcoming:not(.timeline__item--warning) .timeline__dot { border-style: dashed; }
+.kv .copy { min-width: 0; }
+.kv .copy > span { min-width: 0; overflow-wrap: anywhere; }
+.toolbar > .segmented { max-width: 100%; overflow-x: auto; scrollbar-width: none; }
+/* Work-around: shared .drawer__body grid rows shrink to fit instead of scrolling when content is taller than the drawer. */
+.drawer__body { grid-auto-rows: max-content; }

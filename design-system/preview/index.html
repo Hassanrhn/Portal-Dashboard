@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Components · Portal design system</title>
+  <link rel="stylesheet" href="../css/portal.css">
+  <link rel="stylesheet" href="preview.css">
+  <script src="../js/theme.js"></script>
+  <script src="../js/icons.js" defer></script>
+  <script src="../js/components.js" defer></script>
+  <script src="preview.js" defer></script>
+</head>
+<body>
+<header class="pv-bar">
+  <a class="pv-back" href="../../index.html"><i data-icon="chevron-left"></i>Review hub</a>
+  <span class="pv-bar__title">Portal design system <span class="t-meta">v1.0 · review</span></span>
+  <button class="theme-switch" type="button" role="switch" aria-checked="false" aria-label="Dark mode" data-theme-toggle>
+    <span class="theme-switch__knob" aria-hidden="true"></span>
+    <span class="theme-switch__icon theme-switch__icon--sun" aria-hidden="true"><i data-icon="sun"></i></span>
+    <span class="theme-switch__icon theme-switch__icon--moon" aria-hidden="true"><i data-icon="moon"></i></span>
+  </button>
+</header>
+
+<main class="pv">
+  <section class="pv-intro">
+    <h1 class="t-title">Components</h1>
+    <p class="page__sub">Every component below reads its values from design tokens. Change a token in the panel and watch every instance update.</p>
+  </section>
+
+  <!-- Live token panel -->
+  <section class="card pv-tune" aria-labelledby="tune-title">
+    <div class="card__head"><h2 class="card__title" id="tune-title">Try a token change</h2><button class="btn btn--sm btn--ghost" type="button" data-tune-reset>Reset</button></div>
+    <div class="card__body pv-tune__grid">
+      <label class="field"><span class="field__label">Accent · <code class="u-mono">accent.solid</code></span>
+        <span class="pv-swatches" role="radiogroup" aria-label="Accent colour" data-tune="--accent-solid">
+          <button type="button" role="radio" aria-checked="true" class="pv-swatch pv-swatch--orange" data-value="" aria-label="Orange"></button>
+          <button type="button" role="radio" aria-checked="false" class="pv-swatch pv-swatch--blue" data-value="var(--color-blue-500)" aria-label="Blue"></button>
+          <button type="button" role="radio" aria-checked="false" class="pv-swatch pv-swatch--pink" data-value="var(--color-pink-500)" aria-label="Pink"></button>
+          <button type="button" role="radio" aria-checked="false" class="pv-swatch pv-swatch--green" data-value="var(--color-green-500)" aria-label="Green"></button>
+        </span>
+      </label>
+      <label class="field"><span class="field__label">Control radius · <code class="u-mono">control.radius</code> <output class="t-meta" data-out="radius">8px</output></span>
+        <input class="pv-range" type="range" min="0" max="18" value="8" data-tune-range="--control-radius" data-unit="px" data-out-target="radius">
+      </label>
+      <label class="field"><span class="field__label">Button height · <code class="u-mono">button.height</code> <output class="t-meta" data-out="height">32px</output></span>
+        <input class="pv-range" type="range" min="24" max="44" value="32" data-tune-range="--button-height" data-unit="px" data-out-target="height">
+      </label>
+    </div>
+  </section>
+
+  <section class="pv-section" aria-labelledby="color-title">
+    <h2 class="t-heading" id="color-title">Colour roles</h2>
+    <p class="t-meta">Semantic tokens with their live value in the current theme.</p>
+    <div class="pv-colors" data-color-grid></div>
+  </section>
+
+  <section class="pv-section" aria-labelledby="type-title">
+    <h2 class="t-heading" id="type-title">Type</h2>
+    <div class="card card__body pv-type">
+      <p class="t-title">Title 24 / medium</p>
+      <p class="t-heading">Heading 16 / medium</p>
+      <p class="t-figure">299.28 <span class="kpi__unit">Figure 24 / semibold, tabular</span></p>
+      <p class="t-body">Body 14 / regular. Payments route through one API to Crossmint, ForumPay or a blockchain rail.</p>
+      <p class="t-label">Label 13 / medium</p>
+      <p class="t-meta">Meta 12 / regular, secondary colour</p>
+      <p class="u-mono">req_8f3a91c2e7 · mono 12</p>
+    </div>
+  </section>
+
+  <section class="pv-section" aria-labelledby="button-title">
+    <h2 class="t-heading" id="button-title">Buttons</h2>
+    <div class="card card__body pv-rows">
+      <div class="pv-row"><span class="pv-label">Variants</span>
+        <button class="btn btn--primary" type="button">Create payment</button>
+        <button class="btn" type="button">Export</button>
+        <button class="btn btn--ghost" type="button">Cancel</button>
+        <button class="btn btn--danger" type="button">Revoke key</button>
+        <button class="btn btn--icon" type="button" aria-label="More"><i data-icon="more"></i></button>
+      </div>
+      <div class="pv-row"><span class="pv-label">Sizes</span>
+        <button class="btn btn--primary btn--sm" type="button">Small 28</button>
+        <button class="btn btn--primary" type="button">Medium 32</button>
+        <button class="btn btn--primary btn--lg" type="button">Large 36</button>
+        <button class="btn btn--primary btn--xl" type="button">XL 48</button>
+      </div>
+      <div class="pv-row"><span class="pv-label">States</span>
+        <button class="btn btn--primary" type="button" disabled>Disabled</button>
+        <button class="btn btn--primary" type="button" data-demo-busy>Click to load</button>
+        <button class="btn" type="button"><i data-icon="download"></i>With icon</button>
+        <button class="btn" type="button">Save <span class="btn__kbd">⌘S</span></button>
+      </div>
+    </div>
+  </section>
+
+  <section class="pv-section" aria-labelledby="form-title">
+    <h2 class="t-heading" id="form-title">Form controls</h2>
+    <div class="card card__body pv-form">
+      <div class="field"><label class="field__label" for="pv-name">Key name</label><input class="input" id="pv-name" placeholder="Production server" maxlength="60"><p class="field__help">Shown in logs and the API keys list.</p></div>
+      <div class="field"><label class="field__label" for="pv-url">Endpoint URL</label><input class="input" id="pv-url" value="http://example" aria-invalid="true" aria-describedby="pv-url-error"><p class="field__error" id="pv-url-error">Use an https:// URL.</p></div>
+      <div class="field"><label class="field__label" for="pv-search">Search</label><div class="input-group"><i data-icon="search" class="input-group__icon"></i><input class="input" id="pv-search" placeholder="Request ID or reference"></div></div>
+      <div class="pv-row">
+        <button class="switch" type="button" role="switch" aria-checked="true" aria-label="Email alerts" data-switch></button><span>Switch</span>
+        <button class="theme-switch" type="button" role="switch" aria-checked="false" aria-label="Dark mode" data-theme-toggle>
+          <span class="theme-switch__knob" aria-hidden="true"></span>
+          <span class="theme-switch__icon theme-switch__icon--sun" aria-hidden="true"><i data-icon="sun"></i></span>
+          <span class="theme-switch__icon theme-switch__icon--moon" aria-hidden="true"><i data-icon="moon"></i></span>
+        </button><span>Theme switch</span>
+      </div>
+      <div class="pv-row">
+        <div class="segmented" role="radiogroup" aria-label="Range" data-segmented>
+          <button class="segmented__option" type="button" role="radio" aria-checked="true" data-value="a">7 days</button>
+          <button class="segmented__option" type="button" role="radio" aria-checked="false" data-value="b">30 days</button>
+          <button class="segmented__option" type="button" role="radio" aria-checked="false" data-value="c">90 days</button>
+        </div>
+        <div class="segmented segmented--sm" role="radiogroup" aria-label="Status" data-segmented>
+          <button class="segmented__option" type="button" role="radio" aria-checked="true" data-value="all">All <span class="segmented__count">49</span></button>
+          <button class="segmented__option" type="button" role="radio" aria-checked="false" data-value="failed">Failed <span class="segmented__count">12</span></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pv-section" aria-labelledby="status-title">
+    <h2 class="t-heading" id="status-title">Status and feedback</h2>
+    <div class="card card__body pv-rows">
+      <div class="pv-row"><span class="pv-label">Badges</span>
+        <span class="badge badge--success">Paid</span><span class="badge badge--warning">Pending</span><span class="badge badge--danger">Failed</span><span class="badge">Cancelled</span><span class="badge badge--info">Refunded</span>
+      </div>
+      <div class="pv-row"><span class="pv-label">Banner</span><div class="banner"><i data-icon="alert"></i>Test mode: test data only. No real money moves.</div></div>
+      <div class="pv-row"><span class="pv-label">Progress</span><div class="pv-grow"><div class="progress"><div class="progress__fill" data-progress="66"></div></div></div></div>
+      <div class="pv-row"><span class="pv-label">Skeleton</span><div class="pv-grow skeleton-stack"><span class="skeleton skeleton--figure"></span><span class="skeleton skeleton--text"></span><span class="skeleton skeleton--short"></span></div></div>
+      <div class="pv-row"><span class="pv-label">Overlays</span>
+        <button class="btn" type="button" data-demo-toast>Show toast</button>
+        <button class="btn" type="button" data-dialog-open="pv-dialog">Open dialog</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="pv-section" aria-labelledby="data-title">
+    <h2 class="t-heading" id="data-title">Data display</h2>
+    <div class="kpi-strip">
+      <div class="kpi"><p class="kpi__label">Gross volume</p><p class="kpi__value t-figure">299.28<span class="kpi__unit">USD eq.</span></p><p class="kpi__meta"><span class="delta delta--up">+12.4%</span> vs previous 30 days</p></div>
+      <div class="kpi"><p class="kpi__label">Success rate</p><p class="kpi__value t-figure">32.7<span class="kpi__unit">%</span></p><p class="kpi__meta"><span class="delta delta--down">−4.1 pts</span> 16 of 49</p></div>
+      <div class="kpi"><p class="kpi__label">Payouts</p><p class="kpi__value t-figure">8</p><p class="kpi__meta">2 awaiting approval</p></div>
+      <div class="kpi"><p class="kpi__label">API status</p><p class="kpi__value t-figure"><span class="status-dot">Connected</span></p><p class="kpi__meta">Keys verified</p></div>
+    </div>
+    <div class="card pv-table">
+      <div class="table-wrap">
+        <table class="table">
+          <thead><tr><th scope="col">Request ID</th><th scope="col">Route</th><th scope="col">Status</th><th scope="col" class="is-num">Amount</th></tr></thead>
+          <tbody>
+            <tr><td><span class="copy"><span class="u-mono">req_8f3a91c2e7</span><button class="copy__btn" type="button" data-copy="req_8f3a91c2e7" aria-label="Copy request ID"><i data-icon="copy" class="icon-copy"></i><i data-icon="check" class="icon-check"></i></button></span></td><td>Crossmint</td><td><span class="badge badge--success">Paid</span></td><td class="is-num">25.00 <span class="u-muted">USD</span></td></tr>
+            <tr><td><span class="copy"><span class="u-mono">req_77b0d415aa</span><button class="copy__btn" type="button" data-copy="req_77b0d415aa" aria-label="Copy request ID"><i data-icon="copy" class="icon-copy"></i><i data-icon="check" class="icon-check"></i></button></span></td><td>ForumPay</td><td><span class="badge badge--warning">Pending</span></td><td class="is-num">40.00 <span class="u-muted">USDT</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="pv-section" aria-labelledby="nav-title">
+    <h2 class="t-heading" id="nav-title">Navigation</h2>
+    <div class="card card__body pv-nav">
+      <nav class="nav" aria-label="Example">
+        <a class="nav__item" href="#" aria-current="page"><i data-icon="home"></i><span class="nav__label">Current page</span></a>
+        <a class="nav__item" href="#"><i data-icon="payments"></i><span class="nav__label">Default item</span></a>
+        <button class="nav__item" type="button" data-disclosure aria-expanded="false" aria-controls="pv-group"><i data-icon="cards"></i><span class="nav__label">Group</span><i data-icon="chevron-down" class="nav__chevron"></i></button>
+        <div class="nav__group" id="pv-group"><div class="nav"><a class="nav__item" href="#"><span class="nav__label">Child item</span></a><a class="nav__item" href="#"><span class="nav__label">Child item</span></a></div></div>
+      </nav>
+    </div>
+  </section>
+</main>
+
+<dialog class="dialog" id="pv-dialog" aria-labelledby="pv-dialog-title">
+  <div class="dialog__head"><h2 class="dialog__title" id="pv-dialog-title">Revoke API key?</h2><button class="btn btn--ghost btn--icon btn--sm" type="button" data-dialog-close aria-label="Close"><i data-icon="x"></i></button></div>
+  <div class="dialog__body"><p>Requests using <span class="u-mono">pk_live_…4f2a</span> will fail straight away. It was last used 3 minutes ago.</p></div>
+  <div class="dialog__foot"><button class="btn" type="button" data-dialog-close>Cancel</button><button class="btn btn--danger" type="button" data-dialog-close>Revoke key</button></div>
+</dialog>
+</body>
+</html>

@@ -1,0 +1,15 @@
+/* Team page: card heads above tables, invite chips, permission matrix. Tokens only. */
+.team__head { padding-bottom: var(--card-pad); flex-wrap: wrap; }
+.team__you { margin-left: var(--space-6); }
+.team__chips { min-height: var(--size-24); }
+.chip--invalid { border-color: var(--status-danger-fg); background: var(--status-danger-bg); color: var(--status-danger-fg); }
+.matrix td:not(:first-child), .matrix th:not(:first-child) { text-align: center; }
+.matrix__yes { display: inline-grid; vertical-align: middle; color: var(--status-success-icon); }
+.matrix__yes svg { width: var(--size-16); height: var(--size-16); }
+.matrix__no { color: var(--text-tertiary); }
+.matrix__note { padding: var(--space-12) var(--card-pad); border-top: var(--border-width) solid var(--card-border); }
+.table-card .matrix tbody th { height: var(--table-row-height); padding: 0 var(--table-cell-pad-x) 0 var(--card-pad); background: transparent; border-bottom: var(--border-width) solid var(--table-divider); color: var(--text-primary); font-size: var(--font-size-14); }
+.matrix tbody tr:last-child th { border-bottom: 0; }
+fieldset.field { min-width: 0; margin: 0; padding: 0; border: 0; }
+fieldset.field > legend { margin-bottom: var(--space-8); padding: 0; }
+.team__actions { display: flex; align-items: center; justify-content: flex-end; gap: var(--space-4); }

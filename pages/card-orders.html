@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en" data-theme="light" data-env="live">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Card orders · Portal</title>
+  <link rel="stylesheet" href="../design-system/css/portal.css">
+  <link rel="stylesheet" href="css/card-orders.css">
+  <script src="../design-system/js/theme.js"></script>
+  <script src="../design-system/js/icons.js" defer></script>
+  <script src="../design-system/js/dom.js" defer></script>
+  <script src="js/layout.js" defer></script>
+  <script src="../design-system/js/components.js" defer></script>
+  <script src="../design-system/js/patterns.js" defer></script>
+  <script src="../design-system/js/lazy.js" defer></script>
+  <script src="js/data/cards.js" defer></script>
+  <script src="js/card-orders.js" defer></script>
+  <script src="js/create-payment.js" defer></script>
+  <script src="../design-system/js/shell.js" defer></script>
+</head>
+<body data-page="card-orders">
+<div class="app" data-app>
+  <div class="main">
+    <main class="page" id="main">
+      <div class="page__head">
+        <div>
+          <h1 class="t-title">Card orders</h1>
+          <p class="page__sub">Virtual and physical card orders across your issuers. Status changes arrive by the card_order.status_updated webhook.</p>
+        </div>
+        <div class="page__actions">
+          <button class="btn btn--lg" type="button" data-export><i data-icon="download"></i>Export CSV</button>
+          <button class="btn btn--primary btn--lg" type="button" data-new-order><i data-icon="plus"></i>New card order</button>
+        </div>
+      </div>
+
+      <section class="card table-card" data-lazy="card-orders" aria-busy="true" aria-label="Card orders">
+        <div class="toolbar">
+          <div class="input-group toolbar__search"><i data-icon="search" class="input-group__icon"></i><input class="input" type="search" placeholder="Order ID, cardholder or email" aria-label="Search card orders" maxlength="80" data-filter="q"></div>
+          <div class="segmented segmented--sm" role="radiogroup" aria-label="Status" data-segmented data-filter="status">
+            <button class="segmented__option" type="button" role="radio" aria-checked="true" data-value="all">All <span class="segmented__count" data-count="all"></span></button>
+            <button class="segmented__option" type="button" role="radio" aria-checked="false" data-value="requested">Requested <span class="segmented__count" data-count="requested"></span></button>
+            <button class="segmented__option" type="button" role="radio" aria-checked="false" data-value="processing">Processing <span class="segmented__count" data-count="processing"></span></button>
+            <button class="segmented__option" type="button" role="radio" aria-checked="false" data-value="shipped">Shipped <span class="segmented__count" data-count="shipped"></span></button>
+            <button class="segmented__option" type="button" role="radio" aria-checked="false" data-value="active">Active <span class="segmented__count" data-count="active"></span></button>
+            <button class="segmented__option" type="button" role="radio" aria-checked="false" data-value="failed">Failed <span class="segmented__count" data-count="failed"></span></button>
+          </div>
+          <select class="select select--sm" aria-label="Issuer" data-filter="issuer">
+            <option value="">All issuers</option><option>Axys</option><option>Hypercard</option><option>Interlace</option>
+          </select>
+          <select class="select select--sm" aria-label="Card type" data-filter="type">
+            <option value="">All types</option><option value="virtual">Virtual</option><option value="physical">Physical</option>
+          </select>
+          <span class="toolbar__spacer"></span>
+          <button class="btn btn--ghost btn--sm" type="button" data-clear hidden>Clear filters</button>
+        </div>
+        <div data-skeleton class="skeleton-list"></div>
+        <div data-lazy-content data-table></div>
+      </section>
+    </main>
+  </div>
+</div>
+</body>
+</html>
