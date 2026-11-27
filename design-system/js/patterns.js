@@ -253,7 +253,7 @@
    * Builds the inputs for one column filter.
    * Returns { nodes, read() → { value } | { error: true } }; read() shows inline errors itself.
    */
-  function filterFields(column, current, sourceRows, idBase) {
+  function filterFields(column, current, sourceRows, allRows, idBase) {
     const { filter } = column;
     const name = column.label.toLowerCase();
 
@@ -325,7 +325,8 @@
     // options: checkboxes with counts from the rows the other filters leave.
     const counts = new Map();
     sourceRows.forEach((row) => { const v = filter.value(row); counts.set(v, (counts.get(v) || 0) + 1); });
-    const values = [...new Set([...(filter.options || [...counts.keys()].sort((a, b) => optionLabel(filter, a).localeCompare(optionLabel(filter, b)))), ...(current || [])])]
+    const seen = [...new Set(allRows.map(filter.value))];
+    const values = [...new Set([...(filter.options || seen.sort((a, b) => optionLabel(filter, a).localeCompare(optionLabel(filter, b)))), ...(current || [])])]
       .filter((v) => v !== null && v !== undefined && v !== '');
     const boxes = values.map((value) => el('input', { attrs: { type: 'checkbox', value: String(value), checked: Boolean(current?.includes(value)) } }));
     const list = el('fieldset', { className: 'column-filter__options' }, [
@@ -435,7 +436,7 @@
           el('span', { className: 'chip__text', text: `${c.label}: ${FILTER_TYPES[c.filter.type].summary(value, c.filter)}` }),
           el('button', { className: 'chip__remove', attrs: { type: 'button', 'aria-label': `Remove ${c.label} filter` }, on: { click: () => setFilter(i, null) } }, [iconEl('x')]),
         ]);
-      }), active.size > 1 ? btn('Clear all', { variant: 'ghost', size: 'sm', onClick: clearFilters }) : null);
+      }), ...(active.size > 1 ? [btn('Clear all', { variant: 'ghost', size: 'sm', onClick: clearFilters })] : []));
       sheetCount.textContent = String(active.size);
       sheetCount.hidden = !active.size;
       bar.classList.toggle('is-empty', !active.size);
@@ -446,7 +447,7 @@
     function toggleFilterPopover(index, trigger) {
       if (openPopover?.anchor === trigger) { closeFilterPopover(); return; }
       const c = columns[index];
-      const fields = filterFields(c, active.get(index), rowsFor(index), `cf-${uid}-${index}`);
+      const fields = filterFields(c, active.get(index), rowsFor(index), rows, `cf-${uid}-${index}`);
       const form = el('form', { className: 'menu column-filter', attrs: { role: 'dialog', 'aria-label': `Filter ${c.label}`, novalidate: true } }, [
         el('p', { className: 'column-filter__title', text: `Filter by ${c.label.toLowerCase()}` }),
         ...fields.nodes,
@@ -468,7 +469,7 @@
 
     /* Bottom sheet (phones, where the header row is hidden) ------------------------------- */
     function openFilterSheet() {
-      const sets = filterable.map((i) => ({ i, fields: filterFields(columns[i], active.get(i), rowsFor(i), `cfs-${uid}-${i}`) }));
+      const sets = filterable.map((i) => ({ i, fields: filterFields(columns[i], active.get(i), rowsFor(i), rows, `cfs-${uid}-${i}`) }));
       const drawer = Portal.drawer.open({
         title: 'Filter columns',
         subtitle: `${Portal.fmt.count(view.length)} of ${Portal.fmt.count(rows.length)} rows shown`,
