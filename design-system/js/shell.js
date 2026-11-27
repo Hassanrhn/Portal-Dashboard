@@ -16,6 +16,7 @@
   const isCompact = () => window.matchMedia('(max-width: 860px)').matches;
   const setCollapsed = (collapsed) => {
     app.classList.toggle('is-collapsed', collapsed);
+    if (collapsed) root.dataset.sidebar = 'collapsed'; else delete root.dataset.sidebar;
     Portal.store.set('sidebar', collapsed ? 'collapsed' : 'expanded');
     syncToggle();
   };

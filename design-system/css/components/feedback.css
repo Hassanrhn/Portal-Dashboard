@@ -32,7 +32,8 @@
 @keyframes toast-in { from { opacity: 0; transform: translateY(8px) scale(0.98); } }
 @keyframes toast-out { to { opacity: 0; transform: translateY(4px); } }
 @media (max-width: 600px) { .toast-region { left: var(--space-16); right: var(--space-16); bottom: var(--space-16); } .toast { max-width: none; } }
-/* Usage levels: amber from 75%, red from 90% (set by components.js from data-progress) */
+/* Usage levels: green below 75%, orange from 75%, red from 90% (set by components.js from data-progress) */
+.progress__fill[data-level="ok"] { background: var(--progress-fill-ok); }
 .progress__fill[data-level="warning"] { background: var(--progress-fill-warning); }
 .progress__fill[data-level="danger"] { background: var(--progress-fill-danger); }
 .meter.is-danger .meter__row span { color: var(--status-danger-fg); }

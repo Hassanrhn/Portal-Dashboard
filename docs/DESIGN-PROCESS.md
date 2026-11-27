@@ -215,6 +215,17 @@ After v1.0 we built the rest of the product:
 | Quota should warn near the limit | The usage meter turns amber at 75% and red at 90%, using design-system status colours. |
 | Theme choice | Settings → Appearance: Light, Dark or System (default, follows the device). |
 
+### Round 5: focus the orange, stabilise navigation
+
+| Feedback | Decision |
+| --- | --- |
+| Remove Create payment from page headers; keep only "+" in the app bar | One always-available "+" (New payment) in the app bar, with no duplicates in page headers. |
+| Only page-header buttons should be orange, with white text | Orange marks the page's main action. All other primary buttons are graphite, so orange stays rare and meaningful. White text on orange (orange-600) is the requested style. It is about 3.3:1 contrast, so labels stay bold. |
+| API requests meter needs three states | Green under 75%, orange from 75%, red from 90%. |
+| The sidebar opened and closed when navigating while collapsed | The collapsed state is applied before the page paints, so the layout stays still between pages. |
+| Docs contents list too close to the header | It sticks 24px below the app bar. |
+| Remove Light/Dark from the sidebar | Theme lives only in Settings → Appearance. |
+
 ## 8. Key decisions and rationale
 
 | Decision | Alternatives considered | Why we chose it |

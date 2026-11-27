@@ -60,6 +60,8 @@
 
 .btn--primary { --_bg: var(--button-primary-bg); --_bg-hover: var(--button-primary-bg-hover); --_fg: var(--button-primary-fg); --_border: var(--button-primary-bg); --_lip: var(--button-primary-lip); }
 .btn--neutral { --_bg: var(--button-neutral-bg); --_bg-hover: var(--button-neutral-bg-hover); --_fg: var(--button-neutral-fg); --_border: var(--button-neutral-bg); --_lip: var(--button-neutral-lip); }
+/* Page-header actions are the only orange buttons (white text) */
+.page__actions :is(.btn--primary, .btn--neutral) { --_bg: var(--button-header-bg); --_bg-hover: var(--button-header-bg-hover); --_fg: var(--button-header-fg); --_border: var(--button-header-bg); --_lip: var(--button-header-lip); }
 .btn--danger { --_bg: var(--button-danger-bg); --_bg-hover: var(--button-danger-bg); --_fg: var(--button-danger-fg); --_border: var(--button-danger-bg); --_lip: var(--button-danger-lip); }
 .btn--ghost { --_bg: transparent; --_bg-hover: var(--button-ghost-bg-hover); --_fg: var(--button-ghost-fg); --_border: transparent; --_lip: transparent; border-bottom-width: var(--border-width); }
 .btn--ghost:active:not(:disabled) { transform: scale(var(--button-press-scale)); margin-bottom: 0; }

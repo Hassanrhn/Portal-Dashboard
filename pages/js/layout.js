@@ -62,14 +62,6 @@
     ];
   }
 
-  function themeSwitch() {
-    return el('button', { className: 'theme-switch', attrs: { type: 'button', role: 'switch', 'aria-checked': 'false', 'aria-label': 'Dark mode', 'data-theme-toggle': '' } }, [
-      el('span', { className: 'theme-switch__knob', attrs: { 'aria-hidden': 'true' } }),
-      el('span', { className: 'theme-switch__icon theme-switch__icon--sun', attrs: { 'aria-hidden': 'true' } }, [iconEl('sun')]),
-      el('span', { className: 'theme-switch__icon theme-switch__icon--moon', attrs: { 'aria-hidden': 'true' } }, [iconEl('moon')]),
-    ]);
-  }
-
   const logo = el('a', { className: 'sidebar__logo', attrs: { href: 'overview.html', 'aria-label': 'The Orange Card, go to Overview' } }, [
     el('span', { className: 'logo', attrs: { 'aria-hidden': 'true' } }, [
       el('span', { className: 'logo__the', text: 'THE' }),
@@ -91,7 +83,6 @@
         el('div', { className: 'meter__row' }, [el('b', { className: 't-label', text: 'API requests' }), el('span', { text: '18.6k of 20.0k' })]),
         el('div', { className: 'progress', attrs: { role: 'progressbar', 'aria-label': 'API requests used this month', 'aria-valuemin': '0', 'aria-valuemax': '100', 'aria-valuenow': '93' } }, [el('div', { className: 'progress__fill', attrs: { 'data-progress': '93' } })]),
       ]),
-      el('div', { className: 'sidebar__row' }, [el('span', { text: 'Light mode', attrs: { 'data-theme-label': '' } }), themeSwitch()]),
       el('div', { className: 'user' }, [
         el('span', { className: 'user__avatar', text: 'P', attrs: { 'aria-hidden': 'true' } }),
         el('span', { className: 'user__name', text: 'pocket@pocket.com' }),
@@ -123,7 +114,7 @@
       el('span', { className: 'switch', attrs: { 'aria-hidden': 'true' } }),
       el('span', { className: 'env-toggle__label', text: 'Test mode' }),
     ]),
-    el('button', { className: 'btn btn--neutral btn--sm new-payment', attrs: { type: 'button', 'data-create-payment': '', 'aria-label': 'New payment' } }, [iconEl('plus'), el('span', { text: 'New payment' })]),
+    el('button', { className: 'btn btn--neutral btn--sm btn--icon new-payment', attrs: { type: 'button', 'data-create-payment': '', 'aria-label': 'New payment' } }, [iconEl('plus')]),
   ]);
   const envStrip = el('div', { className: 'env-strip', attrs: { role: 'status' } }, [iconEl('alert'), 'Test mode: test data only. No real money moves.']);
 

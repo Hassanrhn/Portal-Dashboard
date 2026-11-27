@@ -745,6 +745,15 @@ If avatars or statement PDFs are served from another host, add it to `img-src` o
 - **Theme preference:** `Portal.theme.setPreference('light' | 'dark' | 'system')`. System is the default and follows the OS live. `Portal.theme.preference()` reads it back. The sidebar switch sets an explicit light or dark choice. Preview pages use `Portal.theme.set(x, { persist: false })`.
 - **KPI status values** (`.kpi__value .status-dot`) use 16px, not the figure size.
 
+## Round 5 changes
+
+- **Orange is for page-header actions only.** Any `btn--primary` or `btn--neutral` inside `.page__actions` renders orange with white text (`button.header-*` tokens). Everywhere else, `btn--primary` is graphite with white text.
+- **Create payment** is only in the app bar, as an icon-only "+" button (`.new-payment`, `aria-label="New payment"`). Page headers no longer repeat it.
+- **Usage meter** has three states from `[data-progress]`: `ok` (green, under 75%), `warning` (orange, 75–89%), `danger` (red, 90% and above).
+- **Sidebar collapse** is applied before first paint: `theme.js` sets `html[data-sidebar="collapsed"]` from storage, so navigating between pages never animates the sidebar. The CSS keys off `.app:is(.is-collapsed, [data-sidebar="collapsed"] *)`.
+- **Theme:** the sidebar no longer has a theme switch. Users change it in Settings → Appearance (Light, Dark or System).
+- **Docs contents list** sticks 24px below the app bar: `top: calc(var(--layout-appbar-height) + var(--space-24))`.
+
 ## 16. Known limitations
 
 - All data is sample data; actions change in-memory objects and are lost on reload.

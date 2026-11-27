@@ -172,7 +172,7 @@
       "$value": "{action.secondary-lip}"
     },
     "primary-lip": {
-      "$value": "{color.orange.700}"
+      "$value": "{color.graphite.700}"
     },
     "danger-lip": {
       "$value": "{color.red.800}"
@@ -188,6 +188,18 @@
     },
     "neutral-lip": {
       "$value": "{color.graphite.700}"
+    },
+    "header-bg": {
+      "$value": "{color.orange.600}"
+    },
+    "header-bg-hover": {
+      "$value": "{color.orange.500}"
+    },
+    "header-fg": {
+      "$value": "{color.white}"
+    },
+    "header-lip": {
+      "$value": "{color.orange.700}"
     }
   },
   "input": {
@@ -373,10 +385,13 @@
       "$value": "{accent.solid}"
     },
     "fill-warning": {
-      "$value": "{status.warning-fg}"
+      "$value": "{color.orange.500}"
     },
     "fill-danger": {
       "$value": "{status.danger-fg}"
+    },
+    "fill-ok": {
+      "$value": "{status.success-icon}"
     }
   },
   "surface-raised": {

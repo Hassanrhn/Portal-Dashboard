@@ -182,8 +182,8 @@
     $$('[data-progress]', scope).forEach((bar) => {
       const pct = Math.max(0, Math.min(100, Number(bar.dataset.progress) || 0));
       bar.style.setProperty('--value', `${pct}%`);
-      const level = pct >= 90 ? 'danger' : pct >= 75 ? 'warning' : '';
-      if (level) bar.dataset.level = level; else delete bar.dataset.level;
+      const level = pct >= 90 ? 'danger' : pct >= 75 ? 'warning' : 'ok';
+      bar.dataset.level = level;
       bar.closest('.meter')?.classList.toggle('is-danger', level === 'danger');
       bar.closest('.meter')?.classList.toggle('is-warning', level === 'warning');
     });

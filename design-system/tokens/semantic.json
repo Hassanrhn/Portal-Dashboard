@@ -60,16 +60,16 @@
     },
     "action": {
       "primary-bg": {
-        "$value": "{color.orange.500}"
+        "$value": "{color.graphite.500}"
       },
       "primary-bg-hover": {
-        "$value": "{color.orange.600}"
+        "$value": "{color.graphite.400}"
       },
       "primary-fg": {
-        "$value": "{color.neutral.900}"
+        "$value": "{color.white}"
       },
       "primary-border": {
-        "$value": "{color.orange.700}"
+        "$value": "{color.graphite.500}"
       },
       "disabled-bg": {
         "$value": "{color.neutral.450}"
@@ -246,16 +246,16 @@
     },
     "action": {
       "primary-bg": {
-        "$value": "{color.orange.500}"
+        "$value": "{color.graphite.500}"
       },
       "primary-bg-hover": {
-        "$value": "{color.orange.600}"
+        "$value": "{color.graphite.400}"
       },
       "primary-fg": {
-        "$value": "{color.neutral.900}"
+        "$value": "{color.white}"
       },
       "primary-border": {
-        "$value": "{color.orange.700}"
+        "$value": "{color.graphite.500}"
       },
       "disabled-bg": {
         "$value": "{color.neutral.780}"

@@ -56,6 +56,8 @@
   };
 
   root.dataset.theme = resolve(preference());
+  // Apply the saved sidebar state before first paint so navigating never flashes the sidebar open.
+  if (Portal.store.get('sidebar') === 'collapsed') root.dataset.sidebar = 'collapsed';
   systemDark.addEventListener('change', () => { if (preference() === 'system') setTheme(resolve('system'), { persist: false }); });
 
   document.addEventListener('DOMContentLoaded', () => {
