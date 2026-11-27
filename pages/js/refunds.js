@@ -64,13 +64,13 @@
     rowLabel: (r) => `refund ${r.id}`,
     empty: { icon: 'refund', title: 'No refunds match these filters', text: 'Try another status or clear the search.', action: btn('Clear filters', { onClick: clearFilters }) },
     columns: [
-      { label: 'Refund ID', render: (r) => Portal.copyable(r.id, { label: 'Copy refund ID' }) },
-      { label: 'Payment', render: (r) => paymentLink(r.paymentId) },
-      { label: 'Reference', render: (r) => el('span', { className: 'u-muted', text: r.ref }) },
-      { label: 'Reason', render: (r) => el('span', { className: 'u-muted', text: r.reason }) },
-      { label: 'Status', render: (r) => Portal.badge(r.status) },
-      { label: 'Amount', num: true, render: (r) => amountCell(r.amount, r.currency) },
-      { label: 'Created', num: true, render: (r) => el('span', { className: 'u-muted', text: fmt.dateTime(r.created) }) },
+      { label: 'Refund ID', filter: { type: 'text', value: (r) => r.id }, render: (r) => Portal.copyable(r.id, { label: 'Copy refund ID' }) },
+      { label: 'Payment', filter: { type: 'text', value: (r) => r.paymentId }, render: (r) => paymentLink(r.paymentId) },
+      { label: 'Reference', filter: { type: 'text', value: (r) => r.ref, placeholder: 'e.g. ORD-10489' }, render: (r) => el('span', { className: 'u-muted', text: r.ref }) },
+      { label: 'Reason', filter: { type: 'options', value: (r) => r.reason, label: String }, render: (r) => el('span', { className: 'u-muted', text: r.reason }) },
+      { label: 'Status', filter: { type: 'options', value: (r) => r.status }, render: (r) => Portal.badge(r.status) },
+      { label: 'Amount', num: true, filter: { type: 'number', value: (r) => r.amount }, render: (r) => amountCell(r.amount, r.currency) },
+      { label: 'Created', num: true, filter: { type: 'date', value: (r) => r.created }, render: (r) => el('span', { className: 'u-muted', text: fmt.dateTime(r.created) }) },
     ],
   });
 

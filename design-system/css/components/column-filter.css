@@ -1,0 +1,57 @@
+/*
+ * Column filters (Portal.dataTable columns with `filter`): header trigger, popover form (a .menu),
+ * active filter chips above the table, and the "Filter columns" button that phones use instead of the header.
+ */
+.column-filter__head { display: inline-flex; align-items: center; gap: var(--space-4); }
+.column-filter__trigger {
+  position: relative;
+  display: inline-grid; place-items: center;
+  width: var(--size-20); height: var(--size-20);
+  border-radius: var(--radius-4);
+  color: var(--text-tertiary);
+  transition: background-color var(--motion-fast) var(--motion-ease), color var(--motion-fast) var(--motion-ease);
+}
+.column-filter__trigger svg { width: var(--space-12); height: var(--space-12); }
+.column-filter__trigger:hover, .column-filter__trigger[aria-expanded="true"] { background: var(--bg-hover); color: var(--text-primary); }
+.column-filter__trigger.is-active { color: var(--accent-text); }
+.column-filter__trigger.is-active::after {
+  content: "";
+  position: absolute; top: var(--space-2); right: var(--space-2);
+  width: var(--space-6); height: var(--space-6);
+  border: var(--border-width) solid var(--bg-sidebar);
+  border-radius: var(--radius-full);
+  background: var(--accent-solid);
+  animation: pop-in var(--motion-base) var(--motion-spring);
+}
+
+/* Popover: shares .menu surface, position and phone bottom sheet */
+.column-filter { display: grid; gap: var(--space-12); width: calc(var(--size-256) + var(--space-24)); max-width: calc(100vw - var(--space-16)); padding: var(--space-12); }
+.column-filter__title { color: var(--text-secondary); font-size: var(--font-size-12); font-weight: var(--font-weight-medium); }
+.column-filter .field { gap: var(--space-6); }
+.column-filter .field__label { font-size: var(--font-size-12); color: var(--text-secondary); }
+.column-filter .input { height: var(--control-height-md); font-size: var(--font-size-13); }
+.column-filter .form-grid { gap: var(--space-8); }
+.column-filter__presets { display: flex; flex-wrap: wrap; gap: var(--space-4); }
+.column-filter__presets .btn[aria-pressed="true"] { border-color: var(--accent-solid); background: var(--accent-subtle); color: var(--accent-text); }
+.column-filter__options { display: grid; gap: var(--space-2); max-height: calc(var(--size-256) - var(--space-32)); margin: 0; padding: 0; border: 0; overflow-y: auto; }
+.column-filter__options .check { display: flex; align-items: center; padding: var(--space-6) var(--space-4); border-radius: var(--radius-6); font-size: var(--font-size-13); }
+.column-filter__options .check:hover { background: var(--bg-hover); }
+.column-filter__options .check input { margin-top: 0; }
+.column-filter__count { margin-left: auto; color: var(--text-tertiary); font-size: var(--font-size-12); font-variant-numeric: tabular-nums; }
+.column-filter__foot { display: flex; justify-content: flex-end; gap: var(--space-8); margin: 0 calc(-1 * var(--space-12)) calc(-1 * var(--space-12)); padding: var(--space-8) var(--space-12); border-top: var(--border-width) solid var(--border-default); }
+
+/* Active filter chips above the table */
+.column-filter__bar { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-8); padding: var(--space-8) var(--card-pad); border-top: var(--border-width) solid var(--card-border); }
+.column-filter__bar.is-empty { display: none; }
+.column-filter__sheet-btn { display: none; }
+.chip--filter { max-width: 100%; height: var(--size-24); padding-right: var(--space-2); border-color: var(--accent-solid); background: var(--accent-subtle); color: var(--text-primary); animation: pop-in var(--motion-base) var(--motion-spring); }
+.chip__text { overflow: hidden; text-overflow: ellipsis; }
+.chip__remove { display: grid; place-items: center; flex-shrink: 0; width: var(--size-20); height: var(--size-20); border-radius: var(--radius-4); color: var(--text-secondary); }
+.chip__remove svg { width: var(--space-12); height: var(--space-12); }
+.chip__remove:hover { background: var(--bg-hover); color: var(--text-primary); }
+
+@media (max-width: 600px) {
+  .column-filter { width: auto; }
+  .column-filter__bar.has-rows { display: flex; }
+  .column-filter__sheet-btn { display: inline-flex; }
+}

@@ -48,12 +48,12 @@
     rowLabel: (o) => `card order ${o.id}`,
     empty: { icon: 'search', title: 'No card orders match these filters', text: 'Try another status or issuer, or clear the filters.', action: btn('Clear filters', { onClick: clearFilters }) },
     columns: [
-      { label: 'Order ID', render: (o) => Portal.copyable(o.id, { label: 'Copy order ID' }) },
-      { label: 'Cardholder', render: (o) => { const h = holderOf(o); return el('span', {}, [h.name, el('span', { className: 'cell-sub', text: h.email })]); } },
-      { label: 'Issuer', render: (o) => issuerLabel(o.issuer) },
-      { label: 'Card type', render: (o) => el('span', {}, [fmt.humanize(o.type), el('span', { className: 'cell-sub', text: o.currency })]) },
-      { label: 'Status', render: (o) => Portal.badge(o.status) },
-      { label: 'Created', num: true, render: (o) => el('span', { className: 'u-muted', text: fmt.dateTime(o.created) }) },
+      { label: 'Order ID', filter: { type: 'text', value: (o) => o.id }, render: (o) => Portal.copyable(o.id, { label: 'Copy order ID' }) },
+      { label: 'Cardholder', filter: { type: 'text', value: (o) => `${holderOf(o).name} ${holderOf(o).email}`, placeholder: 'Name or email' }, render: (o) => { const h = holderOf(o); return el('span', {}, [h.name, el('span', { className: 'cell-sub', text: h.email })]); } },
+      { label: 'Issuer', filter: { type: 'options', value: (o) => o.issuer }, render: (o) => issuerLabel(o.issuer) },
+      { label: 'Card type', filter: { type: 'options', value: (o) => o.type }, render: (o) => el('span', {}, [fmt.humanize(o.type), el('span', { className: 'cell-sub', text: o.currency })]) },
+      { label: 'Status', filter: { type: 'options', value: (o) => o.status }, render: (o) => Portal.badge(o.status) },
+      { label: 'Created', num: true, filter: { type: 'date', value: (o) => o.created }, render: (o) => el('span', { className: 'u-muted', text: fmt.dateTime(o.created) }) },
     ],
   });
 

@@ -43,13 +43,13 @@
     rowLabel: (r) => `request ${r.method} ${r.path}`,
     empty: { icon: 'logs', title: 'No requests match these filters', text: 'Clear the filters or widen your search.', action: btn('Clear filters', { onClick: clearFilters }) },
     columns: [
-      { label: 'Time', render: (r) => el('span', { className: 'u-muted u-num', text: fmt.time(r.time), attrs: { title: `${fmt.dateTime(r.time)} UTC` } }) },
-      { label: 'Method', render: (r) => el('span', { className: 'chip chip--mono', text: r.method }) },
-      { label: 'Path', render: (r) => el('span', { className: 'u-mono', text: r.path }) },
-      { label: 'Status', render: (r) => codeBadge(r.status) },
-      { label: 'Duration', num: true, render: (r) => el('span', { className: 'u-muted', text: `${fmt.count(r.duration)} ms` }) },
-      { label: 'Request ID', render: (r) => Portal.copyable(r.id, { label: 'Copy request ID' }) },
-      { label: 'API key', render: (r) => el('span', { className: 'u-muted', text: r.keyName }) },
+      { label: 'Time', filter: { type: 'date', value: (r) => r.time }, render: (r) => el('span', { className: 'u-muted u-num', text: fmt.time(r.time), attrs: { title: `${fmt.dateTime(r.time)} UTC` } }) },
+      { label: 'Method', filter: { type: 'options', value: (r) => r.method }, render: (r) => el('span', { className: 'chip chip--mono', text: r.method }) },
+      { label: 'Path', filter: { type: 'text', value: (r) => r.path, placeholder: 'e.g. /payments' }, render: (r) => el('span', { className: 'u-mono', text: r.path }) },
+      { label: 'Status', filter: { type: 'options', value: (r) => r.status, label: String }, render: (r) => codeBadge(r.status) },
+      { label: 'Duration', num: true, filter: { type: 'number', value: (r) => r.duration }, render: (r) => el('span', { className: 'u-muted', text: `${fmt.count(r.duration)} ms` }) },
+      { label: 'Request ID', filter: { type: 'text', value: (r) => r.id }, render: (r) => Portal.copyable(r.id, { label: 'Copy request ID' }) },
+      { label: 'API key', filter: { type: 'options', value: (r) => r.keyName }, render: (r) => el('span', { className: 'u-muted', text: r.keyName }) },
     ],
   });
 
@@ -169,9 +169,9 @@
     rowLabel: (e) => `event ${e.type} ${e.objectId}`,
     empty: { icon: 'search', title: 'No events match this search', text: 'Search by event type, such as payment.status_updated, or by object ID.' },
     columns: [
-      { label: 'Event type', render: (e) => el('span', { className: 'u-mono', text: e.type }) },
-      { label: 'Object ID', render: (e) => Portal.copyable(e.objectId, { label: 'Copy object ID' }) },
-      { label: 'Created', render: (e) => el('span', { className: 'u-muted', text: fmt.dateTime(e.created) }) },
+      { label: 'Event type', filter: { type: 'options', value: (e) => e.type, label: String }, render: (e) => el('span', { className: 'u-mono', text: e.type }) },
+      { label: 'Object ID', filter: { type: 'text', value: (e) => e.objectId }, render: (e) => Portal.copyable(e.objectId, { label: 'Copy object ID' }) },
+      { label: 'Created', filter: { type: 'date', value: (e) => e.created }, render: (e) => el('span', { className: 'u-muted', text: fmt.dateTime(e.created) }) },
       { label: 'Webhooks', render: webhookBadge },
     ],
   });

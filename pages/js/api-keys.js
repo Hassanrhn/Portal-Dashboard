@@ -103,13 +103,13 @@
     rowLabel: (k) => `key ${k.name}`,
     empty: { icon: 'key', title: 'No keys here yet', text: 'Create a key to call the API from your server. Start with a Test key.', action: btn('Create key', { variant: 'primary', iconName: 'plus', onClick: () => openCreate() }) },
     columns: [
-      { label: 'Name', render: (k) => el('span', {}, [k.name, k.ips.length ? el('span', { className: 'cell-sub', text: `${k.ips.length} allowed IP ${k.ips.length === 1 ? 'range' : 'ranges'}` }) : null]) },
-      { label: 'Key ID', render: (k) => keyIdCell(k.id) },
+      { label: 'Name', filter: { type: 'text', value: (k) => k.name, placeholder: 'e.g. Checkout server' }, render: (k) => el('span', {}, [k.name, k.ips.length ? el('span', { className: 'cell-sub', text: `${k.ips.length} allowed IP ${k.ips.length === 1 ? 'range' : 'ranges'}` }) : null]) },
+      { label: 'Key ID', filter: { type: 'text', value: (k) => k.id }, render: (k) => keyIdCell(k.id) },
       { label: 'Scopes', render: (k) => el('span', { className: 'chips' }, k.scopes.map((s) => el('span', { className: 'chip', text: SCOPE_LABEL[s] }))) },
       { label: 'Offerings', render: (k) => el('span', { className: k.offerings.length ? '' : 'u-muted', text: k.offerings.length ? `${k.offerings.length} restricted` : 'All' }) },
-      { label: 'Created', render: (k) => el('span', { className: 'u-muted', text: fmt.date(k.created) }) },
-      { label: 'Last used', render: (k) => el('span', { className: 'u-muted', text: k.lastUsed ? fmt.relative(k.lastUsed) : 'Never', attrs: { title: k.lastUsed ? `${fmt.dateTime(k.lastUsed)} UTC` : null } }) },
-      { label: 'Status', render: (k) => Portal.badge(k.status) },
+      { label: 'Created', filter: { type: 'date', value: (k) => k.created }, render: (k) => el('span', { className: 'u-muted', text: fmt.date(k.created) }) },
+      { label: 'Last used', filter: { type: 'date', value: (k) => k.lastUsed }, render: (k) => el('span', { className: 'u-muted', text: k.lastUsed ? fmt.relative(k.lastUsed) : 'Never', attrs: { title: k.lastUsed ? `${fmt.dateTime(k.lastUsed)} UTC` : null } }) },
+      { label: 'Status', filter: { type: 'options', value: (k) => k.status }, render: (k) => Portal.badge(k.status) },
       { label: 'Actions', className: 'cell-actions', render: rowMenu },
     ],
   });

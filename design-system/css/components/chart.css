@@ -1,29 +1,103 @@
-/* Charts: line/area volume chart with scrub cursor, and share bars. Colors from --chart-*. */
-.chart { position: relative; height: 220px; margin: 0 calc(var(--card-pad) * -1); padding: 0 var(--card-pad); touch-action: pan-y; }
-.chart svg { width: 100%; height: 100%; overflow: visible; }
-.chart__grid { stroke: var(--chart-grid); stroke-width: 1; }
-.chart__axis { fill: var(--text-tertiary); font-size: 11px; font-variant-numeric: tabular-nums; }
-.chart__area { fill: var(--chart-1); opacity: 0.12; }
-.chart__line { fill: none; stroke: var(--chart-1); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
-.chart__line.is-drawing { stroke-dasharray: var(--len); stroke-dashoffset: var(--len); animation: line-draw 900ms var(--motion-ease) forwards; }
-.chart__area.is-drawing { animation: fade-in 900ms var(--motion-ease) both; }
-@keyframes line-draw { to { stroke-dashoffset: 0; } }
-.chart__cursor { stroke: var(--text-tertiary); stroke-width: 1; stroke-dasharray: 3 3; opacity: 0; transition: opacity var(--motion-fast) var(--motion-ease); }
-.chart__dot { fill: var(--bg-surface); stroke: var(--chart-1); stroke-width: 2; opacity: 0; transition: opacity var(--motion-fast) var(--motion-ease); }
-.chart.is-scrubbing .chart__cursor, .chart.is-scrubbing .chart__dot { opacity: 1; }
+/*
+ * Charts: soft area/line volume chart with hover guide + tooltip, and share bars. Colors from --chart-*.
+ * Motion timings are derived from the motion tokens; JS reads the same values for its rAF morphs.
+ * Everything here is switched off under prefers-reduced-motion (JS skips its own animations too).
+ */
+.chart {
+  --chart-draw: calc(var(--motion-slow) * 2.5);    /* ≈ 900ms first-load draw */
+  --chart-morph: calc(var(--motion-slow) * 5 / 3); /* ≈ 600ms range morph + label cross-fade */
+  --chart-follow: calc(var(--motion-fast) * 0.8);  /* ≈ 120ms hover follow */
+  position: relative;
+  height: 220px;
+  margin: 0 calc(var(--card-pad) * -1);
+  padding: 0 var(--card-pad);
+  touch-action: pan-y;
+  transition: opacity var(--motion-base) var(--motion-ease);
+}
+.chart svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.chart.is-updating { opacity: 0.6; }
 
-/* Share bar: one stacked bar + legend rows with values */
+/* Grid + axes: light dashed rules, small tertiary labels, no axis lines. */
+.chart__grid { stroke: var(--chart-grid); stroke-width: 1; stroke-dasharray: var(--space-2) var(--space-4); shape-rendering: crispEdges; }
+.chart__axis { fill: var(--text-tertiary); font-size: var(--font-size-11); font-variant-numeric: tabular-nums; }
+.chart__axes.is-entering { animation: fade-in var(--chart-morph) var(--motion-ease) both; }
+.chart__axes.is-leaving { animation: fade-out var(--chart-morph) var(--motion-ease) forwards; }
+
+/* Series: 2px line, gradient area (fill is a <linearGradient> built in JS). */
+.chart__line { fill: none; stroke: var(--chart-1); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.chart__line.is-drawing { stroke-dasharray: var(--len); stroke-dashoffset: var(--len); animation: line-draw var(--chart-draw) var(--motion-ease) forwards; }
+.chart__area.is-drawing { transform-box: fill-box; transform-origin: 50% 100%; animation: area-grow var(--chart-draw) var(--motion-ease) both; }
+@keyframes line-draw { to { stroke-dashoffset: 0; } }
+@keyframes area-grow { from { opacity: 0; transform: scaleY(0); } }
+
+/* Hover: guide line, dot with ring, tooltip card. Positions are CSS transforms so they ease, not jump. */
+.chart__guide,
+.chart__marker,
+.chart__tooltip {
+  opacity: 0;
+  transition: transform var(--chart-follow) var(--motion-ease), opacity var(--motion-fast) var(--motion-ease);
+  will-change: transform;
+}
+.chart__guide { stroke: var(--border-strong); stroke-width: 1; }
+.chart__ring { fill: var(--chart-1); opacity: 0.18; }
+.chart__dot { fill: var(--chart-1); stroke: var(--bg-surface); stroke-width: 2; }
+.chart__tooltip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-6) var(--space-10);
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-8);
+  background: var(--bg-raised);
+  pointer-events: none;
+  white-space: nowrap;
+}
+.chart__tooltip-date { color: var(--text-secondary); font-size: var(--font-size-11); }
+.chart__tooltip-value { color: var(--text-primary); font-size: var(--font-size-13); font-weight: var(--font-weight-medium); font-variant-numeric: tabular-nums; }
+.chart__tooltip-unit { margin-left: var(--space-4); color: var(--text-tertiary); font-weight: var(--font-weight-regular); }
+.chart.is-scrubbing .chart__guide,
+.chart.is-scrubbing .chart__marker,
+.chart.is-scrubbing .chart__tooltip { opacity: 1; }
+/* First frame of a hover: place without easing from a stale position. */
+.chart.is-snapping .chart__guide,
+.chart.is-snapping .chart__marker,
+.chart.is-snapping .chart__tooltip { transition: opacity var(--motion-fast) var(--motion-ease); }
+
+@media (max-width: 600px) {
+  .chart { height: 180px; }
+}
+
+/* Share bar: rounded segments with gaps + legend rows with values. Widths ease when data changes. */
 .share { display: grid; gap: var(--space-16); }
-.share__bar { display: flex; gap: 2px; height: 10px; border-radius: var(--radius-full); overflow: hidden; }
-.share__seg { height: 100%; background: var(--seg-color); transform-origin: left; animation: progress-grow var(--motion-slow) var(--motion-ease) both; transition: opacity var(--motion-fast) var(--motion-ease); }
+.share__bar { display: flex; align-items: center; gap: var(--space-4); height: 12px; }
+.share__seg {
+  flex: 0 1 0;
+  min-width: 0;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background: var(--seg-color);
+  transition:
+    flex-grow var(--chart-morph, var(--motion-slow)) var(--motion-ease) calc(var(--i, 0) * var(--motion-duration-instant) / 2),
+    height var(--motion-fast) var(--motion-ease),
+    opacity var(--motion-fast) var(--motion-ease);
+}
+.share { --chart-morph: calc(var(--motion-slow) * 5 / 3); }
 .share__list { display: grid; }
 .share__row { display: grid; grid-template-columns: 10px 1fr auto 44px; align-items: center; gap: var(--space-10); height: 36px; border-top: var(--border-width) solid var(--table-divider); font-size: var(--font-size-13); transition: opacity var(--motion-fast) var(--motion-ease); }
-.share__swatch { width: 10px; height: 10px; border-radius: 3px; background: var(--seg-color); }
+.share__swatch { width: 10px; height: 10px; border-radius: var(--radius-full); background: var(--seg-color); }
 .share__value { font-weight: var(--font-weight-medium); font-variant-numeric: tabular-nums; }
 .share__pct { text-align: right; color: var(--text-secondary); font-variant-numeric: tabular-nums; }
+.share.is-focusing .share__seg.is-active { height: 12px; }
 .share.is-focusing .share__seg:not(.is-active), .share.is-focusing .share__row:not(.is-active) { opacity: 0.3; }
 
 .chart-1 { --seg-color: var(--chart-1); }
 .chart-2 { --seg-color: var(--chart-2); }
 .chart-3 { --seg-color: var(--chart-3); }
 .chart-4 { --seg-color: var(--chart-4); }
+
+@media (prefers-reduced-motion: reduce) {
+  .chart__line.is-drawing, .chart__area.is-drawing, .chart__axes.is-entering, .chart__axes.is-leaving { animation: none; }
+  .chart__line.is-drawing { stroke-dasharray: none; }
+}

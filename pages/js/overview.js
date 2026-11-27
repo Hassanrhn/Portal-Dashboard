@@ -70,68 +70,84 @@
     $('[data-kpi="paid-detail"]').textContent = `${range.payments - range.paid} failed or pending`;
   }
 
-  /* Volume chart ------------------------------------------------------------- */
+  /* Volume chart ------------------------------------------------------------- *
+   * Soft area/line chart. The SVG is built once per size; range changes morph the existing paths:
+   * both series are resampled onto the same x grid and their y values interpolated with rAF. */
   const chart = {
     host: $('[data-chart]'),
     value: $('[data-chart-value]'),
     label: $('[data-chart-label]'),
     readout: $('.volume-readout'),
     range: null,
+    geo: null,
     points: [],
     index: -1,
+    size: '',
+    frame: 0,
+    uid: `chart-fill-${Math.random().toString(36).slice(2, 8)}`,
   };
-  const PAD = { top: 12, right: 8, bottom: 26, left: 40 };
+  const PAD = { top: 12, right: 4, bottom: 24, left: 30 };
+  const TIP_GAP = 12;
+  const AREA_OPACITY = 0.18;
 
-  function niceMax(max) {
-    const magnitude = Math.pow(10, Math.floor(Math.log10(max)));
-    return Math.ceil(max / magnitude) * magnitude;
+  /** Duration of a motion token in ms (e.g. "360ms"); JS timings follow the same tokens as CSS. */
+  function tokenMs(name) {
+    const raw = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    const n = parseFloat(raw);
+    return raw.endsWith('ms') ? n : n * 1000;
   }
+  const morphMs = () => tokenMs('--motion-duration-slow') * 5 / 3; // matches --chart-morph in chart.css
+  const easeInOut = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 
-  function drawChart({ animate }) {
-    const { host, range } = chart;
+  /** Step from {1, 2, 2.5, 5} × 10^k so four steps cover max. */
+  function niceStep(max) {
+    const raw = max / 4;
+    const magnitude = Math.pow(10, Math.floor(Math.log10(raw)));
+    const step = [1, 2, 2.5, 5, 10].find((m) => m * magnitude >= raw) * magnitude;
+    return step;
+  }
+  const tickText = (v) => (Number.isInteger(v) ? String(v) : v.toFixed(1));
+
+  function geometry(range) {
+    const { host } = chart;
     const width = host.clientWidth - 2 * parseFloat(getComputedStyle(host).paddingLeft || 0);
     const height = host.clientHeight;
-    if (width <= 0) return;
     const values = range.series.map((d) => d.value);
-    const yMax = niceMax(Math.max(...values) * 1.1);
+    const step = niceStep(Math.max(...values) * 1.08);
+    const yMax = step * 4;
     const innerW = width - PAD.left - PAD.right;
     const innerH = height - PAD.top - PAD.bottom;
     const x = (i) => PAD.left + (i / (values.length - 1)) * innerW;
     const y = (v) => PAD.top + innerH - (v / yMax) * innerH;
-    chart.points = values.map((v, i) => ({ x: x(i), y: y(v) }));
-
-    const root = svg('svg', { viewBox: `0 0 ${width} ${height}`, 'aria-hidden': 'true' });
-    for (let i = 0; i <= 4; i += 1) {
-      const v = (yMax / 4) * i;
-      root.appendChild(svg('line', { class: 'chart__grid', x1: PAD.left, x2: width - PAD.right, y1: y(v), y2: y(v) }));
-      const tick = svg('text', { class: 'chart__axis', x: PAD.left - 10, y: y(v) + 4, 'text-anchor': 'end' });
-      tick.textContent = String(Math.round(v));
-      root.appendChild(tick);
-    }
-    [0, Math.floor((values.length - 1) / 2), values.length - 1].forEach((i, n) => {
-      const tick = svg('text', { class: 'chart__axis', x: x(i), y: height - 6, 'text-anchor': ['start', 'middle', 'end'][n] });
-      tick.textContent = dayLabel(range.series[i].date);
-      root.appendChild(tick);
-    });
-
-    const line = smoothPath(chart.points);
-    const baseline = PAD.top + innerH;
-    const area = svg('path', { class: 'chart__area', d: `${line} L${x(values.length - 1)},${baseline} L${x(0)},${baseline} Z` });
-    const path = svg('path', { class: 'chart__line', d: line });
-    root.append(area, path);
-    chart.cursor = svg('line', { class: 'chart__cursor', y1: PAD.top, y2: baseline });
-    chart.dot = svg('circle', { class: 'chart__dot', r: 4.5 });
-    root.append(chart.cursor, chart.dot);
-    host.replaceChildren(root);
-
-    if (animate && !reducedMotion.matches) {
-      path.style.setProperty('--len', String(path.getTotalLength()));
-      path.classList.add('is-drawing');
-      area.classList.add('is-drawing');
-    }
+    // Date labels on an even day stride counted back from today; one too close to the left edge is dropped.
+    const last = values.length - 1;
+    const stride = Math.max(1, Math.ceil(last / Math.max(1, Math.floor(innerW / 80))));
+    const xTicks = [];
+    for (let i = last; i >= 0; i -= stride) if (i === 0 || x(i) - PAD.left >= 40) xTicks.unshift(i);
+    return {
+      width, height, baseline: PAD.top + innerH, left: PAD.left, right: width - PAD.right,
+      points: values.map((v, i) => ({ x: x(i), y: y(v) })),
+      yTicks: [0, 1, 2, 3, 4].map((k) => ({ y: y(step * k), text: tickText(step * k) })),
+      xTicks: xTicks.map((i) => ({ x: x(i), text: dayLabel(range.series[i].date), anchor: i === 0 ? 'start' : i === last ? 'end' : 'middle' })),
+    };
   }
 
-  /** Monotone-ish smoothing: cubic segments with horizontal control points. */
+  function buildAxes(geo) {
+    const group = svg('g', { class: 'chart__axes' });
+    geo.yTicks.forEach((t) => {
+      const label = svg('text', { class: 'chart__axis', x: 0, y: t.y + 4 });
+      label.textContent = t.text;
+      group.appendChild(label);
+    });
+    geo.xTicks.forEach((t) => {
+      const label = svg('text', { class: 'chart__axis', x: t.x, y: geo.height - 4, 'text-anchor': t.anchor });
+      label.textContent = t.text;
+      group.appendChild(label);
+    });
+    return group;
+  }
+
+  /** Cubic segments with horizontal control points (smooth, never overshoots between days). */
   function smoothPath(points) {
     return points.reduce((d, p, i) => {
       if (i === 0) return `M${p.x},${p.y}`;
@@ -139,6 +155,127 @@
       const mid = (p.x - prev.x) / 2;
       return `${d} C${prev.x + mid},${prev.y} ${p.x - mid},${p.y} ${p.x},${p.y}`;
     }, '');
+  }
+  const polyPath = (points) => points.map((p, i) => `${i ? 'L' : 'M'}${p.x.toFixed(2)},${p.y.toFixed(2)}`).join(' ');
+  const areaPath = (line, points, baseline) => `${line} L${points[points.length - 1].x},${baseline} L${points[0].x},${baseline} Z`;
+
+  /** Samples the smoothPath curve at n evenly spaced x positions, so two series of any length line up. */
+  function resample(points, n) {
+    const x0 = points[0].x;
+    const x1 = points[points.length - 1].x;
+    let k = 0;
+    return Array.from({ length: n }, (_, j) => {
+      const X = x0 + ((x1 - x0) * j) / (n - 1);
+      while (k < points.length - 2 && points[k + 1].x < X) k += 1;
+      const a = points[k];
+      const b = points[k + 1];
+      const u = (X - a.x) / (b.x - a.x || 1);
+      let lo = 0; let hi = 1; let t = u; // x(t) = 1.5t(1−t) + t³ is monotone: bisect for t
+      for (let it = 0; it < 18; it += 1) {
+        t = (lo + hi) / 2;
+        if (1.5 * t * (1 - t) + t * t * t < u) lo = t; else hi = t;
+      }
+      return { x: X, y: a.y + (b.y - a.y) * (3 * t * t - 2 * t * t * t) };
+    });
+  }
+
+  /** Gradient stops read the live --chart-1 value, so they follow the theme. */
+  function paintGradient() {
+    if (!chart.stops) return;
+    const color = getComputedStyle(chart.host).getPropertyValue('--chart-1').trim();
+    chart.stops.forEach((stop, i) => {
+      stop.setAttribute('stop-color', color);
+      stop.setAttribute('stop-opacity', i === 0 ? String(AREA_OPACITY) : '0');
+    });
+  }
+
+  function buildChart({ animate }) {
+    const { host, range } = chart;
+    cancelAnimationFrame(chart.frame);
+    const geo = geometry(range);
+    if (geo.width <= 0 || geo.height <= 0) return;
+    chart.geo = geo;
+    chart.points = geo.points;
+    chart.size = `${host.clientWidth}x${host.clientHeight}`;
+
+    const root = svg('svg', { viewBox: `0 0 ${geo.width} ${geo.height}`, 'aria-hidden': 'true' });
+    const gradient = svg('linearGradient', { id: chart.uid, x1: 0, y1: 0, x2: 0, y2: 1 });
+    chart.stops = [svg('stop', { offset: '0' }), svg('stop', { offset: '1' })];
+    gradient.append(...chart.stops);
+    const defs = svg('defs');
+    defs.appendChild(gradient);
+
+    const grid = svg('g');
+    geo.yTicks.forEach((t) => grid.appendChild(svg('line', { class: 'chart__grid', x1: geo.left, x2: geo.right, y1: t.y, y2: t.y })));
+    chart.axes = buildAxes(geo);
+
+    const line = smoothPath(geo.points);
+    chart.area = svg('path', { class: 'chart__area', d: areaPath(line, geo.points, geo.baseline), fill: `url(#${chart.uid})` });
+    chart.line = svg('path', { class: 'chart__line', d: line });
+
+    chart.guide = svg('line', { class: 'chart__guide', x1: 0, x2: 0, y1: PAD.top, y2: geo.baseline });
+    chart.marker = svg('g', { class: 'chart__marker' });
+    chart.marker.append(svg('circle', { class: 'chart__ring', r: 9 }), svg('circle', { class: 'chart__dot', r: 4 }));
+
+    root.append(defs, grid, chart.axes, chart.area, chart.line, chart.guide, chart.marker);
+    chart.tipDate = el('span', { className: 'chart__tooltip-date' });
+    chart.tipValue = el('span', { className: 'chart__tooltip-value' });
+    chart.tooltip = el('div', { className: 'chart__tooltip', attrs: { 'aria-hidden': 'true' } }, [chart.tipDate, chart.tipValue]);
+    host.replaceChildren(root, chart.tooltip);
+    paintGradient();
+
+    if (animate && !reducedMotion.matches) {
+      chart.line.style.setProperty('--len', String(chart.line.getTotalLength()));
+      chart.line.classList.add('is-drawing');
+      chart.area.classList.add('is-drawing');
+      chart.line.addEventListener('animationend', () => chart.line.classList.remove('is-drawing'), { once: true });
+      chart.area.addEventListener('animationend', () => chart.area.classList.remove('is-drawing'), { once: true });
+    }
+    if (chart.index >= 0) scrubTo(chart.index, { snap: true });
+  }
+
+  /** Range change: morph line + area from the old series to the new one, cross-fade the axis labels. */
+  function morphChart(range) {
+    const from = chart.points;
+    chart.range = range;
+    if (!chart.line || !from.length || reducedMotion.matches) { buildChart({ animate: false }); return; }
+    cancelAnimationFrame(chart.frame);
+    const geo = geometry(range);
+    if (geo.width <= 0) return;
+    chart.geo = geo;
+    chart.points = geo.points;
+    [chart.line, chart.area].forEach((node) => node.classList.remove('is-drawing'));
+
+    const duration = morphMs();
+    const oldAxes = chart.axes;
+    chart.axes = buildAxes(geo);
+    chart.axes.classList.add('is-entering');
+    oldAxes.classList.remove('is-entering');
+    oldAxes.classList.add('is-leaving');
+    oldAxes.after(chart.axes);
+    window.setTimeout(() => oldAxes.remove(), duration);
+
+    const n = Math.max(48, Math.ceil(geo.width / 3));
+    const a = resample(from, n);
+    const b = resample(geo.points, n);
+    const start = performance.now();
+    const frame = (now) => {
+      const t = Math.min(1, (now - start) / duration);
+      if (t >= 1) {
+        const line = smoothPath(geo.points);
+        chart.line.setAttribute('d', line);
+        chart.area.setAttribute('d', areaPath(line, geo.points, geo.baseline));
+        return;
+      }
+      const e = easeInOut(t);
+      const pts = a.map((p, i) => ({ x: p.x, y: p.y + (b[i].y - p.y) * e }));
+      const line = polyPath(pts);
+      chart.line.setAttribute('d', line);
+      chart.area.setAttribute('d', areaPath(line, pts, geo.baseline));
+      chart.frame = requestAnimationFrame(frame);
+    };
+    chart.frame = requestAnimationFrame(frame);
+    if (chart.index >= 0) scrubTo(chart.index);
   }
 
   function showTotal() {
@@ -149,17 +286,38 @@
     chart.label.textContent = `USD eq. total, ${chart.range.label.toLowerCase()}`;
   }
 
-  function scrubTo(index) {
+  function scrubTo(index, { snap = false } = {}) {
+    if (!chart.points.length || !chart.tooltip) return;
     const i = Math.max(0, Math.min(chart.points.length - 1, index));
     const point = chart.points[i];
     const day = chart.range.series[i];
+    const { host, tooltip } = chart;
+    const wasHidden = !host.classList.contains('is-scrubbing');
     chart.index = i;
-    chart.host.classList.add('is-scrubbing');
+    chart.tipDate.textContent = day.date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC' });
+    chart.tipValue.replaceChildren(document.createTextNode(money(day.value)), el('span', { className: 'chart__tooltip-unit', text: 'USD eq.' }));
+
+    // Tooltip sits up and to the right of the point; it flips left and clamps so it never leaves the card.
+    const pad = parseFloat(getComputedStyle(host).paddingLeft || 0);
+    const px = pad + point.x;
+    const tipW = tooltip.offsetWidth;
+    const tipH = tooltip.offsetHeight;
+    const maxLeft = host.clientWidth - pad - tipW;
+    let left = px + TIP_GAP;
+    if (left > maxLeft) left = px - TIP_GAP - tipW;
+    left = Math.max(pad, Math.min(maxLeft, left));
+    const top = Math.max(0, Math.min(chart.geo.baseline - tipH, point.y - tipH - TIP_GAP));
+
+    if (wasHidden || snap) host.classList.add('is-snapping');
+    chart.guide.style.setProperty('transform', `translate(${point.x}px, 0)`);
+    chart.marker.style.setProperty('transform', `translate(${point.x}px, ${point.y}px)`);
+    tooltip.style.setProperty('transform', `translate(${left}px, ${top}px)`);
+    if (wasHidden || snap) {
+      void host.offsetWidth; // commit the snapped position before easing resumes
+      host.classList.remove('is-snapping');
+    }
+    host.classList.add('is-scrubbing');
     chart.readout.classList.add('is-scrubbing');
-    chart.cursor.setAttribute('x1', point.x);
-    chart.cursor.setAttribute('x2', point.x);
-    chart.dot.setAttribute('cx', point.x);
-    chart.dot.setAttribute('cy', point.y);
     chart.value.textContent = money(day.value);
     chart.label.textContent = `USD eq. on ${dayLabel(day.date)}`;
   }
@@ -172,30 +330,52 @@
     return best;
   }
 
-  chart.host.addEventListener('pointermove', (event) => scrubTo(nearestIndex(event.clientX)));
-  chart.host.addEventListener('pointerleave', showTotal);
-  chart.host.addEventListener('blur', showTotal);
+  const onPointer = (event) => { if (chart.points.length) scrubTo(nearestIndex(event.clientX)); };
+  chart.host.addEventListener('pointermove', onPointer);
+  chart.host.addEventListener('pointerdown', onPointer);
+  chart.host.addEventListener('pointerleave', () => chart.range && showTotal());
+  chart.host.addEventListener('blur', () => chart.range && showTotal());
   chart.host.addEventListener('keydown', (event) => {
+    if (!chart.points.length) return;
     const step = { ArrowRight: 1, ArrowLeft: -1 }[event.key];
     if (event.key === 'Home') { event.preventDefault(); scrubTo(0); }
     else if (event.key === 'End') { event.preventDefault(); scrubTo(chart.points.length - 1); }
+    else if (event.key === 'Escape') showTotal();
     else if (step) { event.preventDefault(); scrubTo(chart.index < 0 ? (step > 0 ? 0 : chart.points.length - 1) : chart.index + step); }
   });
-  new ResizeObserver(() => chart.range && drawChart({ animate: false })).observe(chart.host);
+  // Rebuild only when the box really changes size (the initial observe callback must not cancel the draw-in).
+  new ResizeObserver(() => {
+    if (chart.range && chart.size !== `${chart.host.clientWidth}x${chart.host.clientHeight}`) buildChart({ animate: false });
+  }).observe(chart.host);
+  // Theme switch: gradient stop colours are attributes, so repaint them from the new tokens.
+  new MutationObserver(paintGradient).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 
-  /* Share bars --------------------------------------------------------------- */
+  /* Share bars ---------------------------------------------------------------- *
+   * Built once; later renders update widths (flex-grow transitions) and tween the values in place. */
   function renderShare(host, rows, total) {
+    if (host.shareRows?.length === rows.length) {
+      rows.forEach(([, share], i) => {
+        const r = host.shareRows[i];
+        r.seg.style.setProperty('flex-grow', String(share));
+        tween(r.value, total * share, money);
+        tween(r.pct, share * 100, (n) => `${Math.round(n)}%`);
+      });
+      return;
+    }
     const bar = el('div', { className: 'share__bar', attrs: { 'aria-hidden': 'true' } });
     const list = el('ul', { className: 'share__list' });
-    rows.forEach(([name, share, color], i) => {
+    host.shareRows = rows.map(([name, share, color], i) => {
       const seg = el('span', { className: `share__seg ${color}` });
-      seg.style.flexGrow = String(share);
-      seg.style.animationDelay = `${i * 60}ms`;
+      seg.style.setProperty('--i', String(i));
+      const value = el('span', { className: 'share__value', text: money(total * share) });
+      const pct = el('span', { className: 'share__pct', text: `${Math.round(share * 100)}%` });
+      value.dataset.current = String(total * share);
+      pct.dataset.current = String(share * 100);
       const row = el('li', { className: `share__row ${color}` }, [
         el('span', { className: 'share__swatch', attrs: { 'aria-hidden': 'true' } }),
         el('span', { text: name }),
-        el('span', { className: 'share__value', text: money(total * share) }),
-        el('span', { className: 'share__pct', text: `${Math.round(share * 100)}%` }),
+        value,
+        pct,
       ]);
       const focus = (on) => {
         host.classList.toggle('is-focusing', on);
@@ -208,8 +388,12 @@
       });
       bar.appendChild(seg);
       list.appendChild(row);
+      return { seg, value, pct, share };
     });
     host.replaceChildren(bar, list);
+    // Grow in from zero on first render (one frame at 0, then the real shares).
+    if (reducedMotion.matches) host.shareRows.forEach((r) => r.seg.style.setProperty('flex-grow', String(r.share)));
+    else requestAnimationFrame(() => requestAnimationFrame(() => host.shareRows.forEach((r) => r.seg.style.setProperty('flex-grow', String(r.share)))));
   }
 
   /* Payments table ----------------------------------------------------------- */
@@ -264,12 +448,39 @@
   const state = { range: '30d', status: 'all' };
   const request = (value) => new Promise((resolve) => window.setTimeout(() => resolve(value), 300 + Math.random() * 500));
   const currentRange = () => data.ranges[state.range];
-  const RANGE_SECTIONS = ['kpis', 'volume', 'share-route', 'share-currency'];
+
+  /* Range changes: KPIs reload as usual. Chart and share bars that are already on screen refetch in place
+   * (no skeleton) so they can morph from the old data; sections not loaded yet load lazily with the new range. */
+  let rangeRequest = 0;
+  function refreshRange() {
+    const token = (rangeRequest += 1);
+    const range = currentRange();
+    Portal.lazy.reload('kpis');
+    if (chart.line) {
+      chart.host.classList.add('is-updating');
+      request(range).then((r) => {
+        if (token !== rangeRequest) return;
+        chart.host.classList.remove('is-updating');
+        morphChart(r);
+        if (chart.index < 0) showTotal(); else scrubTo(chart.index);
+      });
+    } else Portal.lazy.reload('volume');
+    ['route', 'currency'].forEach((kind) => {
+      const host = $(`[data-share="${kind}"]`);
+      if (!host.shareRows) { Portal.lazy.reload(`share-${kind}`); return; }
+      request(Number(range.total)).then((total) => { if (token === rangeRequest) renderShare(host, data.shares[kind], total); });
+    });
+  }
 
   Portal.lazy.register('kpis', { fetch: () => request(currentRange()), render: renderKpis });
   Portal.lazy.register('volume', {
     fetch: () => request(currentRange()),
-    render: (range) => { chart.range = range; drawChart({ animate: true }); showTotal(); },
+    render: (range) => {
+      chart.range = range;
+      chart.host.classList.remove('is-updating');
+      if (chart.line && chart.host.isConnected) morphChart(range); else buildChart({ animate: true });
+      if (chart.index < 0) showTotal();
+    },
   });
   ['route', 'currency'].forEach((kind) => Portal.lazy.register(`share-${kind}`, {
     fetch: () => request(Number(currentRange().total)),
@@ -286,7 +497,7 @@
     if (!data.ranges[event.detail.value]) return;
     state.range = event.detail.value;
     setRangeLabels();
-    RANGE_SECTIONS.forEach((name) => Portal.lazy.reload(name));
+    refreshRange();
   });
   $('[data-status-filter]').addEventListener('segmented:change', (event) => {
     state.status = event.detail.value;

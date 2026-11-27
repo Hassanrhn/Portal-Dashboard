@@ -83,12 +83,12 @@
     rowLabel: (p) => `payout ${p.id}`,
     empty: { icon: 'search', title: 'No payouts match these filters', text: 'Try another status or clear the filters.', action: btn('Clear filters', { onClick: clearFilters }) },
     columns: [
-      { label: 'Payout ID', render: (p) => Portal.copyable(p.id, { label: 'Copy payout ID' }) },
-      { label: 'Destination', render: (p) => el('span', { className: 'payout-dest' }, [el('span', { className: 'chip', text: p.network }), addressCopy(p.address)]) },
-      { label: 'Reference', render: (p) => el('span', { className: 'u-muted', text: p.ref }) },
-      { label: 'Status', render: (p) => statusBadge(p.status) },
-      { label: 'Amount', num: true, render: (p) => amountCell(p.amount, p.currency) },
-      { label: 'Created', num: true, render: (p) => el('span', { className: 'u-muted', text: fmt.dateTime(p.created) }) },
+      { label: 'Payout ID', filter: { type: 'text', value: (p) => p.id }, render: (p) => Portal.copyable(p.id, { label: 'Copy payout ID' }) },
+      { label: 'Destination', filter: { type: 'options', value: (p) => p.network, label: String }, render: (p) => el('span', { className: 'payout-dest' }, [el('span', { className: 'chip', text: p.network }), addressCopy(p.address)]) },
+      { label: 'Reference', filter: { type: 'text', value: (p) => p.ref, placeholder: 'e.g. WD-2041' }, render: (p) => el('span', { className: 'u-muted', text: p.ref }) },
+      { label: 'Status', filter: { type: 'options', value: (p) => p.status, label: (s) => STATUS_BADGE[s][1] }, render: (p) => statusBadge(p.status) },
+      { label: 'Amount', num: true, filter: { type: 'number', value: (p) => p.amount }, render: (p) => amountCell(p.amount, p.currency) },
+      { label: 'Created', num: true, filter: { type: 'date', value: (p) => p.created }, render: (p) => el('span', { className: 'u-muted', text: fmt.dateTime(p.created) }) },
     ],
   });
 

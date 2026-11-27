@@ -51,13 +51,13 @@
     rowLabel: (m) => m.email,
     empty: { icon: 'invite', title: 'No members yet', text: 'Invite your team to share access.' },
     columns: [
-      { label: 'Member', render: (m) => el('span', { className: 'table__lead' }, [
+      { label: 'Member', filter: { type: 'text', value: (m) => `${m.name} ${m.email}`, placeholder: 'Name or email' }, render: (m) => el('span', { className: 'table__lead' }, [
         el('span', { className: 'tile', text: initials(m.name), attrs: { 'aria-hidden': 'true' } }),
         el('span', {}, [m.name, isMe(m) ? el('span', { className: 'chip team__you', text: 'You' }) : null, el('span', { className: 'cell-sub', text: m.email })]),
       ]) },
-      { label: 'Role', render: (m) => m.role },
-      { label: 'Two-factor', render: (m) => (m.twoFactor ? Portal.badge('active', 'On') : Portal.badge('review', 'Off')) },
-      { label: 'Last active', render: (m) => el('span', { className: 'u-muted', text: fmt.relative(m.lastActive, NOW) }) },
+      { label: 'Role', filter: { type: 'options', value: (m) => m.role, options: ROLES.map((r) => r.id) }, render: (m) => m.role },
+      { label: 'Two-factor', filter: { type: 'options', value: (m) => m.twoFactor, options: [true, false], label: (on) => (on ? 'On' : 'Off') }, render: (m) => (m.twoFactor ? Portal.badge('active', 'On') : Portal.badge('review', 'Off')) },
+      { label: 'Last active', filter: { type: 'date', value: (m) => m.lastActive }, render: (m) => el('span', { className: 'u-muted', text: fmt.relative(m.lastActive, NOW) }) },
       { label: 'Actions', className: 'cell-actions', render: (m) => Portal.menu.button(() => memberMenu(m), `Actions for ${m.name}`) },
     ],
   });
@@ -125,9 +125,9 @@
     rowLabel: (i) => i.email,
     empty: { icon: 'mail', title: 'No pending invites', text: 'People you invite appear here until they accept.', action: btn('Invite members', { iconName: 'invite', onClick: openInviteDrawer }) },
     columns: [
-      { label: 'Email', render: (i) => i.email },
-      { label: 'Role', render: (i) => i.role },
-      { label: 'Sent', render: (i) => el('span', { className: 'u-muted', text: fmt.relative(i.sent, NOW) }) },
+      { label: 'Email', filter: { type: 'text', value: (i) => i.email, placeholder: 'e.g. name@company.com' }, render: (i) => i.email },
+      { label: 'Role', filter: { type: 'options', value: (i) => i.role, options: ROLES.map((r) => r.id) }, render: (i) => i.role },
+      { label: 'Sent', filter: { type: 'date', value: (i) => i.sent }, render: (i) => el('span', { className: 'u-muted', text: fmt.relative(i.sent, NOW) }) },
       { label: 'Actions', className: 'cell-actions', render: (i) => el('span', { className: 'team__actions' }, [resendButton(i), btn('Revoke', { variant: 'ghost', size: 'sm', onClick: () => revokeInvite(i), attrs: { 'aria-label': `Revoke invite for ${i.email}` } })]) },
     ],
   });

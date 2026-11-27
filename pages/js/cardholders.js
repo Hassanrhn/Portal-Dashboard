@@ -88,25 +88,23 @@
     return { icon: 'search', title: 'No cardholders match these filters', text: 'Try another issuer or clear the filters.', action: btn('Clear filters', { onClick: clearFilters }) };
   }
 
-  const tableHost = $('[data-table]');
-  const tableOptions = {
+  const table = Portal.dataTable($('[data-table]'), {
     pageSize: 12,
     onRowClick: openCardholder,
     rowLabel: (h) => `cardholder ${h.name}`,
     empty: emptyState(),
     columns: [
-      { label: 'Cardholder', render: (h) => el('span', { className: 'table__lead' }, [
+      { label: 'Cardholder', filter: { type: 'text', value: (h) => `${h.name} ${h.email} ${h.id}`, placeholder: 'Name, email or ID' }, render: (h) => el('span', { className: 'table__lead' }, [
         el('span', { className: 'tile', text: initials(h), attrs: { 'aria-hidden': 'true' } }),
         el('span', {}, [h.name, el('span', { className: 'cell-sub', text: h.email })]),
       ]) },
-      { label: 'Country', render: (h) => countryLabel(h.country) },
-      { label: 'Issuer', render: (h) => issuerLabel(h.issuer) },
-      { label: 'KYC', render: (h) => (h.status === 'suspended' ? Portal.badge('blocked', 'Suspended') : Portal.badge(h.kyc)) },
-      { label: 'Cards', num: true, render: (h) => fmt.count(cardsOf(h).length) },
-      { label: 'Created', num: true, render: (h) => el('span', { className: 'u-muted', text: fmt.date(h.created) }) },
+      { label: 'Country', filter: { type: 'options', value: (h) => h.country, label: (code) => countryOf(code)?.name || code }, render: (h) => countryLabel(h.country) },
+      { label: 'Issuer', filter: { type: 'options', value: (h) => h.issuer }, render: (h) => issuerLabel(h.issuer) },
+      { label: 'KYC', filter: { type: 'options', value: (h) => (h.status === 'suspended' ? 'suspended' : h.kyc) }, render: (h) => (h.status === 'suspended' ? Portal.badge('blocked', 'Suspended') : Portal.badge(h.kyc)) },
+      { label: 'Cards', num: true, filter: { type: 'number', value: (h) => cardsOf(h).length }, render: (h) => fmt.count(cardsOf(h).length) },
+      { label: 'Created', num: true, filter: { type: 'date', value: (h) => h.created }, render: (h) => el('span', { className: 'u-muted', text: fmt.date(h.created) }) },
     ],
-  };
-  let table = Portal.dataTable(tableHost, tableOptions);
+  });
 
   function matches(h, { ignoreKyc = false } = {}) {
     const q = filters.q.trim().toLowerCase();
@@ -115,16 +113,10 @@
       && (!filters.issuer || h.issuer === filters.issuer);
   }
 
-  function rebuildTableForEmptyState() {
-    // dataTable reads its empty state once, so rebuild it when the reason for "empty" changes.
-    tableHost.replaceChildren();
-    table = Portal.dataTable(tableHost, { ...tableOptions, empty: emptyState() });
-  }
-
   let lastEmptyKey = '';
   function apply() {
     const emptyKey = filters.issuer && issuerOf(filters.issuer).status === 'needs_scope' ? 'scope' : 'filters';
-    if (emptyKey !== lastEmptyKey) { lastEmptyKey = emptyKey; rebuildTableForEmptyState(); }
+    if (emptyKey !== lastEmptyKey) { lastEmptyKey = emptyKey; table.setEmpty(emptyState()); }
     const base = cardholders.filter((h) => matches(h, { ignoreKyc: true }));
     document.querySelectorAll('[data-count]').forEach((node) => {
       const kyc = node.dataset.count;

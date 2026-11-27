@@ -136,9 +136,9 @@
     pageSize: 10,
     rowLabel: (o) => o.id,
     columns: [
-      { label: 'Offering ID', render: (o) => Portal.copyable(o.id, { label: 'Copy offering ID' }) },
-      { label: 'Provider', render: (o) => o.provider },
-      { label: 'Action', render: (o) => el('span', { className: 'chip chip--mono', text: o.action }) },
+      { label: 'Offering ID', filter: { type: 'text', value: (o) => o.id, placeholder: 'e.g. CROSSMINT' }, render: (o) => Portal.copyable(o.id, { label: 'Copy offering ID' }) },
+      { label: 'Provider', filter: { type: 'options', value: (o) => o.provider }, render: (o) => o.provider },
+      { label: 'Action', filter: { type: 'options', value: (o) => o.action }, render: (o) => el('span', { className: 'chip chip--mono', text: o.action }) },
       { label: 'Currencies', render: (o) => el('span', { className: 'chips' }, o.currencies.map((c) => el('span', { className: 'chip', text: c }))) },
     ],
   });
