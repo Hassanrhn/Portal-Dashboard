@@ -10,7 +10,7 @@
   .kpi-strip--3 { grid-template-columns: minmax(0, 1fr); }
   .kpi-strip--3 .kpi + .kpi, .kpi-strip--3 .kpi:nth-child(3) { border-left: 0; border-top: var(--border-width) solid var(--card-border); }
 }
-.export-status { display: grid; gap: var(--space-6); min-width: 120px; }
+.export-status { display: grid; gap: var(--space-6); min-width: 104px; }
 .row-actions { display: inline-flex; align-items: center; gap: var(--space-4); }
 .diff--negative { color: var(--status-danger-fg); }
 .date-range[hidden] { display: none; }

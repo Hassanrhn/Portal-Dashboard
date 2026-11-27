@@ -64,7 +64,7 @@
   }
 
   /* Exports ------------------------------------------------------------------------ */
-  const exportName = (e) => `${REPORT_TYPES[e.type].label} · ${rangeLabel(e.from, e.to)}`;
+  const exportName = (e) => `${e.type}_${e.from}_${e.to}.${e.format}`;
   const expiresAt = (e) => new Date(Date.parse(e.readyAt || e.created) + EXPIRY_DAYS * DAY).toISOString();
   const exportStatus = (e) => (e.progress < 100 ? 'generating' : Date.parse(expiresAt(e)) <= NOW ? 'expired' : 'ready');
   const progressNodes = new Map(); // export id → { fill, label } while generating
@@ -91,7 +91,7 @@
   function exportActions(e) {
     const ready = exportStatus(e) === 'ready';
     return el('span', { className: 'row-actions' }, [
-      btn('Download', { size: 'sm', iconName: 'download', onClick: () => download(e), attrs: { disabled: !ready, 'aria-label': `Download ${exportName(e)}` } }),
+      btn(`Download ${exportName(e)}`, { variant: 'ghost', size: 'sm', iconName: 'download', iconOnly: true, onClick: () => download(e), attrs: { disabled: !ready } }),
       Portal.menu.button(() => [
         { label: `Download ${e.format.toUpperCase()}`, icon: 'download', description: `${fmt.count(rowsFor(e).length)} rows`, disabled: !ready, onSelect: () => download(e) },
         'separator',
@@ -104,7 +104,7 @@
     pageSize: 10,
     empty: { icon: 'file', title: 'No exports yet', text: 'Create an export to download transactions, payouts, refunds, fees or card orders.', action: btn('New export', { variant: 'primary', iconName: 'plus', onClick: openNewExport }) },
     columns: [
-      { label: 'Name', render: (e) => el('span', {}, [exportName(e), el('span', { className: 'cell-sub', text: `${e.format.toUpperCase()} · ${e.createdBy}${e.includeTest ? ' · includes Test data' : ''}` })]) },
+      { label: 'Name', render: (e) => el('span', {}, [el('span', { className: 'u-mono', text: exportName(e) }), el('span', { className: 'cell-sub', text: `${e.createdBy}${e.includeTest ? ' · includes Test data' : ''}` })]) },
       { label: 'Type', render: (e) => el('span', { className: 'chip', text: REPORT_TYPES[e.type].label }) },
       { label: 'Range', render: (e) => el('span', { className: 'u-muted', text: rangeLabel(e.from, e.to) }) },
       { label: 'Rows', num: true, render: (e) => (exportStatus(e) === 'generating' ? el('span', { className: 'u-muted', text: 'Counting' }) : fmt.count(rowsFor(e).length)) },
@@ -135,12 +135,11 @@
   function download(e) {
     const type = REPORT_TYPES[e.type];
     const rows = rowsFor(e);
-    const filename = `${e.type}_${e.from}_${e.to}.${e.format}`;
     if (e.format === 'csv') {
-      Portal.downloadCsv(filename, type.columns.map(([label, value]) => ({ label, value })), rows);
+      Portal.downloadCsv(exportName(e), type.columns.map(([label, value]) => ({ label, value })), rows);
       return;
     }
-    downloadJson(filename, {
+    downloadJson(exportName(e), {
       report: e.type, from: e.from, to: e.to, includesTestData: e.includeTest, generatedAt: e.readyAt,
       data: rows.map((r) => Object.fromEntries(type.columns.map(([label, value]) => [label, value(r)]))),
     });
@@ -273,7 +272,7 @@
         drawer.close();
         renderExports();
         generate(e);
-        Portal.toast(`Generating ${exportName(e)}`, { icon: 'clock' });
+        Portal.toast(`Generating ${REPORT_TYPES[e.type].label.toLowerCase()} export`, { icon: 'clock' });
       } }),
     ], 'Exports include data you can see with your role.');
   }
