@@ -494,12 +494,12 @@
       const state = byColumns
         ? { icon: 'filter', title: 'No rows match the column filters', text: 'Remove a filter to see more rows.', action: btn('Clear column filters', { onClick: clearFilters }) }
         : empty;
-      emptyBox.replaceChildren(
+      emptyBox.replaceChildren(...[
         el('span', { className: 'empty__icon' }, [iconEl(state.icon || 'search')]),
         el('p', { className: 'empty__title', text: state.title || 'Nothing here yet' }),
-        state.text ? el('p', { className: 'empty__text', text: state.text }) : null,
-        state.action || null,
-      );
+        state.text && el('p', { className: 'empty__text', text: state.text }),
+        state.action,
+      ].filter(Boolean)); // replaceChildren would render null as text
     }
 
     function go(target) {
