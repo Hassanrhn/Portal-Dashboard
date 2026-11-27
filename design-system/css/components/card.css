@@ -49,3 +49,4 @@
   .kpi-strip { grid-template-columns: 1fr; }
   .kpi + .kpi { border-left: 0; border-top: var(--border-width) solid var(--card-border); }
 }
+.kpi__skeleton { margin-top: var(--space-12); gap: var(--space-12); }

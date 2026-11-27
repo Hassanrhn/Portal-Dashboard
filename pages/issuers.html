@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en" data-theme="light" data-env="live">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Issuers · Portal</title>
+  <link rel="stylesheet" href="../design-system/css/portal.css">
+  <link rel="stylesheet" href="css/issuers.css">
+  <script src="../design-system/js/theme.js"></script>
+  <script src="../design-system/js/icons.js" defer></script>
+  <script src="../design-system/js/dom.js" defer></script>
+  <script src="js/layout.js" defer></script>
+  <script src="../design-system/js/components.js" defer></script>
+  <script src="../design-system/js/patterns.js" defer></script>
+  <script src="../design-system/js/lazy.js" defer></script>
+  <script src="js/data/cards.js" defer></script>
+  <script src="js/issuers.js" defer></script>
+  <script src="js/create-payment.js" defer></script>
+  <script src="../design-system/js/shell.js" defer></script>
+</head>
+<body data-page="issuers">
+<div class="app" data-app>
+  <div class="main">
+    <main class="page" id="main">
+      <div class="page__head">
+        <div>
+          <h1 class="t-title">Issuers</h1>
+          <p class="page__sub">Connection status for each card issuer in your program. Every issuer needs an API key with the CARDS scope before Portal can read cardholders, cards and orders.</p>
+        </div>
+        <div class="page__actions">
+          <a class="btn btn--lg" href="api-keys.html"><i data-icon="key"></i>API keys</a>
+        </div>
+      </div>
+
+      <div class="stack">
+        <section class="issuer-grid" data-lazy="issuers" aria-busy="true" aria-label="Issuers">
+          <div class="issuer-grid__skeleton" data-skeleton>
+            <div class="card card__body skeleton-stack"><span class="skeleton skeleton--title"></span><span class="skeleton skeleton--text"></span><span class="skeleton skeleton--block"></span></div>
+            <div class="card card__body skeleton-stack"><span class="skeleton skeleton--title"></span><span class="skeleton skeleton--text"></span><span class="skeleton skeleton--block"></span></div>
+            <div class="card card__body skeleton-stack"><span class="skeleton skeleton--title"></span><span class="skeleton skeleton--text"></span><span class="skeleton skeleton--block"></span></div>
+          </div>
+          <div class="issuer-grid__list" data-lazy-content data-issuers></div>
+        </section>
+
+        <section class="card" data-lazy="card-webhooks" aria-busy="true" aria-labelledby="card-webhooks-title">
+          <div class="card__head">
+            <div>
+              <h2 class="card__title" id="card-webhooks-title">Card webhooks</h2>
+              <p class="t-meta">Issuers push lifecycle changes to your endpoint. Delivery health over the last 30 days.</p>
+            </div>
+            <a class="btn btn--ghost btn--sm" href="webhooks.html">Open webhooks<i data-icon="arrow-right"></i></a>
+          </div>
+          <div class="card__body">
+            <div class="skeleton-stack" data-skeleton><span class="skeleton skeleton--text"></span><span class="skeleton skeleton--short"></span><span class="skeleton skeleton--text"></span><span class="skeleton skeleton--short"></span></div>
+            <ul class="rows" data-lazy-content data-webhooks></ul>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+</div>
+</body>
+</html>

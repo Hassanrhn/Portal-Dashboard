@@ -24,6 +24,6 @@
 .btn__dot { display: inline-grid; place-items: center; min-width: 16px; height: 16px; padding: 0 4px; border-radius: var(--radius-full); background: var(--accent-solid); color: var(--accent-solid-fg); font-size: var(--font-size-11); font-weight: var(--font-weight-semibold); }
 @media (max-width: 600px) {
   .toolbar__search { max-width: none; flex-basis: 100%; }
-  .toolbar > .segmented { max-width: 100%; overflow-x: auto; scrollbar-width: none; }
+  .toolbar .segmented { max-width: 100%; overflow-x: auto; scrollbar-width: none; }
   .pagination { flex-wrap: wrap; }
 }

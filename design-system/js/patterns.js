@@ -228,6 +228,8 @@
 
     return {
       setRows(next) { rows = next; go(1); },
+      /** Change the empty state, e.g. "no results" vs "needs setup"; re-renders if currently empty. */
+      setEmpty(next) { empty = next; if (!rows.length) renderEmpty(); },
       refresh() { go(page); },
       get rows() { return rows; },
     };

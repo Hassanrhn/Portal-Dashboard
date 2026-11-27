@@ -1,0 +1,7 @@
+/* Card orders page specifics. Tokens only. */
+.inline-link { text-decoration: underline; text-decoration-color: var(--border-strong); text-underline-offset: var(--space-2); transition: text-decoration-color var(--motion-fast) var(--motion-ease); }
+.inline-link:hover { text-decoration-color: currentColor; }
+.drawer .form-grid > .field, .drawer .form-grid > div > .field { align-content: start; }
+.drawer .form-grid { align-items: start; }
+/* Six status options overflow a phone-width toolbar; let the segmented control scroll inside the card. */
+@media (max-width: 600px) { .toolbar .segmented { max-width: 100%; overflow-x: auto; scrollbar-width: none; } }
