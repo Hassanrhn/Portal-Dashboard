@@ -765,6 +765,17 @@ If avatars or statement PDFs are served from another host, add it to `img-src` o
   - Sorting runs after column filters and before pagination.
 - **Pop-up variant.** `Portal.drawer.open({ modal: true, … })` opens the same head/body/foot as a centred pop-up; it is still a bottom sheet on phones. Create payment (the app bar "+") uses it.
 
+## Round 7 changes
+
+- **Copy:** `Portal.copyable` no longer stops the click event, so icon-only copy buttons reach the shared handler. Table rows ignore clicks on buttons, so copying does not open the row. `Portal.copyText(text)` falls back to `execCommand('copy')` where the Clipboard API is blocked (sandboxed frames).
+- **Top layer:** `Portal.showOnTop(node)` renders dropdown lists, menus and column-filter popovers as `popover` elements, so they appear above open dialogs and drawers. Previously, a dropdown inside a pop-up opened behind it.
+- **Option icons:** the custom select adds an icon to each option and to the selected label. `Portal.optionIcon(option)` resolves them:
+  - currencies → flag or the USDT/USDC mark;
+  - issuers → Visa or Mastercard;
+  - routes, methods, networks, support topics, roles and report types → line icons;
+  - override with `<option data-icon="name">` or `data-flag="AE"`.
+- **Share lists** on Overview show currency logos and route icons.
+
 ## 16. Known limitations
 
 - All data is sample data; actions change in-memory objects and are lost on reload.

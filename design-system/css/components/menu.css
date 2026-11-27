@@ -26,3 +26,5 @@
 }
 /* Zero-size anchor at the pointer for the context menu */
 .context-anchor { position: fixed; width: 0; height: 0; }
+/* In the top layer (popover) the UA centres popovers; keep our own positioning */
+.menu[popover] { inset: auto; margin: 0; overflow: auto; color: var(--text-primary); }

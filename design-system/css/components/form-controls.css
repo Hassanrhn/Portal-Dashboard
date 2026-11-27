@@ -79,6 +79,12 @@
 .cselect:disabled { opacity: 0.5; cursor: not-allowed; }
 .cselect__list { max-height: min(320px, 60vh); overflow-y: auto; }
 .cselect__option { align-items: center; justify-content: space-between; }
-.cselect__option svg { opacity: 0; color: var(--accent-solid); }
+.cselect__option > svg { opacity: 0; color: var(--accent-solid); }
 .cselect__option[aria-selected="true"] { font-weight: var(--font-weight-medium); }
-.cselect__option[aria-selected="true"] svg { opacity: 1; }
+.cselect__option[aria-selected="true"] > svg { opacity: 1; }
+/* Option icons (flags, currency marks, card networks, topic icons) */
+.cselect__label, .cselect__text { display: inline-flex; align-items: center; gap: var(--space-8); min-width: 0; }
+.cselect__label { overflow: hidden; }
+.cselect__icon { width: 16px; height: 16px; flex-shrink: 0; color: var(--text-secondary); }
+.cselect__icon.network-mark { width: 22px !important; height: 16px !important; }
+.cselect__icon.flag { width: auto; height: auto; font-size: var(--font-size-14); }

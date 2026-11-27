@@ -186,7 +186,7 @@
   if (!document.querySelector('[data-app]') || !Portal.menu) return;
 
   const copy = async (value, toast) => {
-    try { await navigator.clipboard.writeText(value); Portal.toast(toast); } catch { Portal.toast('Copy is blocked in this browser.', { icon: 'alert' }); }
+    if (await Portal.copyText(value)) Portal.toast(toast); else Portal.toast('Copy is blocked in this browser.', { icon: 'alert' });
   };
 
   /** Actions depend on what was right-clicked; only the most relevant ones are offered. */
