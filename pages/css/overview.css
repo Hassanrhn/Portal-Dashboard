@@ -11,3 +11,13 @@
 @media (max-width: 600px) {
   .card__head:has([data-status-filter]) { flex-direction: column; align-items: flex-start; }
 }
+
+/* Skeleton shapes match the content they stand in for, so nothing shifts when data arrives. */
+.kpi__skeleton { margin-top: var(--space-12); gap: var(--space-12); }
+.volume-skeleton { margin-top: var(--space-10); width: 160px; }
+.chart--skeleton { display: flex; }
+.chart--skeleton .skeleton { width: 100%; height: 100%; }
+.share-skeleton { gap: var(--space-16); }
+.payments-skeleton { margin-top: var(--card-pad); padding: 0 var(--card-pad); border-top: var(--border-width) solid var(--card-border); }
+.payments-skeleton .skeleton--short:first-child { width: 22%; }
+.payments-skeleton .skeleton--short:last-child { width: 14%; }

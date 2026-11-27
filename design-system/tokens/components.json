@@ -125,6 +125,10 @@
     "active-bg":    { "$value": "{bg.surface}" },
     "active-border":{ "$value": "{border.default}" }
   },
+  "skeleton": {
+    "base":  { "$value": "{bg.muted}" },
+    "shine": { "$value": "{bg.hover}" }
+  },
   "progress": {
     "height": { "$value": "{space.4}" },
     "track":  { "$value": "{border.default}" },

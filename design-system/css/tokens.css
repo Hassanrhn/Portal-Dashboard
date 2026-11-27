@@ -336,6 +336,8 @@
   --segmented-track: var(--bg-muted);
   --segmented-active-bg: var(--bg-surface);
   --segmented-active-border: var(--border-default);
+  --skeleton-base: var(--bg-muted);
+  --skeleton-shine: var(--bg-hover);
   --progress-height: var(--space-4);
   --progress-track: var(--border-default);
   --progress-fill: var(--accent-solid);

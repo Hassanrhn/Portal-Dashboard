@@ -58,6 +58,30 @@ node design-system/scripts/build-tokens.mjs
 
 Theme: `data-theme="light|dark"` on `<html>`. It is set before first paint by `js/theme.js`, saved per browser, and defaults to the OS setting.
 
+## Lazy loading (dashboard pages)
+
+Every dashboard section is a lazy region. The sign-in page is excluded.
+
+```html
+<section class="card" data-lazy="volume" aria-busy="true">
+  <div data-skeleton>…skeleton in the content's shape…</div>
+  <div data-lazy-content>…real content…</div>
+</section>
+```
+
+```js
+Portal.lazy.register('volume', { fetch: () => api('/volume'), render: (data, el) => draw(data) });
+Portal.lazy.reload('volume'); // e.g. after a filter change
+```
+
+`js/lazy.js` behaviour:
+
+- A section fetches only when it comes within 120px of the viewport.
+- The skeleton shows while the section is busy. Content then fades in, and `render` runs once it is visible, so charts can measure their size.
+- A failed fetch shows an inline "Try again" instead of a blank card.
+
+On Overview, `request()` in `pages/js/overview.js` simulates the API. Replace it with `fetch()`, and add the API host to the CSP `connect-src`.
+
 ## Rules
 
 - No shadows. Surfaces separate by 1px borders and background steps; overlays use a blurred backdrop.

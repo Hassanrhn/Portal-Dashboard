@@ -68,7 +68,6 @@
     $('[data-kpi-period]').textContent = range.period;
     $('[data-kpi="rate-detail"]').textContent = `${range.paid} of ${range.payments} payments`;
     $('[data-kpi="paid-detail"]').textContent = `${range.payments - range.paid} failed or pending`;
-    $$('[data-range-label]').forEach((node) => { node.textContent = range.label; });
   }
 
   /* Volume chart ------------------------------------------------------------- */
@@ -251,6 +250,7 @@
     hint: `${p.ref} · ${p.amount} ${p.currency}`,
     run: () => {
       $('[data-status-filter]').portalSelect?.('all');
+      state.status = 'all';
       renderPayments('all');
       const cell = $$('.u-mono', tbody).find((node) => node.textContent === p.id);
       cell?.closest('tr').scrollIntoView({ behavior: reducedMotion.matches ? 'auto' : 'smooth', block: 'center' });
@@ -258,21 +258,40 @@
     },
   }));
 
+  /* Lazy sections ------------------------------------------------------------------
+   * Each section fetches when it nears the viewport and shows a skeleton until then.
+   * `request` stands in for the API; swap it for fetch() (and allow the API host in connect-src). */
+  const state = { range: '30d', status: 'all' };
+  const request = (value) => new Promise((resolve) => window.setTimeout(() => resolve(value), 300 + Math.random() * 500));
+  const currentRange = () => data.ranges[state.range];
+  const RANGE_SECTIONS = ['kpis', 'volume', 'share-route', 'share-currency'];
+
+  Portal.lazy.register('kpis', { fetch: () => request(currentRange()), render: renderKpis });
+  Portal.lazy.register('volume', {
+    fetch: () => request(currentRange()),
+    render: (range) => { chart.range = range; drawChart({ animate: true }); showTotal(); },
+  });
+  ['route', 'currency'].forEach((kind) => Portal.lazy.register(`share-${kind}`, {
+    fetch: () => request(Number(currentRange().total)),
+    render: (total) => renderShare($(`[data-share="${kind}"]`), data.shares[kind], total),
+  }));
+  Portal.lazy.register('payments', { fetch: () => request(data.payments), render: () => renderPayments(state.status) });
+
   /* Wiring ----------------------------------------------------------------------- */
-  function applyRange(key, { animate }) {
-    const range = data.ranges[key];
-    if (!range) return;
-    chart.range = range;
-    renderKpis(range);
-    drawChart({ animate });
-    showTotal();
-    renderShare($('[data-share="route"]'), data.shares.route, Number(range.total));
-    renderShare($('[data-share="currency"]'), data.shares.currency, Number(range.total));
+  function setRangeLabels() {
+    $$('[data-range-label]').forEach((node) => { node.textContent = currentRange().label; });
   }
 
-  $('[data-range-control]').addEventListener('segmented:change', (event) => applyRange(event.detail.value, { animate: true }));
-  $('[data-status-filter]').addEventListener('segmented:change', (event) => renderPayments(event.detail.value));
+  $('[data-range-control]').addEventListener('segmented:change', (event) => {
+    if (!data.ranges[event.detail.value]) return;
+    state.range = event.detail.value;
+    setRangeLabels();
+    RANGE_SECTIONS.forEach((name) => Portal.lazy.reload(name));
+  });
+  $('[data-status-filter]').addEventListener('segmented:change', (event) => {
+    state.status = event.detail.value;
+    renderPayments(state.status);
+  });
 
-  applyRange('30d', { animate: true });
-  renderPayments('all');
+  setRangeLabels();
 })();
