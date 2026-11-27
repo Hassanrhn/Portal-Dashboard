@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Portal review</title>
+  <link rel="stylesheet" href="design-system/css/portal.css">
+  <link rel="stylesheet" href="pages/css/hub.css">
+  <script src="design-system/js/theme.js"></script>
+  <script src="design-system/js/icons.js" defer></script>
+</head>
+<body>
+<main class="hub">
+  <header class="hub__head">
+    <span class="brand-mark" aria-hidden="true"></span>
+    <button class="theme-switch" type="button" role="switch" aria-checked="false" aria-label="Dark mode" data-theme-toggle>
+      <span class="theme-switch__knob" aria-hidden="true"></span>
+      <span class="theme-switch__icon theme-switch__icon--sun" aria-hidden="true"><i data-icon="sun"></i></span>
+      <span class="theme-switch__icon theme-switch__icon--moon" aria-hidden="true"><i data-icon="moon"></i></span>
+    </button>
+  </header>
+  <h1 class="t-title">Portal redesign review</h1>
+  <p class="hub__sub">The dashboard and component gallery are built only from the design system, in light and dark. Sign in keeps its original design.</p>
+
+  <ul class="hub__list">
+    <li><a class="hub__link" href="pages/overview.html"><i data-icon="home"></i><span><b>Overview</b><span>Dashboard home: metrics, volume chart, routes, recent payments</span></span><i data-icon="arrow-right" class="hub__arrow"></i></a></li>
+    <li><a class="hub__link" href="pages/login.html"><i data-icon="key"></i><span><b>Sign in</b><span>Your existing login prototype v0.14, unchanged</span></span><i data-icon="arrow-right" class="hub__arrow"></i></a></li>
+    <li><a class="hub__link" href="design-system/preview/index.html"><i data-icon="cards"></i><span><b>Components</b><span>Tokens, type, buttons, forms, status, tables, navigation</span></span><i data-icon="arrow-right" class="hub__arrow"></i></a></li>
+  </ul>
+
+  <p class="t-meta hub__foot">Things to try: switch theme with the sun/moon switch, press ⌘K or Ctrl K on Overview, hover the volume chart, and change the range or status filters.</p>
+</main>
+</body>
+</html>

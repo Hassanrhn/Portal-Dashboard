@@ -1,0 +1,49 @@
+/* Text field, label, helper and error text. Tokens: --input-*. */
+.field { display: grid; gap: var(--space-8); }
+.field__row { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-8); }
+.field__label { font-size: var(--type-label-size); font-weight: var(--font-weight-medium); color: var(--text-primary); }
+.field__help { font-size: var(--type-meta-size); color: var(--text-secondary); }
+.field__error { font-size: var(--type-meta-size); color: var(--input-border-error); min-height: 0; }
+.field__error:empty { display: none; }
+
+.input {
+  width: 100%;
+  height: var(--input-height);
+  padding: 0 var(--input-pad-x);
+  border: var(--border-width) solid var(--input-border);
+  border-radius: var(--input-radius);
+  background: var(--input-bg);
+  color: var(--input-fg);
+  font-size: var(--input-font-size);
+  transition: border-color var(--motion-fast) var(--motion-ease), outline-color var(--motion-fast) var(--motion-ease);
+  outline: var(--focus-ring-width) solid transparent;
+  outline-offset: 0;
+}
+.input::placeholder { color: var(--input-placeholder); }
+.input:hover:not(:focus):not(:disabled) { border-color: var(--input-border-hover); }
+.input:focus { border-color: var(--input-border-focus); outline-color: var(--focus-ring-color); }
+.input[aria-invalid="true"] { border-color: var(--input-border-error); }
+.input--xl { height: var(--control-height-xl); border-radius: var(--control-radius-xl); padding: 0 var(--space-16); }
+
+/* Input with a leading icon or trailing action */
+.input-group { position: relative; display: flex; align-items: center; }
+.input-group > .input { padding-left: calc(var(--input-pad-x) + var(--size-16) + var(--space-8)); }
+.input-group__icon { position: absolute; left: var(--input-pad-x); color: var(--text-tertiary); pointer-events: none; }
+.input-group--trailing > .input { padding-left: var(--space-16); padding-right: var(--space-48); }
+.input-group__action { position: absolute; right: var(--space-6); }
+
+/* Search trigger that looks like an input (opens the command palette) */
+.search-trigger {
+  display: flex; align-items: center; gap: var(--space-8);
+  width: 100%; height: var(--control-height-sm);
+  padding: 0 var(--space-8);
+  border: var(--border-width) solid var(--border-strong);
+  border-radius: var(--radius-6);
+  background: var(--input-bg);
+  color: var(--text-tertiary);
+  font-size: var(--font-size-13);
+  transition: border-color var(--motion-fast) var(--motion-ease);
+}
+.search-trigger:hover { border-color: var(--input-border-hover); }
+.search-trigger svg { width: 14px; height: 14px; }
+.search-trigger .kbd { margin-left: auto; }

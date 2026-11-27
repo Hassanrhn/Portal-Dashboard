@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en" data-theme="light" data-env="live">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Overview · Portal</title>
+  <link rel="stylesheet" href="../design-system/css/portal.css">
+  <link rel="stylesheet" href="css/overview.css">
+  <script src="../design-system/js/theme.js"></script>
+  <script src="../design-system/js/icons.js" defer></script>
+  <script src="../design-system/js/components.js" defer></script>
+  <script src="js/overview-data.js" defer></script>
+  <script src="js/overview.js" defer></script>
+  <script src="../design-system/js/shell.js" defer></script>
+</head>
+<body>
+<div class="app" data-app>
+  <div class="scrim" data-nav-close></div>
+
+  <!-- Sidebar ------------------------------------------------------------ -->
+  <aside class="sidebar" aria-label="Main">
+    <div class="sidebar__brand">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="sidebar__name">Digital Center</span>
+      <button class="btn btn--ghost btn--icon btn--sm collapse-toggle" type="button" data-collapse-toggle aria-pressed="false" aria-label="Collapse sidebar"><i data-icon="sidebar"></i></button>
+    </div>
+
+    <div class="sidebar__actions">
+      <div class="workspace">
+        <span class="workspace__avatar" aria-hidden="true">O</span>
+        <span class="nav__label">The Orange Card</span>
+      </div>
+      <div class="segmented segmented--sm segmented--block collapsible" role="radiogroup" aria-label="Environment" data-segmented data-env-control>
+        <button class="segmented__option" type="button" role="radio" aria-checked="true" data-value="live">Live</button>
+        <button class="segmented__option" type="button" role="radio" aria-checked="false" data-value="test">Test</button>
+      </div>
+      <button class="btn btn--sm btn--block new-payment" type="button" data-soon="Create payment"><i data-icon="plus"></i><span>New payment</span></button>
+      <button class="search-trigger" type="button" data-command-open aria-label="Search (Ctrl or Command K)"><i data-icon="search"></i><span>Search</span><span class="kbd" aria-hidden="true">⌘K</span></button>
+    </div>
+
+    <div class="sidebar__scroll">
+      <nav class="nav" aria-label="Primary">
+        <a class="nav__item" href="overview.html" aria-current="page"><i data-icon="home"></i><span class="nav__label">Overview</span></a>
+        <button class="nav__item" type="button" data-disclosure aria-expanded="true" aria-controls="group-payments"><i data-icon="payments"></i><span class="nav__label">Payments</span><i data-icon="chevron-down" class="nav__chevron"></i></button>
+        <div class="nav__group" id="group-payments">
+          <div class="nav">
+            <a class="nav__item" href="#" data-soon="Transactions"><span class="nav__label">Transactions</span></a>
+            <a class="nav__item" href="#" data-soon="Payouts"><span class="nav__label">Payouts</span></a>
+            <a class="nav__item" href="#" data-soon="Refunds"><span class="nav__label">Refunds</span></a>
+          </div>
+        </div>
+        <button class="nav__item" type="button" data-disclosure aria-expanded="false" aria-controls="group-cards"><i data-icon="cards"></i><span class="nav__label">Cards</span><i data-icon="chevron-down" class="nav__chevron"></i></button>
+        <div class="nav__group" id="group-cards">
+          <div class="nav">
+            <a class="nav__item" href="#" data-soon="Cardholders"><span class="nav__label">Cardholders</span></a>
+            <a class="nav__item" href="#" data-soon="Card orders"><span class="nav__label">Card orders</span></a>
+            <a class="nav__item" href="#" data-soon="Issuers"><span class="nav__label">Issuers</span></a>
+          </div>
+        </div>
+        <a class="nav__item" href="#" data-soon="Reports"><i data-icon="reports"></i><span class="nav__label">Reports</span></a>
+      </nav>
+
+      <p class="nav__section">Developers</p>
+      <nav class="nav" aria-label="Developers">
+        <a class="nav__item" href="#" data-soon="API keys"><i data-icon="key"></i><span class="nav__label">API keys</span></a>
+        <a class="nav__item" href="#" data-soon="Webhooks"><i data-icon="webhook"></i><span class="nav__label">Webhooks</span></a>
+        <a class="nav__item" href="#" data-soon="Event logs"><i data-icon="logs"></i><span class="nav__label">Event logs</span></a>
+        <a class="nav__item" href="#" data-soon="Docs"><i data-icon="docs"></i><span class="nav__label">Docs</span></a>
+      </nav>
+    </div>
+
+    <div class="sidebar__foot">
+      <a class="nav__item" href="#" data-soon="Team"><i data-icon="invite"></i><span class="nav__label">Invite your team</span></a>
+      <a class="nav__item" href="#" data-soon="Settings"><i data-icon="settings"></i><span class="nav__label">Settings</span></a>
+      <a class="nav__item" href="#" data-soon="Support"><i data-icon="support"></i><span class="nav__label">Contact support</span></a>
+      <div class="meter">
+        <div class="meter__row"><b class="t-label">API requests</b><span>13.3k of 20.0k</span></div>
+        <div class="progress" role="progressbar" aria-label="API requests used this month" aria-valuemin="0" aria-valuemax="100" aria-valuenow="66"><div class="progress__fill" data-progress="66"></div></div>
+      </div>
+      <div class="sidebar__row">
+        <span data-theme-label>Light mode</span>
+        <button class="theme-switch" type="button" role="switch" aria-checked="false" aria-label="Dark mode" data-theme-toggle>
+          <span class="theme-switch__knob" aria-hidden="true"></span>
+          <span class="theme-switch__icon theme-switch__icon--sun" aria-hidden="true"><i data-icon="sun"></i></span>
+          <span class="theme-switch__icon theme-switch__icon--moon" aria-hidden="true"><i data-icon="moon"></i></span>
+        </button>
+      </div>
+      <div class="user">
+        <span class="user__avatar" aria-hidden="true">P</span>
+        <span class="user__name">pocket@pocket.com</span>
+        <a class="btn btn--ghost btn--icon btn--sm" href="login.html" aria-label="Sign out"><i data-icon="logout"></i></a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main ---------------------------------------------------------------- -->
+  <div class="main">
+    <header class="topbar">
+      <button class="btn btn--ghost btn--icon" type="button" data-nav-open aria-expanded="false" aria-label="Open navigation"><i data-icon="menu"></i></button>
+      <span class="topbar__title">Overview</span>
+      <button class="btn btn--ghost btn--icon" type="button" data-command-open aria-label="Search"><i data-icon="search"></i></button>
+      <button class="theme-switch" type="button" role="switch" aria-checked="false" aria-label="Dark mode" data-theme-toggle>
+        <span class="theme-switch__knob" aria-hidden="true"></span>
+        <span class="theme-switch__icon theme-switch__icon--sun" aria-hidden="true"><i data-icon="sun"></i></span>
+        <span class="theme-switch__icon theme-switch__icon--moon" aria-hidden="true"><i data-icon="moon"></i></span>
+      </button>
+    </header>
+    <div class="env-strip" role="status"><i data-icon="alert"></i>Test mode: test data only. No real money moves.</div>
+
+    <main class="page" id="main">
+      <div class="page__head">
+        <div>
+          <h1 class="t-title">Overview</h1>
+          <p class="page__sub">Payments across every route for The Orange Card.</p>
+        </div>
+        <div class="page__actions">
+          <div class="segmented" role="radiogroup" aria-label="Time range" data-segmented data-range-control>
+            <button class="segmented__option" type="button" role="radio" aria-checked="false" data-value="7d">7 days</button>
+            <button class="segmented__option" type="button" role="radio" aria-checked="true" data-value="30d">30 days</button>
+            <button class="segmented__option" type="button" role="radio" aria-checked="false" data-value="90d">90 days</button>
+          </div>
+          <button class="btn btn--primary btn--lg" type="button" data-soon="Create payment"><i data-icon="plus"></i>Create payment</button>
+        </div>
+      </div>
+
+      <div class="stack">
+        <section class="kpi-strip" aria-label="Key metrics">
+          <div class="kpi">
+            <p class="kpi__label">Gross volume</p>
+            <p class="kpi__value t-figure"><span data-kpi="volume">0.00</span><span class="kpi__unit">USD eq.</span></p>
+            <p class="kpi__meta"><span class="delta" data-kpi-delta="volume"></span><span data-kpi-period>vs previous 30 days</span></p>
+          </div>
+          <div class="kpi">
+            <p class="kpi__label">Success rate</p>
+            <p class="kpi__value t-figure"><span data-kpi="rate">0.0</span><span class="kpi__unit">%</span></p>
+            <p class="kpi__meta"><span class="delta" data-kpi-delta="rate"></span><span data-kpi="rate-detail"></span></p>
+          </div>
+          <div class="kpi">
+            <p class="kpi__label">Successful payments</p>
+            <p class="kpi__value t-figure"><span data-kpi="paid">0</span></p>
+            <p class="kpi__meta"><span class="delta" data-kpi-delta="paid"></span><span data-kpi="paid-detail"></span></p>
+          </div>
+          <div class="kpi">
+            <p class="kpi__label">API status</p>
+            <p class="kpi__value t-figure"><span class="status-dot">Connected</span></p>
+            <p class="kpi__meta">Keys verified, last call 2 min ago</p>
+          </div>
+        </section>
+
+        <section class="card" aria-labelledby="volume-title">
+          <div class="card__head volume-head">
+            <div>
+              <h2 class="card__title" id="volume-title">Volume over time</h2>
+              <p class="volume-readout"><span class="t-figure" data-chart-value>0.00</span> <span class="t-meta" data-chart-label></span></p>
+            </div>
+            <span class="t-meta">Daily, USD equivalent</span>
+          </div>
+          <div class="card__body">
+            <div class="chart" data-chart tabindex="0" role="img" aria-label="Daily volume chart. Use the left and right arrow keys to read each day."></div>
+          </div>
+        </section>
+
+        <div class="grid-2">
+          <section class="card" aria-labelledby="route-title">
+            <div class="card__head"><h2 class="card__title" id="route-title">Volume by route</h2><span class="t-meta" data-range-label>Last 30 days</span></div>
+            <div class="card__body"><div class="share" data-share="route"></div></div>
+          </section>
+          <section class="card" aria-labelledby="currency-title">
+            <div class="card__head"><h2 class="card__title" id="currency-title">Volume by currency</h2><span class="t-meta" data-range-label>Last 30 days</span></div>
+            <div class="card__body"><div class="share" data-share="currency"></div></div>
+          </section>
+        </div>
+
+        <section class="card" aria-labelledby="payments-title">
+          <div class="card__head">
+            <h2 class="card__title" id="payments-title">Recent payments</h2>
+            <div class="segmented segmented--sm" role="radiogroup" aria-label="Filter by status" data-segmented data-status-filter>
+              <button class="segmented__option" type="button" role="radio" aria-checked="true" data-value="all">All</button>
+              <button class="segmented__option" type="button" role="radio" aria-checked="false" data-value="paid">Paid</button>
+              <button class="segmented__option" type="button" role="radio" aria-checked="false" data-value="pending">Pending</button>
+              <button class="segmented__option" type="button" role="radio" aria-checked="false" data-value="failed">Failed</button>
+            </div>
+          </div>
+          <div class="table-wrap payments-table">
+            <table class="table">
+              <thead>
+                <tr><th scope="col">Request ID</th><th scope="col">Reference</th><th scope="col">Route</th><th scope="col">Status</th><th scope="col" class="is-num">Amount</th><th scope="col" class="is-num">Date</th></tr>
+              </thead>
+              <tbody data-payments></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+</div>
+
+<dialog class="dialog cmd" id="command-palette" aria-label="Search">
+  <div class="cmd__search"><i data-icon="search"></i><input class="cmd__input" type="text" placeholder="Search payments, pages and actions" aria-label="Search" role="combobox" aria-expanded="true" aria-controls="cmd-list" autocomplete="off" spellcheck="false" maxlength="80"><span class="kbd">Esc</span></div>
+  <div class="cmd__list" id="cmd-list" role="listbox"></div>
+</dialog>
+</body>
+</html>

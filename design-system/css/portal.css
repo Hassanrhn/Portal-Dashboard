@@ -1,0 +1,21 @@
+/*
+ * Portal design system — single entry point. Link this one file from every page.
+ * Order matters: tokens → foundations → components → layouts.
+ * Theme is set with data-theme="light|dark" on <html> (see js/theme.js).
+ */
+@import url("tokens.css");
+@import url("foundations/fonts.css");
+@import url("foundations/base.css");
+@import url("foundations/typography.css");
+@import url("components/button.css");
+@import url("components/input.css");
+@import url("components/switch.css");
+@import url("components/segmented.css");
+@import url("components/badge.css");
+@import url("components/card.css");
+@import url("components/table.css");
+@import url("components/nav.css");
+@import url("components/feedback.css");
+@import url("components/dialog.css");
+@import url("components/chart.css");
+@import url("layouts/app-shell.css");

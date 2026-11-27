@@ -1,0 +1,41 @@
+/* Segmented control. A single indicator slides between options (positioned by segmented.js). */
+.segmented {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  height: var(--segmented-height);
+  padding: 3px;
+  border-radius: var(--segmented-radius);
+  background: var(--segmented-track);
+  isolation: isolate;
+}
+.segmented__indicator {
+  position: absolute;
+  z-index: -1;
+  top: 3px; bottom: 3px; left: 0;
+  width: 0;
+  border: var(--border-width) solid var(--segmented-active-border);
+  border-radius: var(--segmented-item-radius);
+  background: var(--segmented-active-bg);
+  transition: transform var(--motion-base) var(--motion-spring), width var(--motion-base) var(--motion-spring);
+}
+.segmented:not(.is-ready) .segmented__indicator { transition: none; }
+.segmented__option {
+  display: inline-flex; align-items: center; gap: var(--space-6);
+  height: var(--segmented-item-height);
+  padding: 0 var(--space-12);
+  border-radius: var(--segmented-item-radius);
+  color: var(--text-secondary);
+  font-size: var(--font-size-13);
+  font-weight: var(--font-weight-medium);
+  white-space: nowrap;
+  transition: color var(--motion-fast) var(--motion-ease);
+}
+.segmented__option:hover { color: var(--text-primary); }
+.segmented__option[aria-checked="true"], .segmented__option[aria-selected="true"] { color: var(--text-primary); }
+.segmented__count { color: var(--text-tertiary); font-variant-numeric: tabular-nums; }
+.segmented--sm { height: var(--control-height-md); }
+.segmented--sm .segmented__option { height: 24px; padding: 0 var(--space-8); font-size: var(--font-size-12); }
+.segmented--block { display: flex; }
+.segmented--block .segmented__option { flex: 1; justify-content: center; }

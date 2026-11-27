@@ -1,0 +1,13 @@
+/* Overview page specifics. Tokens only. */
+.volume-head { align-items: flex-start; }
+.volume-readout { display: flex; align-items: baseline; gap: var(--space-8); margin-top: var(--space-6); }
+.volume-readout .t-figure { transition: color var(--motion-fast) var(--motion-ease); }
+.volume-readout.is-scrubbing .t-figure { color: var(--chart-1); }
+.payments-table { border-top: var(--border-width) solid var(--card-border); margin-top: var(--card-pad); }
+.payments-table .table th { background: var(--bg-sidebar); }
+.payments-table .table td:first-child, .payments-table .table th:first-child { padding-left: var(--card-pad); }
+.payments-table .table td:last-child, .payments-table .table th:last-child { padding-right: var(--card-pad); }
+.amount__currency { margin-left: var(--space-4); color: var(--text-secondary); }
+@media (max-width: 600px) {
+  .card__head:has([data-status-filter]) { flex-direction: column; align-items: flex-start; }
+}

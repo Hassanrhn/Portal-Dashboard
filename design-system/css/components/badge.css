@@ -1,0 +1,32 @@
+/* Status badge. Always carries a text label — color is never the only signal. */
+.badge {
+  display: inline-flex; align-items: center; gap: var(--space-6);
+  height: var(--badge-height);
+  padding: 0 var(--badge-pad-x);
+  border-radius: var(--badge-radius);
+  background: var(--status-neutral-bg);
+  color: var(--status-neutral-fg);
+  font-size: var(--badge-font-size);
+  font-weight: var(--font-weight-medium);
+  white-space: nowrap;
+}
+.badge::before { content: ""; width: 6px; height: 6px; border-radius: var(--radius-full); background: currentColor; }
+.badge--success { background: var(--status-success-bg); color: var(--status-success-fg); }
+.badge--warning { background: var(--status-warning-bg); color: var(--status-warning-fg); }
+.badge--danger  { background: var(--status-danger-bg);  color: var(--status-danger-fg); }
+.badge--info    { background: var(--status-info-bg);    color: var(--status-info-fg); }
+.badge--plain::before { display: none; }
+
+/* Pending pulses once per cycle to read as "in progress" */
+.badge--warning::before { animation: badge-pulse 2s var(--motion-ease) infinite; }
+@keyframes badge-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+.kbd {
+  display: inline-grid; place-items: center;
+  min-width: 18px; height: 18px; padding: 0 4px;
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-4);
+  color: var(--text-tertiary);
+  font-size: var(--font-size-11);
+  font-family: var(--type-family);
+}

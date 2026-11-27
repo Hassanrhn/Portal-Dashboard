@@ -1,0 +1,15 @@
+/* Self-hosted variable fonts (SIL OFL 1.1, see design-system/fonts/LICENSE-*). No third-party requests. */
+@font-face {
+  font-family: "Inter Variable";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("../../fonts/inter-latin-var.woff2") format("woff2");
+}
+@font-face {
+  font-family: "JetBrains Mono Variable";
+  font-style: normal;
+  font-weight: 100 800;
+  font-display: swap;
+  src: url("../../fonts/jetbrains-mono-latin-var.woff2") format("woff2");
+}
