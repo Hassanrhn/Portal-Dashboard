@@ -754,6 +754,17 @@ If avatars or statement PDFs are served from another host, add it to `img-src` o
 - **Theme:** the sidebar no longer has a theme switch. Users change it in Settings → Appearance (Light, Dark or System).
 - **Docs contents list** sticks 24px below the app bar: `top: calc(var(--layout-appbar-height) + var(--space-24))`.
 
+## Round 6 changes
+
+- **Content swaps animate.** Use `Portal.animateSwap(node)` whenever content is replaced in place: a short fade-and-rise (`.is-swapping`).
+  - It is automatic for drawer and pop-up step changes (`setBody`), table re-renders (rows enter), tab panels and lazy sections.
+  - The Docs API explorer calls it when the endpoint changes and when a response arrives.
+- **Sortable columns.** `Portal.dataTable` makes every column with a `number` or `date` filter sortable. To sort another column, pass `sort: (row) => value`.
+  - The header shows an arrow button: ↕ unsorted, ↑ ascending, ↓ descending.
+  - Clicking cycles through them; `th[aria-sort]` reflects the state.
+  - Sorting runs after column filters and before pagination.
+- **Pop-up variant.** `Portal.drawer.open({ modal: true, … })` opens the same head/body/foot as a centred pop-up; it is still a bottom sheet on phones. Create payment (the app bar "+") uses it.
+
 ## 16. Known limitations
 
 - All data is sample data; actions change in-memory objects and are lost on reload.

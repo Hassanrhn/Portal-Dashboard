@@ -68,3 +68,12 @@
 @keyframes copied-bubble { 0% { opacity: 0; transform: translate(-50%, 4px); } 12%, 80% { opacity: 1; transform: translate(-50%, 0); } 100% { opacity: 0; } }
 .btn.is-copied { color: var(--status-success-fg); }
 .icon-check-inline { color: var(--status-success-icon); animation: pop-in var(--motion-base) var(--motion-spring); }
+
+/* Sortable header: label + arrow (↕ unsorted, ↑ ascending, ↓ descending) */
+.column-sort { display: inline-flex; align-items: center; gap: var(--space-4); margin: 0 calc(var(--space-4) * -1); padding: var(--space-2) var(--space-4); border-radius: var(--radius-4); color: inherit; font: inherit; transition: color var(--motion-fast) var(--motion-ease), background-color var(--motion-fast) var(--motion-ease); }
+.column-sort svg { width: 13px; height: 13px; color: var(--text-tertiary); transition: transform var(--motion-base) var(--motion-spring), color var(--motion-fast) var(--motion-ease); }
+.column-sort:hover { background: var(--bg-hover); color: var(--text-primary); }
+.column-sort:hover svg { transform: translateY(-1px); }
+.column-sort.is-sorted { color: var(--text-primary); font-weight: var(--font-weight-medium); }
+.column-sort.is-sorted svg { color: var(--accent-solid); animation: pop-in var(--motion-base) var(--motion-spring); }
+.table th.is-num .column-sort { flex-direction: row-reverse; }

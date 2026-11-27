@@ -226,6 +226,14 @@ After v1.0 we built the rest of the product:
 | Docs contents list too close to the header | It sticks 24px below the app bar. |
 | Remove Light/Dark from the sidebar | Theme lives only in Settings → Appearance. |
 
+### Round 6: motion for change, sorting, pop-up create
+
+| Feedback | Decision |
+| --- | --- |
+| Content that changes in place (e.g. the Docs explorer endpoint) should animate | One shared fade-and-rise for replaced content, used across drawers, pop-ups, tables, tabs and the explorer. |
+| Sorting by highest or lowest should use an arrow | Number and date columns in every table get a header arrow (↕ / ↑ / ↓) that cycles ascending, descending and original order. |
+| "+" should open a pop-up, not a side panel | Create payment opens as a centred pop-up. On phones it stays a bottom sheet for reachability. |
+
 ## 8. Key decisions and rationale
 
 | Decision | Alternatives considered | Why we chose it |

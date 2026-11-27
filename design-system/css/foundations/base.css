@@ -73,3 +73,7 @@ html:has(dialog[open]) { overflow: hidden; }
 ::-webkit-scrollbar-thumb { border: 3px solid transparent; border-radius: var(--radius-full); background: var(--scrollbar-thumb) padding-box; }
 ::-webkit-scrollbar-thumb:hover { background-color: var(--scrollbar-thumb-hover); }
 ::-webkit-scrollbar-corner { background: transparent; }
+
+/* Content swapped in place (Portal.animateSwap): a short fade-and-rise so the change is noticed, not jarring */
+.is-swapping { animation: content-swap var(--motion-slow) var(--motion-sheet) both; }
+@keyframes content-swap { from { opacity: 0; transform: translateY(6px); } }

@@ -53,3 +53,13 @@
 @keyframes sheet-in { from { transform: translateY(100%); } }
 @keyframes sheet-out { to { transform: translateY(100%); } }
 .drawer__body > * { min-height: min-content; }
+
+/* Pop-up variant (Portal.drawer.open({ modal: true })): centred dialog with the same head/body/foot.
+   On phones it still becomes a bottom sheet. */
+@media (min-width: 601px) {
+  .drawer--modal { inset: 0; width: min(600px, calc(100vw - var(--space-48))); height: fit-content; max-height: min(760px, calc(100dvh - var(--space-64))); margin: auto; border: var(--border-width) solid var(--surface-raised-border); border-radius: var(--surface-raised-radius); }
+  .drawer--modal[open] { animation-name: modal-in; }
+  .drawer--modal.is-closing { animation-name: modal-out; }
+}
+@keyframes modal-in { from { opacity: 0; transform: translateY(10px) scale(0.96); } }
+@keyframes modal-out { to { opacity: 0; transform: scale(0.97); } }

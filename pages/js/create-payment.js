@@ -28,7 +28,7 @@
 
   function open() {
     const values = { offering: OFFERINGS[0].id, amount: '', currency: 'USD', reference: '', email: '', description: '' };
-    const drawer = Portal.drawer.open({ title: 'Create payment', subtitle: 'Request a pay-in through one offering.' });
+    const drawer = Portal.drawer.open({ title: 'Create payment', subtitle: 'Request a pay-in through one offering.', modal: true });
     const isTest = () => document.documentElement.dataset.env === 'test';
     const offering = () => OFFERINGS.find((o) => o.id === values.offering);
 
@@ -57,7 +57,7 @@
       description.value = values.description;
 
       drawer.setBody([
-        isTest() ? null : el('div', { className: 'note' }, [iconEl('info'), el('span', { text: 'You are in Live mode. This creates a real payment request. Switch to Test in the sidebar to try it safely.' })]),
+        isTest() ? null : el('div', { className: 'note' }, [iconEl('info'), el('span', { text: 'You are in Live mode. This creates a real payment request. Turn on Test mode in the header to try it safely.' })]),
         el('div', { className: 'drawer__section' }, [el('p', { className: 'drawer__section-title', text: 'Offering' }), offeringCards]),
         el('div', { className: 'form-grid form-grid--2' }, [
           field('cp-amount', 'Amount', amount),

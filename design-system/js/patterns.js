@@ -19,12 +19,12 @@
 
   /* Drawer ---------------------------------------------------------------------- */
   Portal.drawer = {
-    open({ title, subtitle, leading, body = [], footer = [], footNote, onClose, labelledBy } = {}) {
+    open({ title, subtitle, leading, body = [], footer = [], footNote, onClose, labelledBy, modal = false } = {}) {
       const titleId = `drawer-title-${Math.random().toString(36).slice(2, 8)}`;
       const bodyEl = el('div', { className: 'drawer__body' });
       const footEl = el('div', { className: 'drawer__foot' });
       const subtitleEl = subtitle ? el('p', { className: 'drawer__subtitle' }, [subtitle]) : null;
-      const dialog = el('dialog', { className: 'drawer', attrs: { 'aria-labelledby': labelledBy || titleId } }, [
+      const dialog = el('dialog', { className: modal ? 'drawer drawer--modal' : 'drawer', attrs: { 'aria-labelledby': labelledBy || titleId } }, [
         el('div', { className: 'drawer__head' }, [
           leading || null,
           el('div', { className: 'drawer__titles' }, [el('h2', { className: 'drawer__title', text: title, attrs: { id: titleId } }), subtitleEl]),
@@ -36,7 +36,12 @@
       const api = {
         el: dialog,
         body: bodyEl,
-        setBody(nodes) { bodyEl.replaceChildren(...[].concat(nodes).filter(Boolean)); bodyEl.scrollTop = 0; },
+        setBody(nodes) {
+          const swapping = bodyEl.childElementCount > 0;
+          bodyEl.replaceChildren(...[].concat(nodes).filter(Boolean));
+          bodyEl.scrollTop = 0;
+          if (swapping) Portal.animateSwap(bodyEl);
+        },
         setFooter(nodes, note) {
           footEl.replaceChildren(...[note && el('span', { className: 'drawer__foot-note', text: note }), ...[].concat(nodes)].filter(Boolean));
           footEl.hidden = !footEl.childElementCount;
@@ -380,15 +385,52 @@
     const triggers = new Map();
 
     const cellClass = (c) => [c.num && 'is-num', c.className].filter(Boolean).join(' ');
+
+    /* Sorting: number and date columns (or any column with sort: row => value) get an arrow button.
+       Click cycles ascending → descending → original order; th carries aria-sort. */
+    const sortValue = (c) => (typeof c.sort === 'function' ? c.sort : c.filter && ['number', 'date'].includes(c.filter.type) ? c.filter.value : null);
+    const sortKey = (v) => (v instanceof Date ? v.getTime() : typeof v === 'number' ? v : v !== '' && v !== null && !Number.isNaN(Number(v)) ? Number(v) : Number.isNaN(Date.parse(v)) ? String(v ?? '').toLowerCase() : Date.parse(v));
+    const sort = { col: -1, dir: 0 };
+    const sortButtons = new Map();
+    function sortButton(c, i) {
+      const button = el('button', { className: 'column-sort', attrs: { type: 'button' }, on: { click: () => cycleSort(i) } }, [el('span', { text: c.label }), iconEl('arrow-up-down')]);
+      sortButtons.set(i, button);
+      return button;
+    }
+    function cycleSort(i) {
+      sort.dir = sort.col === i ? (sort.dir === 1 ? -1 : sort.dir === -1 ? 0 : 1) : 1;
+      sort.col = sort.dir ? i : -1;
+      sortButtons.forEach((button, index) => {
+        const dir = index === sort.col ? sort.dir : 0;
+        button.closest('th').setAttribute('aria-sort', dir === 1 ? 'ascending' : dir === -1 ? 'descending' : 'none');
+        button.querySelector('svg').replaceWith(iconEl(dir === 1 ? 'arrow-up' : dir === -1 ? 'arrow-down' : 'arrow-up-down'));
+        button.classList.toggle('is-sorted', Boolean(dir));
+      });
+      view = computeView();
+      go(1);
+    }
+    function computeView() {
+      const filtered = active.size ? rows.filter((row) => passes(row)) : rows;
+      if (sort.col < 0) return filtered;
+      const get = sortValue(columns[sort.col]);
+      return filtered.slice().sort((a, b) => {
+        const x = sortKey(get(a)); const y = sortKey(get(b));
+        return (x > y ? 1 : x < y ? -1 : 0) * sort.dir;
+      });
+    }
+
     function headCell(c, i) {
-      if (!c.filter) return el('th', { className: cellClass(c), text: c.label, attrs: { scope: 'col' } });
+      const sortable = Boolean(sortValue(c));
+      const label = sortable ? sortButton(c, i) : el('span', { text: c.label });
+      const sortAttr = sortable ? { 'aria-sort': 'none' } : {};
+      if (!c.filter) return el('th', { className: cellClass(c), attrs: { scope: 'col', ...sortAttr } }, [label]);
       const trigger = el('button', {
         className: 'column-filter__trigger',
         attrs: { type: 'button', 'aria-label': `Filter ${c.label}`, 'aria-haspopup': 'dialog', 'aria-expanded': 'false' },
         on: { click: (event) => { event.stopPropagation(); toggleFilterPopover(i, trigger); } },
       }, [iconEl('filter')]);
       triggers.set(i, trigger);
-      return el('th', { className: cellClass(c), attrs: { scope: 'col' } }, [el('span', { className: 'column-filter__head' }, [el('span', { text: c.label }), trigger])]);
+      return el('th', { className: cellClass(c), attrs: { scope: 'col', ...sortAttr } }, [el('span', { className: 'column-filter__head' }, [label, trigger])]);
     }
 
     const thead = el('thead', {}, [el('tr', {}, columns.map(headCell))]);
@@ -423,7 +465,7 @@
     function clearFilters() { active.clear(); update(); }
 
     function update() {
-      view = active.size ? rows.filter((row) => passes(row)) : rows;
+      view = computeView();
       renderFilterState();
       go(1);
     }
@@ -534,7 +576,7 @@
       setRows(nextRows) { rows = nextRows; update(); },
       /** Change the empty state, e.g. "no results" vs "needs setup"; re-renders if currently empty. */
       setEmpty(next) { empty = next; if (!view.length) renderEmpty(); },
-      refresh() { const current = page; view = active.size ? rows.filter((row) => passes(row)) : rows; renderFilterState(); go(current); },
+      refresh() { const current = page; view = computeView(); renderFilterState(); go(current); },
       clearColumnFilters: clearFilters,
       /** The rows currently shown across all pages (page filters and column filters applied), e.g. for CSV export. */
       get rows() { return view; },

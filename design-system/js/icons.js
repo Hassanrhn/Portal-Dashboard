@@ -34,6 +34,7 @@
     calendar: [['rect', { x: 3, y: 4.5, width: 18, height: 16.5, rx: 2 }], ['path', { d: 'M3 9.5h18M8 2.5v4M16 2.5v4' }]],
     'arrow-up': [['path', { d: 'M12 19V5M5 12l7-7 7 7' }]],
     'arrow-down': [['path', { d: 'M12 5v14M19 12l-7 7-7-7' }]],
+    'arrow-up-down': [['path', { d: 'm21 16-4 4-4-4M17 20V4M3 8l4-4 4 4M7 4v16' }]],
     'arrow-right': [['path', { d: 'M5 12h14M13 6l6 6-6 6' }]],
     alert: [['path', { d: 'm21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3' }], ['path', { d: 'M12 9v4M12 17h.01' }]],
     menu: [['path', { d: 'M4 6h16M4 12h16M4 18h16' }]],

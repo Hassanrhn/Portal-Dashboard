@@ -205,6 +205,7 @@ export function isValidSignature(rawBody, timestamp, signature, secret) {
     Portal.fieldError(bodyInput, '');
     Portal.fieldError(requestInput, '');
     responseHost.replaceChildren();
+    Portal.animateSwap($('[data-explorer-body-field]'));
   }
 
   function syncEnv() {
@@ -281,6 +282,7 @@ export function isValidSignature(rawBody, timestamp, signature, secret) {
       ]),
       Portal.codePanel('Response', result.body),
     );
+    Portal.animateSwap(responseHost);
   }
 
   endpoint.addEventListener('change', syncEndpoint);

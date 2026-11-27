@@ -190,6 +190,15 @@
   };
   Portal.initComponents();
 
+  /** Smoothly reveals content that was just replaced in place (drawer steps, explorer responses, filtered views). */
+  Portal.animateSwap = function animateSwap(node) {
+    if (!node) return;
+    node.classList.remove('is-swapping');
+    void node.offsetWidth; // restart the animation
+    node.classList.add('is-swapping');
+    node.addEventListener('animationend', () => node.classList.remove('is-swapping'), { once: true });
+  };
+
   /* Custom select: replaces the OS dropdown with a listbox styled like our menus while the native
      <select> stays in the DOM (hidden) as the source of truth, so forms, validation and page code keep working.
      Opt out with data-native. */
