@@ -1,5 +1,7 @@
 # Portal Dashboard
 
+**Docs:** [API specification](docs/API.md) (backend) · [Frontend guide](docs/FRONTEND.md) (frontend) · [Design process](docs/DESIGN-PROCESS.md) (product design)
+
 A redesign prototype of Portal, the partner dashboard for The Orange Card's payment orchestration platform. It is static HTML, CSS and JS: no framework, and no build step apart from design tokens.
 
 - **Preview:** open `index.html` in a browser. It links to every page and to the component gallery.
