@@ -93,7 +93,7 @@
       { label: 'Endpoint', render: (e) => el('span', { className: 'endpoint-cell' }, [el('span', { className: 'u-mono endpoint-url', text: e.url, attrs: { title: e.url } }), e.description ? el('span', { className: 'cell-sub', text: e.description }) : null]) },
       { label: 'Events', render: (e) => eventChips(e.events) },
       { label: 'Status', render: (e) => statusBadge(e.status) },
-      { label: 'Success (7 days)', num: true, render: (e) => { const r = stats(e).rate; return el('span', { className: r === null ? 'u-muted' : '', text: r === null ? 'No deliveries' : `${r.toFixed(1)}%` }); } },
+      { label: '7-day success', num: true, render: (e) => { const r = stats(e).rate; return el('span', { className: r === null ? 'u-muted' : '', text: r === null ? 'No deliveries' : `${r.toFixed(1)}%` }); } },
       { label: 'Last delivery', render: (e) => { const last = stats(e).last; return el('span', { className: 'u-muted', text: last ? fmt.relative(last) : 'Never' }); } },
       { label: 'Actions', className: 'cell-actions', render: rowMenu },
     ],

@@ -46,6 +46,8 @@
     Payments: ['payment.created', 'payment.status_updated', 'refund.status_updated', 'payout.status_updated'],
     Cards: ['card_order.status_updated', 'cardholder.status_updated'],
   };
+  // Payment IDs that exist in data/payments.js, so links to transactions.html?payment= resolve.
+  const PAYMENT_IDS = ['req_8f3a91c2e7', 'req_77b0d415aa', 'req_c19e2f0b63', 'req_5d4410ee09', 'req_2ab9c3d871', 'req_e04b7a19c5', 'req_91fd02c6b8'];
   const OBJECT_PREFIX = { payment: 'req_', refund: 'rf_', payout: 'po_', card_order: 'co_', cardholder: 'ch_' };
 
   function eventPayload(type, objectId, created) {
@@ -64,7 +66,7 @@
     const types = endpoint.events;
     const type = types[index % types.length];
     const kind = type.split('.')[0];
-    const objectId = `${OBJECT_PREFIX[kind]}${hex(10)}`;
+    const objectId = kind === 'payment' ? pick(PAYMENT_IDS) : `${OBJECT_PREFIX[kind]}${hex(10)}`;
     const time = ago(8 + index * (37 + Math.floor(rand() * 40)));
     const roll = rand();
     let status = 'delivered';
@@ -114,7 +116,6 @@
   events.sort((a, b) => b.created.localeCompare(a.created));
 
   /* API request log ----------------------------------------------------------------------- */
-  const PAYMENT_IDS = ['req_8f3a91c2e7', 'req_77b0d415aa', 'req_c19e2f0b63', 'req_5d4410ee09', 'req_2ab9c3d871', 'req_e04b7a19c5', 'req_91fd02c6b8'];
   const ROUTES = [
     { method: 'POST', path: () => '/payments', ok: 201, errors: [400, 422, 409], body: () => ({ offeringId: 'CROSSMINT.PAYMENT_API.START_PAYMENT.PAYIN', requestId: pick(PAYMENT_IDS), referenceId: `ORD-${10400 + Math.floor(rand() * 99)}`, amount: '25.00', currency: 'USD' }) },
     { method: 'GET', path: () => `/payments/${pick(PAYMENT_IDS)}`, ok: 200, errors: [404] },

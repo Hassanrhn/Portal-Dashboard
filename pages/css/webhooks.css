@@ -1,7 +1,7 @@
 /* Webhooks page specifics. Tokens only. */
 .endpoint-limit { flex-basis: 100%; text-align: right; }
 .kpi__skeleton { margin-top: var(--space-12); gap: var(--space-12); }
-.endpoint-cell { display: grid; width: 260px; }
+.endpoint-cell { display: grid; width: 200px; }
 .endpoint-url { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 .event-groups { display: grid; gap: var(--space-12); }
