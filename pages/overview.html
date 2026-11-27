@@ -11,106 +11,20 @@
   <link rel="stylesheet" href="css/overview.css">
   <script src="../design-system/js/theme.js"></script>
   <script src="../design-system/js/icons.js" defer></script>
+  <script src="../design-system/js/dom.js" defer></script>
+  <script src="js/layout.js" defer></script>
   <script src="../design-system/js/components.js" defer></script>
+  <script src="../design-system/js/patterns.js" defer></script>
   <script src="../design-system/js/lazy.js" defer></script>
   <script src="js/overview-data.js" defer></script>
   <script src="js/overview.js" defer></script>
+  <script src="js/create-payment.js" defer></script>
   <script src="../design-system/js/shell.js" defer></script>
 </head>
-<body>
+<body data-page="overview">
 <div class="app" data-app>
-  <div class="scrim" data-nav-close></div>
-
-  <!-- Sidebar ------------------------------------------------------------ -->
-  <aside class="sidebar" aria-label="Main">
-    <div class="sidebar__brand">
-      <span class="brand-mark" aria-hidden="true"></span>
-      <span class="sidebar__name">Digital Center</span>
-      <button class="btn btn--ghost btn--icon btn--sm collapse-toggle" type="button" data-collapse-toggle aria-pressed="false" aria-label="Collapse sidebar"><i data-icon="sidebar"></i></button>
-    </div>
-
-    <div class="sidebar__actions">
-      <div class="workspace">
-        <span class="workspace__avatar" aria-hidden="true">O</span>
-        <span class="nav__label">The Orange Card</span>
-      </div>
-      <div class="segmented segmented--sm segmented--block collapsible" role="radiogroup" aria-label="Environment" data-segmented data-env-control>
-        <button class="segmented__option" type="button" role="radio" aria-checked="true" data-value="live">Live</button>
-        <button class="segmented__option" type="button" role="radio" aria-checked="false" data-value="test">Test</button>
-      </div>
-      <button class="btn btn--sm btn--block new-payment" type="button" data-soon="Create payment"><i data-icon="plus"></i><span>New payment</span></button>
-      <button class="search-trigger" type="button" data-command-open aria-label="Search (Ctrl or Command K)"><i data-icon="search"></i><span>Search</span><span class="kbd" aria-hidden="true">⌘K</span></button>
-    </div>
-
-    <div class="sidebar__scroll">
-      <nav class="nav" aria-label="Primary">
-        <a class="nav__item" href="overview.html" aria-current="page"><i data-icon="home"></i><span class="nav__label">Overview</span></a>
-        <button class="nav__item" type="button" data-disclosure aria-expanded="true" aria-controls="group-payments"><i data-icon="payments"></i><span class="nav__label">Payments</span><i data-icon="chevron-down" class="nav__chevron"></i></button>
-        <div class="nav__group" id="group-payments">
-          <div class="nav">
-            <a class="nav__item" href="#" data-soon="Transactions"><span class="nav__label">Transactions</span></a>
-            <a class="nav__item" href="#" data-soon="Payouts"><span class="nav__label">Payouts</span></a>
-            <a class="nav__item" href="#" data-soon="Refunds"><span class="nav__label">Refunds</span></a>
-          </div>
-        </div>
-        <button class="nav__item" type="button" data-disclosure aria-expanded="false" aria-controls="group-cards"><i data-icon="cards"></i><span class="nav__label">Cards</span><i data-icon="chevron-down" class="nav__chevron"></i></button>
-        <div class="nav__group" id="group-cards">
-          <div class="nav">
-            <a class="nav__item" href="#" data-soon="Cardholders"><span class="nav__label">Cardholders</span></a>
-            <a class="nav__item" href="#" data-soon="Card orders"><span class="nav__label">Card orders</span></a>
-            <a class="nav__item" href="#" data-soon="Issuers"><span class="nav__label">Issuers</span></a>
-          </div>
-        </div>
-        <a class="nav__item" href="#" data-soon="Reports"><i data-icon="reports"></i><span class="nav__label">Reports</span></a>
-      </nav>
-
-      <p class="nav__section">Developers</p>
-      <nav class="nav" aria-label="Developers">
-        <a class="nav__item" href="#" data-soon="API keys"><i data-icon="key"></i><span class="nav__label">API keys</span></a>
-        <a class="nav__item" href="#" data-soon="Webhooks"><i data-icon="webhook"></i><span class="nav__label">Webhooks</span></a>
-        <a class="nav__item" href="#" data-soon="Event logs"><i data-icon="logs"></i><span class="nav__label">Event logs</span></a>
-        <a class="nav__item" href="#" data-soon="Docs"><i data-icon="docs"></i><span class="nav__label">Docs</span></a>
-      </nav>
-    </div>
-
-    <div class="sidebar__foot">
-      <a class="nav__item" href="#" data-soon="Team"><i data-icon="invite"></i><span class="nav__label">Invite your team</span></a>
-      <a class="nav__item" href="#" data-soon="Settings"><i data-icon="settings"></i><span class="nav__label">Settings</span></a>
-      <a class="nav__item" href="#" data-soon="Support"><i data-icon="support"></i><span class="nav__label">Contact support</span></a>
-      <div class="meter">
-        <div class="meter__row"><b class="t-label">API requests</b><span>13.3k of 20.0k</span></div>
-        <div class="progress" role="progressbar" aria-label="API requests used this month" aria-valuemin="0" aria-valuemax="100" aria-valuenow="66"><div class="progress__fill" data-progress="66"></div></div>
-      </div>
-      <div class="sidebar__row">
-        <span data-theme-label>Light mode</span>
-        <button class="theme-switch" type="button" role="switch" aria-checked="false" aria-label="Dark mode" data-theme-toggle>
-          <span class="theme-switch__knob" aria-hidden="true"></span>
-          <span class="theme-switch__icon theme-switch__icon--sun" aria-hidden="true"><i data-icon="sun"></i></span>
-          <span class="theme-switch__icon theme-switch__icon--moon" aria-hidden="true"><i data-icon="moon"></i></span>
-        </button>
-      </div>
-      <div class="user">
-        <span class="user__avatar" aria-hidden="true">P</span>
-        <span class="user__name">pocket@pocket.com</span>
-        <a class="btn btn--ghost btn--icon btn--sm" href="login.html" aria-label="Sign out"><i data-icon="logout"></i></a>
-      </div>
-    </div>
-  </aside>
-
   <!-- Main ---------------------------------------------------------------- -->
   <div class="main">
-    <header class="topbar">
-      <button class="btn btn--ghost btn--icon" type="button" data-nav-open aria-expanded="false" aria-label="Open navigation"><i data-icon="menu"></i></button>
-      <span class="topbar__title">Overview</span>
-      <button class="btn btn--ghost btn--icon" type="button" data-command-open aria-label="Search"><i data-icon="search"></i></button>
-      <button class="theme-switch" type="button" role="switch" aria-checked="false" aria-label="Dark mode" data-theme-toggle>
-        <span class="theme-switch__knob" aria-hidden="true"></span>
-        <span class="theme-switch__icon theme-switch__icon--sun" aria-hidden="true"><i data-icon="sun"></i></span>
-        <span class="theme-switch__icon theme-switch__icon--moon" aria-hidden="true"><i data-icon="moon"></i></span>
-      </button>
-    </header>
-    <div class="env-strip" role="status"><i data-icon="alert"></i>Test mode: test data only. No real money moves.</div>
-
     <main class="page" id="main">
       <div class="page__head">
         <div>
@@ -123,7 +37,7 @@
             <button class="segmented__option" type="button" role="radio" aria-checked="true" data-value="30d">30 days</button>
             <button class="segmented__option" type="button" role="radio" aria-checked="false" data-value="90d">90 days</button>
           </div>
-          <button class="btn btn--primary btn--lg" type="button" data-soon="Create payment"><i data-icon="plus"></i>Create payment</button>
+          <button class="btn btn--primary btn--lg" type="button" data-create-payment><i data-icon="plus"></i>Create payment</button>
         </div>
       </div>
 
@@ -214,9 +128,5 @@
   </div>
 </div>
 
-<dialog class="dialog cmd" id="command-palette" aria-label="Search">
-  <div class="cmd__search"><i data-icon="search"></i><input class="cmd__input" type="text" placeholder="Search payments, pages and actions" aria-label="Search" role="combobox" aria-expanded="true" aria-controls="cmd-list" autocomplete="off" spellcheck="false" maxlength="80"><span class="kbd">Esc</span></div>
-  <div class="cmd__list" id="cmd-list" role="listbox"></div>
-</dialog>
 </body>
 </html>

@@ -20,6 +20,9 @@
 .skeleton-stack   { display: grid; gap: var(--space-10); }
 .skeleton-row     { display: flex; align-items: center; justify-content: space-between; gap: var(--space-16); height: var(--table-row-height); border-bottom: var(--border-width) solid var(--table-divider); }
 .skeleton-row:last-child { border-bottom: 0; }
+.skeleton-list { padding: 0 var(--card-pad); border-top: var(--border-width) solid var(--card-border); }
+.skeleton-list .skeleton--short { width: 14%; }
+.skeleton-list .skeleton--text { width: 30%; }
 @keyframes skeleton-shimmer { to { background-position: -200% 0; } }
 
 [data-lazy][aria-busy="true"] [data-lazy-content] { display: none; }

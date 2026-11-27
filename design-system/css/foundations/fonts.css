@@ -13,3 +13,12 @@
   font-display: swap;
   src: url("../../fonts/jetbrains-mono-latin-var.woff2") format("woff2");
 }
+/* Archivo (weight + width axes) — used only by the The Orange Card wordmark. */
+@font-face {
+  font-family: "Archivo Variable";
+  font-style: normal;
+  font-weight: 100 900;
+  font-stretch: 62% 125%;
+  font-display: swap;
+  src: url("../../fonts/archivo-latin-var.woff2") format("woff2");
+}

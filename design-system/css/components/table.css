@@ -46,3 +46,4 @@ tr:hover .copy__btn, .copy__btn:focus-visible, .copy__btn.is-copied { opacity: 1
 .copy__btn.is-copied .icon-check { display: block; animation: pop-in var(--motion-base) var(--motion-spring); }
 @keyframes pop-in { from { transform: scale(0.4); opacity: 0; } }
 @media (hover: none) { .copy__btn { opacity: 1; } }
+.amount__currency { margin-left: var(--space-4); color: var(--text-secondary); }

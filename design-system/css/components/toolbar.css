@@ -1,0 +1,25 @@
+/* Filter toolbar above tables and pagination below. */
+.toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-8); padding: var(--card-pad); }
+.toolbar__search { flex: 1 1 260px; max-width: 340px; }
+.toolbar__spacer { flex: 1; }
+.toolbar__count { color: var(--text-secondary); font-size: var(--font-size-13); font-variant-numeric: tabular-nums; }
+.table-card { overflow: hidden; }
+.table-card .table-wrap { border-top: var(--border-width) solid var(--card-border); }
+.table-card .table th { background: var(--bg-sidebar); }
+.table-card .table th:first-child, .table-card .table td:first-child { padding-left: var(--card-pad); }
+.table-card .table th:last-child, .table-card .table td:last-child { padding-right: var(--card-pad); }
+.table tr.is-clickable { cursor: pointer; }
+.table tr.is-clickable:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: -2px; }
+.table .cell-actions { width: 1%; text-align: right; }
+.table .cell-sub { display: block; color: var(--text-secondary); font-size: var(--font-size-12); }
+.table__lead { display: flex; align-items: center; gap: var(--space-10); }
+.tile { display: grid; place-items: center; width: var(--size-32); height: var(--size-32); flex-shrink: 0; border: var(--border-width) solid var(--border-default); border-radius: var(--radius-8); background: var(--bg-surface); color: var(--text-secondary); font-size: var(--font-size-12); font-weight: var(--font-weight-semibold); }
+.tile svg { width: var(--size-16); height: var(--size-16); }
+
+.pagination { display: flex; align-items: center; justify-content: space-between; gap: var(--space-12); padding: var(--space-12) var(--card-pad); border-top: var(--border-width) solid var(--card-border); color: var(--text-secondary); font-size: var(--font-size-13); }
+.pagination__controls { display: flex; align-items: center; gap: var(--space-8); }
+.pagination__page { font-variant-numeric: tabular-nums; }
+
+/* Active filter count dot on a button */
+.btn__dot { display: inline-grid; place-items: center; min-width: 16px; height: 16px; padding: 0 4px; border-radius: var(--radius-full); background: var(--accent-solid); color: var(--accent-solid-fg); font-size: var(--font-size-11); font-weight: var(--font-weight-semibold); }
+@media (max-width: 600px) { .toolbar__search { max-width: none; flex-basis: 100%; } .pagination { flex-wrap: wrap; } }

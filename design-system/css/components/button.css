@@ -26,7 +26,8 @@
 }
 .btn:hover:not(:disabled) { background: var(--_bg-hover); }
 .btn:active:not(:disabled) { transform: scale(var(--button-press-scale)); }
-.btn:disabled { --_bg: var(--button-disabled-bg); --_bg-hover: var(--button-disabled-bg); --_fg: var(--button-disabled-fg); --_border: transparent; }
+.btn:disabled { opacity: 0.45; }
+.btn--primary:disabled { opacity: 1; --_bg: var(--button-disabled-bg); --_bg-hover: var(--button-disabled-bg); --_fg: var(--button-disabled-fg); --_border: transparent; }
 .btn svg { width: var(--size-16); height: var(--size-16); }
 
 .btn--primary {

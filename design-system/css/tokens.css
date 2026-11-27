@@ -177,6 +177,10 @@
   --chart-3: var(--color-orange-500);
   --chart-4: var(--color-green-500);
   --chart-grid: var(--color-slate-100);
+  --code-bg: var(--color-neutral-50);
+  --code-key: var(--color-blue-700);
+  --code-string: var(--color-green-700);
+  --code-number: var(--color-orange-700);
 }
 
 [data-theme="dark"] {
@@ -231,6 +235,10 @@
   --chart-3: var(--color-orange-300);
   --chart-4: var(--color-green-400);
   --chart-grid: var(--color-neutral-780);
+  --code-bg: var(--color-neutral-900);
+  --code-key: var(--color-blue-400);
+  --code-string: var(--color-green-400);
+  --code-number: var(--color-orange-300);
 }
 
 /* Tier 3 · components */
@@ -351,4 +359,6 @@
   --motion-slow: var(--motion-duration-slow);
   --motion-ease: var(--motion-easing-standard);
   --motion-spring: var(--motion-easing-spring);
+  --drawer-width: 560px;
+  --drawer-pad: var(--space-24);
 }

@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en" data-theme="light" data-env="live">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Transactions · Portal</title>
+  <link rel="stylesheet" href="../design-system/css/portal.css">
+  <script src="../design-system/js/theme.js"></script>
+  <script src="../design-system/js/icons.js" defer></script>
+  <script src="../design-system/js/dom.js" defer></script>
+  <script src="js/layout.js" defer></script>
+  <script src="../design-system/js/components.js" defer></script>
+  <script src="../design-system/js/patterns.js" defer></script>
+  <script src="../design-system/js/lazy.js" defer></script>
+  <script src="js/data/payments.js" defer></script>
+  <script src="js/transactions.js" defer></script>
+  <script src="js/create-payment.js" defer></script>
+  <script src="../design-system/js/shell.js" defer></script>
+</head>
+<body data-page="transactions">
+<div class="app" data-app>
+  <div class="main">
+    <main class="page" id="main">
+      <div class="page__head">
+        <div>
+          <h1 class="t-title">Transactions</h1>
+          <p class="page__sub">Every pay-in across Crossmint, ForumPay and the blockchain rail. Select a row for details.</p>
+        </div>
+        <div class="page__actions">
+          <button class="btn btn--lg" type="button" data-export><i data-icon="download"></i>Export CSV</button>
+          <button class="btn btn--primary btn--lg" type="button" data-create-payment><i data-icon="plus"></i>Create payment</button>
+        </div>
+      </div>
+
+      <section class="card table-card" data-lazy="transactions" aria-busy="true" aria-label="Transactions">
+        <div class="toolbar">
+          <div class="input-group toolbar__search"><i data-icon="search" class="input-group__icon"></i><input class="input" type="search" placeholder="Request ID, reference or email" aria-label="Search transactions" maxlength="80" data-filter="q"></div>
+          <div class="segmented segmented--sm" role="radiogroup" aria-label="Status" data-segmented data-filter="status">
+            <button class="segmented__option" type="button" role="radio" aria-checked="true" data-value="all">All <span class="segmented__count" data-count="all"></span></button>
+            <button class="segmented__option" type="button" role="radio" aria-checked="false" data-value="paid">Paid <span class="segmented__count" data-count="paid"></span></button>
+            <button class="segmented__option" type="button" role="radio" aria-checked="false" data-value="pending">Pending <span class="segmented__count" data-count="pending"></span></button>
+            <button class="segmented__option" type="button" role="radio" aria-checked="false" data-value="failed">Failed <span class="segmented__count" data-count="failed"></span></button>
+            <button class="segmented__option" type="button" role="radio" aria-checked="false" data-value="refunded">Refunded <span class="segmented__count" data-count="refunded"></span></button>
+          </div>
+          <select class="select select--sm" aria-label="Route" data-filter="route">
+            <option value="">All routes</option><option>Crossmint</option><option>ForumPay</option><option>Blockchain rail</option>
+          </select>
+          <select class="select select--sm" aria-label="Method" data-filter="method">
+            <option value="">All methods</option><option value="FIAT_CARD">Card</option><option value="CRYPTO">Crypto</option>
+          </select>
+          <select class="select select--sm" aria-label="Date range" data-filter="range">
+            <option value="7">Last 7 days</option><option value="30" selected>Last 30 days</option><option value="90">Last 90 days</option><option value="0">All time</option>
+          </select>
+          <span class="toolbar__spacer"></span>
+          <button class="btn btn--ghost btn--sm" type="button" data-clear hidden>Clear filters</button>
+        </div>
+        <div data-skeleton class="skeleton-list"></div>
+        <div data-lazy-content data-table></div>
+      </section>
+    </main>
+  </div>
+</div>
+</body>
+</html>

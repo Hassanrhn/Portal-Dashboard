@@ -56,6 +56,21 @@
     }
   }
 
+  /** <div data-skeleton class="skeleton-list" data-rows="8"></div> is filled with table-row skeletons. */
+  document.querySelectorAll('.skeleton-list:empty').forEach((list) => {
+    const rows = Number(list.dataset.rows) || 8;
+    for (let i = 0; i < rows; i += 1) {
+      const row = document.createElement('div');
+      row.className = 'skeleton-row';
+      ['skeleton--short', 'skeleton--text', 'skeleton--pill', 'skeleton--short'].forEach((variant) => {
+        const bar = document.createElement('span');
+        bar.className = `skeleton ${variant}`;
+        row.appendChild(bar);
+      });
+      list.appendChild(row);
+    }
+  });
+
   const observer = 'IntersectionObserver' in window
     ? new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
