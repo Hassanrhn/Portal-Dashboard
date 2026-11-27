@@ -106,7 +106,7 @@
       "$value": "{control.height-md}"
     },
     "radius": {
-      "$value": "{radius.10}"
+      "$value": "{radius.12}"
     },
     "pad-x": {
       "$value": "{space.12}"
@@ -118,7 +118,7 @@
       "$value": "{font.size.13}"
     },
     "font-weight": {
-      "$value": "{font.weight.semibold}"
+      "$value": "700"
     },
     "primary-bg": {
       "$value": "{action.primary-bg}"
@@ -166,7 +166,7 @@
       "$value": "0.97"
     },
     "lip": {
-      "$value": "3px"
+      "$value": "4px"
     },
     "secondary-lip": {
       "$value": "{action.secondary-lip}"
@@ -176,6 +176,18 @@
     },
     "danger-lip": {
       "$value": "{color.red.800}"
+    },
+    "neutral-bg": {
+      "$value": "{color.graphite.500}"
+    },
+    "neutral-bg-hover": {
+      "$value": "{color.graphite.400}"
+    },
+    "neutral-fg": {
+      "$value": "{color.white}"
+    },
+    "neutral-lip": {
+      "$value": "{color.graphite.700}"
     }
   },
   "input": {
@@ -359,6 +371,12 @@
     },
     "fill": {
       "$value": "{accent.solid}"
+    },
+    "fill-warning": {
+      "$value": "{status.warning-fg}"
+    },
+    "fill-danger": {
+      "$value": "{status.danger-fg}"
     }
   },
   "surface-raised": {
@@ -404,6 +422,20 @@
     },
     "pad": {
       "$value": "{space.24}"
+    }
+  },
+  "scrollbar": {
+    "size": {
+      "$value": "10px"
+    },
+    "thumb": {
+      "$value": "{border.strong}"
+    },
+    "thumb-hover": {
+      "$value": "{text.tertiary}"
+    },
+    "track": {
+      "$value": "transparent"
     }
   }
 }

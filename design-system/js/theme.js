@@ -17,11 +17,10 @@
   const root = document.documentElement;
   const systemDark = window.matchMedia('(prefers-color-scheme: dark)');
 
-  function initialTheme() {
-    const saved = Portal.store.get('theme');
-    if (THEMES.includes(saved)) return saved;
-    return systemDark.matches ? 'dark' : 'light';
-  }
+  /* Preference is "light", "dark" or "system" (default). "system" follows the OS and updates live. */
+  const PREFERENCES = ['light', 'dark', 'system'];
+  const preference = () => (PREFERENCES.includes(Portal.store.get('theme')) ? Portal.store.get('theme') : 'system');
+  const resolve = (pref) => (pref === 'system' ? (systemDark.matches ? 'dark' : 'light') : pref);
 
   function syncSwitches(theme) {
     document.querySelectorAll('[data-theme-toggle]').forEach((el) => {
@@ -47,9 +46,17 @@
     get: () => root.dataset.theme,
     set: setTheme,
     toggle: () => setTheme(root.dataset.theme === 'dark' ? 'light' : 'dark'),
+    preference,
+    /** Settings → Appearance: 'light' | 'dark' | 'system' */
+    setPreference(pref) {
+      if (!PREFERENCES.includes(pref)) return;
+      Portal.store.set('theme', pref);
+      setTheme(resolve(pref), { persist: false });
+    },
   };
 
-  root.dataset.theme = initialTheme();
+  root.dataset.theme = resolve(preference());
+  systemDark.addEventListener('change', () => { if (preference() === 'system') setTheme(resolve('system'), { persist: false }); });
 
   document.addEventListener('DOMContentLoaded', () => {
     syncSwitches(root.dataset.theme);

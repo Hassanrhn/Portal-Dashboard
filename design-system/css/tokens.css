@@ -61,6 +61,9 @@
   --color-amber-800: #773C00;
   --color-amber-900: #2B2110;
   --color-amber-950: #4A3A12;
+  --color-graphite-400: #52525B;
+  --color-graphite-500: #45454D;
+  --color-graphite-700: #2C2C32;
   --font-family-sans: "Inter Variable", Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-family-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, monospace;
   --font-size-11: 11px;
@@ -278,11 +281,11 @@
   --control-radius: var(--radius-8);
   --control-radius-xl: var(--radius-12);
   --button-height: var(--control-height-md);
-  --button-radius: var(--radius-10);
+  --button-radius: var(--radius-12);
   --button-pad-x: var(--space-12);
   --button-gap: var(--space-6);
   --button-font-size: var(--font-size-13);
-  --button-font-weight: var(--font-weight-semibold);
+  --button-font-weight: 700;
   --button-primary-bg: var(--action-primary-bg);
   --button-primary-bg-hover: var(--action-primary-bg-hover);
   --button-primary-fg: var(--action-primary-fg);
@@ -298,10 +301,14 @@
   --button-disabled-bg: var(--action-disabled-bg);
   --button-disabled-fg: var(--action-disabled-fg);
   --button-press-scale: 0.97;
-  --button-lip: 3px;
+  --button-lip: 4px;
   --button-secondary-lip: var(--action-secondary-lip);
   --button-primary-lip: var(--color-orange-700);
   --button-danger-lip: var(--color-red-800);
+  --button-neutral-bg: var(--color-graphite-500);
+  --button-neutral-bg-hover: var(--color-graphite-400);
+  --button-neutral-fg: var(--color-white);
+  --button-neutral-lip: var(--color-graphite-700);
   --input-height: var(--control-height-lg);
   --input-radius: var(--control-radius);
   --input-pad-x: var(--space-12);
@@ -357,6 +364,8 @@
   --progress-height: var(--space-4);
   --progress-track: var(--border-default);
   --progress-fill: var(--accent-solid);
+  --progress-fill-warning: var(--status-warning-fg);
+  --progress-fill-danger: var(--status-danger-fg);
   --surface-raised-bg: var(--bg-raised);
   --surface-raised-border: var(--border-default);
   --surface-raised-radius: var(--radius-12);
@@ -370,4 +379,8 @@
   --motion-sheet: cubic-bezier(0.32, 0.72, 0, 1);
   --drawer-width: 560px;
   --drawer-pad: var(--space-24);
+  --scrollbar-size: 10px;
+  --scrollbar-thumb: var(--border-strong);
+  --scrollbar-thumb-hover: var(--text-tertiary);
+  --scrollbar-track: transparent;
 }

@@ -200,6 +200,21 @@ After v1.0 we built the rest of the product:
 | Browser right-click menu is generic | **Custom right-click menu** with actions that fit what was clicked |
 | Teams need written guidance | **These docs**: API, frontend and design process |
 
+### Round 4: tactile buttons and polish
+
+| Feedback | Decision |
+| --- | --- |
+| Follow the tactile button reference (coloured fill with a thick darker lip) | All buttons get a 4px lip, a 12px radius and bold labels. Orange is the main action colour. |
+| Gray only for Create payment | A dedicated `btn--neutral` (graphite) is used solely for Create payment and New payment, so the most frequent business action is recognisable everywhere without competing with each screen's orange primary action. |
+| Header layout: elements opposite each other | Page title and description on the left, actions on the right, vertically centred. On phones actions stay opposite the title as square icon buttons. |
+| Icon-only and square buttons on mobile | Icon buttons drop their visible text on phones. Screen readers still announce the label. |
+| Context menu should depend on where you click | The menu is contextual (row, header, value, link, selection, background) and keeps only high-priority actions. Theme switching was removed from it. |
+| Login logo alignment | The wordmark moved into the top row, centred and aligned with Back and Partner operations, at a smaller size. |
+| "Connected" too large | KPI status text uses 16px. |
+| Default scrollbars looked heavy | Thin, rounded, token-coloured scrollbars on both axes. |
+| Quota should warn near the limit | The usage meter turns amber at 75% and red at 90%, using design-system status colours. |
+| Theme choice | Settings → Appearance: Light, Dark or System (default, follows the device). |
+
 ## 8. Key decisions and rationale
 
 | Decision | Alternatives considered | Why we chose it |

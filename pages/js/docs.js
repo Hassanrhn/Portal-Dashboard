@@ -70,7 +70,7 @@
 
   function stepLink(step) {
     if (!step.link) return null;
-    if (step.link.createPayment) return el('button', { className: 'btn btn--sm', attrs: { type: 'button', 'data-create-payment': '' } }, [iconEl('plus'), step.link.label]);
+    if (step.link.createPayment) return el('button', { className: 'btn btn--neutral btn--sm', attrs: { type: 'button', 'data-create-payment': '' } }, [iconEl('plus'), step.link.label]);
     return el('a', { className: 'btn btn--sm', attrs: { href: step.link.href } }, [step.link.label, iconEl('arrow-right')]);
   }
 

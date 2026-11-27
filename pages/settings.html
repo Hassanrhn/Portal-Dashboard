@@ -37,6 +37,7 @@
         <button class="tabs__tab" type="button" role="tab" id="tab-security" aria-controls="panel-security" aria-selected="false" data-value="security">Security</button>
         <button class="tabs__tab" type="button" role="tab" id="tab-checkout" aria-controls="panel-checkout" aria-selected="false" data-value="checkout">Checkout</button>
         <button class="tabs__tab" type="button" role="tab" id="tab-notifications" aria-controls="panel-notifications" aria-selected="false" data-value="notifications">Notifications</button>
+        <button class="tabs__tab" type="button" role="tab" id="tab-appearance" aria-controls="panel-appearance" aria-selected="false" data-value="appearance">Appearance</button>
       </div>
 
       <form data-settings-form novalidate>
@@ -190,6 +191,20 @@ app.theorangecard.com</textarea></div>
             <div class="setting">
               <div><label class="setting__title" for="ch-recipients">Recipients</label><p class="setting__desc">Comma-separated emails, up to 10.</p></div>
               <div class="setting__control field"><input class="input" id="ch-recipients" name="recipients" inputmode="email" maxlength="600" value="pocket@pocket.com, ops@theorangecard.com" placeholder="ops@yourcompany.com, finance@yourcompany.com"></div>
+            </div>
+          </section>
+        </div>
+              <div class="stack" role="tabpanel" id="panel-appearance" aria-labelledby="tab-appearance" hidden>
+          <section class="card settings" aria-label="Appearance">
+            <div class="setting">
+              <div><p class="setting__title">Theme</p><p class="setting__desc">System follows your device and switches automatically. Saved on this browser and applied straight away.</p></div>
+              <div class="setting__control">
+                <div class="segmented" role="radiogroup" aria-label="Theme" data-segmented data-appearance>
+                  <button class="segmented__option" type="button" role="radio" aria-checked="false" data-value="light"><i data-icon="sun"></i>Light</button>
+                  <button class="segmented__option" type="button" role="radio" aria-checked="false" data-value="dark"><i data-icon="moon"></i>Dark</button>
+                  <button class="segmented__option" type="button" role="radio" aria-checked="true" data-value="system"><i data-icon="settings"></i>System</button>
+                </div>
+              </div>
             </div>
           </section>
         </div>

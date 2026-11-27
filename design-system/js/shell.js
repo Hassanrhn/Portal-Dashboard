@@ -188,27 +188,51 @@
     try { await navigator.clipboard.writeText(value); Portal.toast(toast); } catch { Portal.toast('Copy is blocked in this browser.', { icon: 'alert' }); }
   };
 
+  /** Actions depend on what was right-clicked; only the most relevant ones are offered. */
   function itemsFor(target) {
-    const items = [];
     const selection = String(window.getSelection() || '').trim();
-    const copyable = target.closest('.copy')?.querySelector('[data-copy]') || target.closest('[data-copy]');
-    const link = target.closest('a[href]');
-    const row = target.closest('tr.is-clickable');
-    if (selection) items.push({ label: 'Copy selection', icon: 'copy', onSelect: () => copy(selection, 'Selection copied') });
-    if (copyable) items.push({ label: 'Copy value', icon: 'copy', description: copyable.dataset.copy.length > 36 ? `${copyable.dataset.copy.slice(0, 34)}…` : copyable.dataset.copy, onSelect: () => copy(copyable.dataset.copy, 'Copied to clipboard') });
-    if (row) items.push({ label: 'Open details', icon: 'arrow-right', onSelect: () => row.click() });
-    if (link) {
-      items.push({ label: 'Open in new tab', icon: 'external', onSelect: () => window.open(link.href, '_blank', 'noopener') });
-      items.push({ label: 'Copy link', icon: 'link', onSelect: () => copy(link.href, 'Link copied') });
+    if (selection) {
+      return [
+        { label: 'Copy', icon: 'copy', onSelect: () => copy(selection, 'Copied') },
+        { label: `Search for “${selection.length > 24 ? `${selection.slice(0, 22)}…` : selection}”`, icon: 'search', onSelect: () => openSearch(selection) },
+      ];
     }
-    if (items.length) items.push('separator');
-    items.push(
+    const row = target.closest('tr.is-clickable, tbody tr');
+    if (row) {
+      const ids = Array.from(row.querySelectorAll('[data-copy]')).map((b) => b.dataset.copy);
+      const header = row.closest('table')?.querySelector('thead th')?.textContent.trim() || 'ID';
+      return [
+        row.classList.contains('is-clickable') && { label: 'Open details', icon: 'arrow-right', onSelect: () => row.click() },
+        ids[0] && { label: `Copy ${header.toLowerCase()}`, icon: 'copy', description: ids[0], onSelect: () => copy(ids[0], 'Copied') },
+        ids[1] && { label: 'Copy reference', icon: 'copy', description: ids[1], onSelect: () => copy(ids[1], 'Copied') },
+        { label: 'Copy row', icon: 'file', onSelect: () => copy(Array.from(row.cells).map((c) => c.innerText.replace(/\s+/g, ' ').trim()).join('\t'), 'Row copied') },
+      ].filter(Boolean);
+    }
+    const head = target.closest('thead th');
+    if (head) {
+      const filter = head.querySelector('button');
+      return [filter && { label: `Filter ${head.textContent.trim().toLowerCase()}`, icon: 'filter', onSelect: () => filter.click() }].filter(Boolean);
+    }
+    const copyable = target.closest('.copy')?.querySelector('[data-copy]') || target.closest('[data-copy]');
+    if (copyable) return [{ label: 'Copy', icon: 'copy', description: copyable.dataset.copy.length > 36 ? `${copyable.dataset.copy.slice(0, 34)}…` : copyable.dataset.copy, onSelect: () => copy(copyable.dataset.copy, 'Copied') }];
+    const link = target.closest('a[href]');
+    if (link) {
+      return [
+        { label: 'Open in new tab', icon: 'external', onSelect: () => window.open(link.href, '_blank', 'noopener') },
+        { label: 'Copy link', icon: 'link', onSelect: () => copy(link.href, 'Link copied') },
+      ];
+    }
+    return [
+      { label: 'New payment', icon: 'plus', onSelect: () => Portal.createPayment?.() },
+      { label: 'Search', icon: 'search', description: '⌘K', onSelect: () => openSearch('') },
       { label: 'Copy page link', icon: 'link', onSelect: () => copy(window.location.href, 'Page link copied') },
-      { label: 'Search', icon: 'search', description: '⌘K', onSelect: () => document.querySelector('[data-command-open]')?.click() },
-      { label: Portal.theme.get() === 'dark' ? 'Light mode' : 'Dark mode', icon: Portal.theme.get() === 'dark' ? 'sun' : 'moon', onSelect: () => Portal.theme.toggle() },
-      { label: 'Reload', icon: 'rotate', onSelect: () => window.location.reload() },
-    );
-    return items;
+    ];
+  }
+
+  function openSearch(query) {
+    document.querySelector('[data-command-open]')?.click();
+    const input = document.querySelector('.cmd__input');
+    if (input && query) { input.value = query; input.dispatchEvent(new Event('input')); }
   }
 
   document.addEventListener('contextmenu', (event) => {
@@ -220,7 +244,9 @@
     anchor.style.left = `${event.clientX}px`;
     anchor.style.top = `${event.clientY}px`;
     document.body.appendChild(anchor);
-    Portal.menu.open(anchor, itemsFor(event.target));
+    const items = itemsFor(event.target);
+    if (!items.length) { anchor.remove(); return; }
+    Portal.menu.open(anchor, items);
     const cleanup = new MutationObserver(() => { if (!document.querySelector('.menu')) { anchor.remove(); cleanup.disconnect(); } });
     cleanup.observe(document.body, { childList: true });
   });

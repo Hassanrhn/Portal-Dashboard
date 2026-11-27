@@ -65,3 +65,11 @@ html:has(dialog[open]) { overflow: hidden; }
 /* Long content: text wraps instead of overflowing; compact labels (badges, chips) truncate with an ellipsis */
 :where(p, h1, h2, h3, dd, li, td, label, .u-mono) { overflow-wrap: break-word; }
 :where(.badge, .chip) { max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+
+/* Scrollbars: thin, rounded, token-coloured, in every scroll area (both axes) */
+* { scrollbar-width: thin; scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track); }
+::-webkit-scrollbar { width: var(--scrollbar-size); height: var(--scrollbar-size); }
+::-webkit-scrollbar-track { background: var(--scrollbar-track); }
+::-webkit-scrollbar-thumb { border: 3px solid transparent; border-radius: var(--radius-full); background: var(--scrollbar-thumb) padding-box; }
+::-webkit-scrollbar-thumb:hover { background-color: var(--scrollbar-thumb-hover); }
+::-webkit-scrollbar-corner { background: transparent; }

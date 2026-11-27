@@ -326,7 +326,7 @@ Every error has the same shape:
 | Sign-in, 2FA, password reset | 5 attempts per 15 minutes per account and per IP |
 | Exports | 5 export jobs at a time per organization |
 
-Every response carries `RateLimit-Limit`, `RateLimit-Remaining` and `RateLimit-Reset` (seconds). A `429` adds `Retry-After`. The sidebar meter "API requests 13.3k of 20.0k" reads the monthly quota from `GET /me/usage` (see [8.1](#81-current-user-and-auth)).
+Every response carries `RateLimit-Limit`, `RateLimit-Remaining` and `RateLimit-Reset` (seconds). A `429` adds `Retry-After`. The sidebar meter "API requests 18.6k of 20.0k" reads the monthly quota from `GET /me/usage`. The UI turns it amber from 75% and red from 90%, so the response should return `used` and `limit` as integers; thresholds stay client-side (see [8.1](#81-current-user-and-auth)).
 
 ## 6. Test and Live environments
 
@@ -1656,6 +1656,17 @@ Session. Environment-scoped. Results are filtered by the user's permissions.
 
 ---
 
+### User preferences (appearance)
+
+Settings → Appearance offers Light, Dark and System. The prototype keeps the choice in the browser. If the preference should follow a user across devices, store it per user:
+
+| Method | Path | Notes |
+| --- | --- | --- |
+| GET | `/me/preferences` | `{ "theme": "system" }` |
+| PATCH | `/me/preferences` | Body `{ "theme": "light" \| "dark" \| "system" }`. Default is `system`. |
+
+No role restriction: every user owns their own preferences.
+
 ## 9. Webhook events
 
 Every event has the same envelope:
@@ -1935,6 +1946,6 @@ Data that is hard-coded in page scripts rather than data files also moves to the
 | `pages/js/docs.js` | `STEPS`, `OFFERINGS` | `GET /onboarding/checklist`, `GET /offerings` |
 | `pages/js/team.js` | `ROLES`, `MATRIX` | `GET /team/roles` |
 | `pages/js/api-keys.js` | `SCOPES` | Keep in the frontend, or add `GET /api-keys/scopes` |
-| `pages/js/layout.js` | User email, usage meter (13.3k of 20.0k) | `GET /me`, `GET /me/usage` |
+| `pages/js/layout.js` | User email, usage meter (18.6k of 20.0k) | `GET /me`, `GET /me/usage` |
 | `pages/settings.html` | Form values | `GET /settings` |
 | Each page | `Portal.searchIndex` rows | `GET /search` |

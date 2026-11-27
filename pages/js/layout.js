@@ -88,8 +88,8 @@
     el('div', { className: 'sidebar__foot' }, [
       ...NAV.footer.map((item) => link(item)),
       el('div', { className: 'meter' }, [
-        el('div', { className: 'meter__row' }, [el('b', { className: 't-label', text: 'API requests' }), el('span', { text: '13.3k of 20.0k' })]),
-        el('div', { className: 'progress', attrs: { role: 'progressbar', 'aria-label': 'API requests used this month', 'aria-valuemin': '0', 'aria-valuemax': '100', 'aria-valuenow': '66' } }, [el('div', { className: 'progress__fill', attrs: { 'data-progress': '66' } })]),
+        el('div', { className: 'meter__row' }, [el('b', { className: 't-label', text: 'API requests' }), el('span', { text: '18.6k of 20.0k' })]),
+        el('div', { className: 'progress', attrs: { role: 'progressbar', 'aria-label': 'API requests used this month', 'aria-valuemin': '0', 'aria-valuemax': '100', 'aria-valuenow': '93' } }, [el('div', { className: 'progress__fill', attrs: { 'data-progress': '93' } })]),
       ]),
       el('div', { className: 'sidebar__row' }, [el('span', { text: 'Light mode', attrs: { 'data-theme-label': '' } }), themeSwitch()]),
       el('div', { className: 'user' }, [
@@ -123,7 +123,7 @@
       el('span', { className: 'switch', attrs: { 'aria-hidden': 'true' } }),
       el('span', { className: 'env-toggle__label', text: 'Test mode' }),
     ]),
-    el('button', { className: 'btn btn--primary btn--sm new-payment', attrs: { type: 'button', 'data-create-payment': '', 'aria-label': 'New payment' } }, [iconEl('plus'), el('span', { text: 'New payment' })]),
+    el('button', { className: 'btn btn--neutral btn--sm new-payment', attrs: { type: 'button', 'data-create-payment': '', 'aria-label': 'New payment' } }, [iconEl('plus'), el('span', { text: 'New payment' })]),
   ]);
   const envStrip = el('div', { className: 'env-strip', attrs: { role: 'status' } }, [iconEl('alert'), 'Test mode: test data only. No real money moves.']);
 

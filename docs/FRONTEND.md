@@ -719,6 +719,32 @@ If avatars or statement PDFs are served from another host, add it to `img-src` o
 - **Comments** explain why, not what. Each file starts with a short header saying what it does.
 - **Do not change** `pages/login.html`, and do not redesign `pages/overview.html` without design review.
 
+## Round 4 changes (component rules)
+
+- **Buttons** are tactile: a solid fill, a 4px darker lip, a 12px radius and bold labels. On press the button sinks onto the lip.
+  - `btn--primary` (orange) is for the main action on a screen.
+  - `btn--neutral` (graphite gray) is used **only** for Create payment / New payment (`[data-create-payment]`). Don't use it elsewhere.
+  - `btn` (secondary), `btn--ghost` and `btn--danger` are unchanged.
+  - Tokens: `button.lip`, `button.radius`, `button.neutral-*`, `button.primary-lip`.
+- **Page headers** (`.page__head`): title and description on the left, actions on the right, vertically centred, never wrapping on desktop. On phones the actions stay opposite the title.
+- **Phones (≤600px):** a button with an icon inside `.page__actions`, `.card__head`, `.toolbar` or `.appbar` drops its visible label and becomes a square icon button. The label stays available to screen readers, so always keep a text label or `aria-label`.
+- **Context menu** (`shell.js`): items depend on the target, and only the most relevant ones are shown:
+
+  | Target | Items |
+  | --- | --- |
+  | Selected text | Copy, Search for "…" |
+  | Table row | Open details, Copy ID, Copy reference, Copy row |
+  | Table header | Filter column |
+  | Copyable value | Copy |
+  | Link | Open in new tab, Copy link |
+  | Elsewhere | New payment, Search, Copy page link |
+
+  Text fields and Shift+right-click keep the native menu.
+- **Scrollbars:** thin and token-coloured everywhere, on both axes (`scrollbar.*` tokens; `base.css`).
+- **Usage meter / progress:** `[data-progress]` sets `data-level="warning"` at 75% or more and `"danger"` at 90% or more (`progress.fill-warning` / `progress.fill-danger`).
+- **Theme preference:** `Portal.theme.setPreference('light' | 'dark' | 'system')`. System is the default and follows the OS live. `Portal.theme.preference()` reads it back. The sidebar switch sets an explicit light or dark choice. Preview pages use `Portal.theme.set(x, { persist: false })`.
+- **KPI status values** (`.kpi__value .status-dot`) use 16px, not the figure size.
+
 ## 16. Known limitations
 
 - All data is sample data; actions change in-memory objects and are lost on reload.

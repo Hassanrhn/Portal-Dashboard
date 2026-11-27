@@ -170,4 +170,13 @@
   /* Deep link to a tab (?tab=checkout) -------------------------------------------------------- */
   const tab = new URLSearchParams(window.location.search).get('tab');
   if (tab) tabs.portalSelect(tab);
+
+  /* Appearance: Light / Dark / System (default). Applies immediately, outside the save bar. */
+  const appearance = document.querySelector('[data-appearance]');
+  appearance?.portalSelect?.(Portal.theme.preference());
+  appearance?.addEventListener('segmented:change', (event) => {
+    event.stopPropagation();
+    Portal.theme.setPreference(event.detail.value);
+    Portal.toast(event.detail.value === 'system' ? 'Theme follows your device' : `${event.detail.value === 'dark' ? 'Dark' : 'Light'} mode on`);
+  });
 })();

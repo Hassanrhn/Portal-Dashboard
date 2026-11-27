@@ -91,7 +91,7 @@
         ].flatMap(([k, v]) => [el('dt', { text: k }), el('dd', { text: v })])),
         el('p', { className: 't-meta', text: 'The payment starts as Pending. You will get a payment.status_updated webhook when it changes.' }),
       ]);
-      const create = btn(`Create ${amountText}`, { variant: 'primary', onClick: async () => {
+      const create = btn(`Create ${amountText}`, { variant: 'neutral', onClick: async () => {
         create.setAttribute('aria-busy', 'true');
         await Portal.request(null, { delay: 700 });
         createdStep();
