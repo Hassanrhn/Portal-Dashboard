@@ -31,3 +31,8 @@
 .pv-swatch--green { background: var(--color-green-500); }
 .pv-range { width: 100%; accent-color: var(--accent-solid); }
 @media (max-width: 600px) { .pv-bar { padding: 0 var(--space-16); } .pv { padding: var(--space-24) var(--space-16) var(--space-48); } .pv-label { width: 100%; } }
+.pv-logo { --logo-size: 24px; }
+.pv-appbar { overflow: hidden; }
+.pv-appbar .appbar { position: static; }
+.pv-tabpanel { padding-top: var(--space-16); color: var(--text-secondary); }
+.pv-details { display: grid; gap: var(--space-24); }

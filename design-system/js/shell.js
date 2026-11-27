@@ -38,17 +38,20 @@
 
   /* Environment ---------------------------------------------------------------- */
   const ENVS = ['live', 'test'];
-  const envControl = app.querySelector('[data-env-control]');
+  const envToggles = () => document.querySelectorAll('[data-env-toggle]');
   const setEnv = (env, { announce = false } = {}) => {
     if (!ENVS.includes(env)) return;
     root.dataset.env = env;
     Portal.store.set('env', env);
-    envControl?.portalSelect?.(env);
+    envToggles().forEach((toggle) => {
+      toggle.setAttribute('aria-checked', String(env === 'test'));
+      toggle.querySelector('.switch')?.setAttribute('aria-checked', String(env === 'test'));
+    });
     if (announce) Portal.toast(env === 'test' ? 'Switched to Test mode. No real money moves.' : 'Switched to Live mode.');
   };
   Portal.env = { get: () => root.dataset.env, set: setEnv };
   setEnv(ENVS.includes(Portal.store.get('env')) ? Portal.store.get('env') : 'live');
-  envControl?.addEventListener('segmented:change', (event) => setEnv(event.detail.value, { announce: true }));
+  envToggles().forEach((toggle) => toggle.addEventListener('click', () => setEnv(root.dataset.env === 'test' ? 'live' : 'test', { announce: true })));
 
   /* Pages not built yet: explain instead of following a dead link ------------------ */
   document.addEventListener('click', (event) => {

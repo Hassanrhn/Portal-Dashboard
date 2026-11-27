@@ -19,7 +19,7 @@
       "$value": "{font.family.mono}"
     },
     "title-size": {
-      "$value": "{font.size.24}"
+      "$value": "{font.size.20}"
     },
     "title-weight": {
       "$value": "{font.weight.medium}"
@@ -31,7 +31,7 @@
       "$value": "{font.tracking.tight}"
     },
     "heading-size": {
-      "$value": "{font.size.16}"
+      "$value": "{font.size.14}"
     },
     "heading-weight": {
       "$value": "{font.weight.medium}"
@@ -52,7 +52,7 @@
       "$value": "{font.size.12}"
     },
     "figure-size": {
-      "$value": "{font.size.24}"
+      "$value": "{font.size.20}"
     },
     "figure-weight": {
       "$value": "{font.weight.semibold}"
@@ -66,7 +66,7 @@
       "$value": "{space.64}"
     },
     "page-pad-top": {
-      "$value": "{space.56}"
+      "$value": "{space.32}"
     },
     "page-max": {
       "$value": "1120px"
@@ -76,6 +76,9 @@
     },
     "grid-gap": {
       "$value": "{space.12}"
+    },
+    "appbar-height": {
+      "$value": "56px"
     }
   },
   "control": {
@@ -161,6 +164,9 @@
     },
     "press-scale": {
       "$value": "0.97"
+    },
+    "lip": {
+      "$value": "2px"
     }
   },
   "input": {
@@ -378,6 +384,9 @@
     },
     "spring": {
       "$value": "{motion.easing.spring}"
+    },
+    "sheet": {
+      "$value": "cubic-bezier(0.32, 0.72, 0, 1)"
     }
   },
   "drawer": {

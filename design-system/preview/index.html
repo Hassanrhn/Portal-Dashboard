@@ -11,18 +11,19 @@
   <link rel="stylesheet" href="preview.css">
   <script src="../js/theme.js"></script>
   <script src="../js/icons.js" defer></script>
+  <script src="../js/dom.js" defer></script>
   <script src="../js/components.js" defer></script>
+  <script src="../js/patterns.js" defer></script>
   <script src="preview.js" defer></script>
 </head>
 <body>
 <header class="pv-bar">
   <a class="pv-back" href="../../index.html"><i data-icon="chevron-left"></i>Review hub</a>
   <span class="pv-bar__title">Portal design system <span class="t-meta">v1.0 · review</span></span>
-  <button class="theme-switch" type="button" role="switch" aria-checked="false" aria-label="Dark mode" data-theme-toggle>
-    <span class="theme-switch__knob" aria-hidden="true"></span>
-    <span class="theme-switch__icon theme-switch__icon--sun" aria-hidden="true"><i data-icon="sun"></i></span>
-    <span class="theme-switch__icon theme-switch__icon--moon" aria-hidden="true"><i data-icon="moon"></i></span>
-  </button>
+  <div class="segmented segmented--sm" role="radiogroup" aria-label="Preview theme" data-segmented data-preview-theme>
+    <button class="segmented__option" type="button" role="radio" aria-checked="true" data-value="light"><i data-icon="sun"></i>Light</button>
+    <button class="segmented__option" type="button" role="radio" aria-checked="false" data-value="dark"><i data-icon="moon"></i>Dark</button>
+  </div>
 </header>
 
 <main class="pv">
@@ -61,9 +62,9 @@
   <section class="pv-section" aria-labelledby="type-title">
     <h2 class="t-heading" id="type-title">Type</h2>
     <div class="card card__body pv-type">
-      <p class="t-title">Title 24 / medium</p>
-      <p class="t-heading">Heading 16 / medium</p>
-      <p class="t-figure">299.28 <span class="kpi__unit">Figure 24 / semibold, tabular</span></p>
+      <p class="t-title">Title 20 / medium</p>
+      <p class="t-heading">Heading 14 / medium</p>
+      <p class="t-figure">299.28 <span class="kpi__unit">Figure 20 / semibold, tabular</span></p>
       <p class="t-body">Body 14 / regular. Payments route through one API to Crossmint, ForumPay or a blockchain rail.</p>
       <p class="t-label">Label 13 / medium</p>
       <p class="t-meta">Meta 12 / regular, secondary colour</p>
@@ -170,6 +171,79 @@
         <button class="nav__item" type="button" data-disclosure aria-expanded="false" aria-controls="pv-group"><i data-icon="cards"></i><span class="nav__label">Group</span><i data-icon="chevron-down" class="nav__chevron"></i></button>
         <div class="nav__group" id="pv-group"><div class="nav"><a class="nav__item" href="#"><span class="nav__label">Child item</span></a><a class="nav__item" href="#"><span class="nav__label">Child item</span></a></div></div>
       </nav>
+    </div>
+  </section>
+
+  <section class="pv-section" aria-labelledby="brand-title">
+    <h2 class="t-heading" id="brand-title">Brand</h2>
+    <div class="card card__body pv-row">
+      <span class="logo pv-logo" role="img" aria-label="The Orange Card"><span class="logo__the" aria-hidden="true">THE</span><span class="logo__word" aria-hidden="true"><span class="logo__orange">ORANGE</span><span class="logo__card">CARD</span></span></span>
+      <span class="logo-mark" aria-hidden="true">O</span>
+      <span class="pv-label">Card networks</span><i data-icon="visa" class="network-mark"></i><i data-icon="mastercard" class="network-mark"></i>
+    </div>
+  </section>
+
+  <section class="pv-section" aria-labelledby="header-title">
+    <h2 class="t-heading" id="header-title">Header and breadcrumbs</h2>
+    <div class="card pv-appbar">
+      <header class="appbar">
+        <nav class="crumbs" aria-label="Breadcrumb"><a class="crumbs__parent" href="#">Payments</a><i data-icon="chevron-right"></i><span aria-current="page">Transactions</span></nav>
+        <span class="appbar__spacer"></span>
+        <button class="search-trigger" type="button"><i data-icon="search"></i><span>Search payments, pages…</span><span class="kbd">⌘K</span></button>
+        <button class="env-toggle" type="button" role="switch" aria-checked="false" data-pv-env><span class="switch" aria-hidden="true"></span><span class="env-toggle__label">Test mode</span></button>
+        <button class="btn btn--primary btn--sm" type="button"><i data-icon="plus"></i><span>New payment</span></button>
+      </header>
+    </div>
+  </section>
+
+  <section class="pv-section" aria-labelledby="copy-title">
+    <h2 class="t-heading" id="copy-title">Copy and identifiers</h2>
+    <div class="card card__body pv-rows" data-pv-copy></div>
+  </section>
+
+  <section class="pv-section" aria-labelledby="overlay-title">
+    <h2 class="t-heading" id="overlay-title">Overlays</h2>
+    <p class="t-meta">Drawers slide in from the right; on phones they become bottom sheets you can drag down to close.</p>
+    <div class="card card__body pv-row">
+      <button class="btn" type="button" data-pv-drawer><i data-icon="arrow-right"></i>Open drawer</button>
+      <button class="btn btn--danger" type="button" data-pv-confirm><i data-icon="trash"></i>Confirm dialog</button>
+      <span data-pv-menu></span>
+      <button class="btn" type="button" data-pv-toast><i data-icon="check"></i>Toast</button>
+    </div>
+  </section>
+
+  <section class="pv-section" aria-labelledby="tabs-title">
+    <h2 class="t-heading" id="tabs-title">Tabs</h2>
+    <div class="card card__body">
+      <div class="tabs" role="tablist" data-tabs aria-label="Example tabs">
+        <button class="tabs__tab" role="tab" id="pvt-1" aria-controls="pvp-1" aria-selected="true">Overview</button>
+        <button class="tabs__tab" role="tab" id="pvt-2" aria-controls="pvp-2" aria-selected="false">Deliveries <span class="tabs__count">12</span></button>
+      </div>
+      <div role="tabpanel" id="pvp-1" aria-labelledby="pvt-1" class="pv-tabpanel">First panel.</div>
+      <div role="tabpanel" id="pvp-2" aria-labelledby="pvt-2" class="pv-tabpanel" hidden>Second panel.</div>
+    </div>
+  </section>
+
+  <section class="pv-section" aria-labelledby="details-title">
+    <h2 class="t-heading" id="details-title">Details</h2>
+    <div class="card card__body pv-details" data-pv-details></div>
+  </section>
+
+  <section class="pv-section" aria-labelledby="settings-title">
+    <h2 class="t-heading" id="settings-title">Settings rows and countries</h2>
+    <div class="card settings">
+      <div class="setting"><div><p class="setting__title">Require two-factor sign-in</p><p class="setting__desc">Every member must use an authenticator app.</p></div><div class="setting__control"><button class="switch" type="button" role="switch" aria-checked="true" aria-label="Require two-factor" data-switch></button></div></div>
+      <div class="setting"><div><p class="setting__title">Support phone</p><p class="setting__desc">Country code with flag, then the number.</p></div><div class="setting__control" data-pv-phone></div></div>
+      <div class="setting"><div><p class="setting__title">Country</p><p class="setting__desc">Flags come from the ISO code, no images.</p></div><div class="setting__control" data-pv-country></div></div>
+    </div>
+  </section>
+
+  <section class="pv-section" aria-labelledby="list-title">
+    <h2 class="t-heading" id="list-title">Table with toolbar and pagination</h2>
+    <p class="t-meta">On phones each row stacks into label and value pairs, so tables never scroll sideways.</p>
+    <div class="card table-card">
+      <div class="toolbar"><div class="input-group toolbar__search"><i data-icon="search" class="input-group__icon"></i><input class="input" type="search" placeholder="Request ID or reference" aria-label="Search"></div></div>
+      <div data-pv-table></div>
     </div>
   </section>
 </main>

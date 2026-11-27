@@ -83,15 +83,6 @@
       logo,
       el('button', { className: 'btn btn--ghost btn--icon btn--sm collapse-toggle', attrs: { type: 'button', 'data-collapse-toggle': '', 'aria-pressed': 'false', 'aria-label': 'Collapse sidebar' } }, [iconEl('sidebar')]),
     ]),
-    el('div', { className: 'sidebar__actions' }, [
-      el('div', { className: 'workspace' }, [el('span', { className: 'workspace__avatar', text: 'D', attrs: { 'aria-hidden': 'true' } }), label('Digital Center')]),
-      el('div', { className: 'segmented segmented--sm segmented--block collapsible', attrs: { role: 'radiogroup', 'aria-label': 'Environment', 'data-segmented': '', 'data-env-control': '' } }, [
-        el('button', { className: 'segmented__option', text: 'Live', attrs: { type: 'button', role: 'radio', 'aria-checked': 'true', 'data-value': 'live' } }),
-        el('button', { className: 'segmented__option', text: 'Test', attrs: { type: 'button', role: 'radio', 'aria-checked': 'false', 'data-value': 'test' } }),
-      ]),
-      el('button', { className: 'btn btn--sm btn--block new-payment', attrs: { type: 'button', 'data-create-payment': '' } }, [iconEl('plus'), el('span', { text: 'New payment' })]),
-      el('button', { className: 'search-trigger', attrs: { type: 'button', 'data-command-open': '', 'aria-label': 'Search (Ctrl or Command K)' } }, [iconEl('search'), el('span', { text: 'Search' }), el('span', { className: 'kbd', text: '⌘K', attrs: { 'aria-hidden': 'true' } })]),
-    ]),
     el('div', { className: 'sidebar__scroll' }, [
       el('nav', { className: 'nav', attrs: { 'aria-label': 'Primary' } }, NAV.primary.flatMap((item) => (item.group ? group(item) : [link(item)]))),
       el('p', { className: 'nav__section', text: 'Developers' }),
@@ -112,12 +103,30 @@
     ]),
   ]);
 
-  const pageTitle = document.body.dataset.title || document.querySelector('h1')?.textContent.trim() || 'Portal';
-  const topbar = el('header', { className: 'topbar' }, [
-    el('button', { className: 'btn btn--ghost btn--icon', attrs: { type: 'button', 'data-nav-open': '', 'aria-expanded': 'false', 'aria-label': 'Open navigation' } }, [iconEl('menu')]),
-    el('span', { className: 'topbar__title', text: pageTitle }),
-    el('button', { className: 'btn btn--ghost btn--icon', attrs: { type: 'button', 'data-command-open': '', 'aria-label': 'Search' } }, [iconEl('search')]),
-    themeSwitch(),
+  /* App bar: breadcrumbs (section › page), search, Test mode, New payment ------------------ */
+  function crumbTrail() {
+    const sections = [['Home', NAV.primary.filter((i) => !i.group)], ...NAV.primary.filter((i) => i.group).map((g) => [g.label, g.children]), ['Developers', NAV.developers], ['Account', NAV.footer]];
+    for (const [section, items] of sections) {
+      const item = items.find((i) => i.id === current);
+      if (item) return { section, page: item.id === 'team' ? 'Team' : item.label };
+    }
+    return { section: 'Home', page: document.querySelector('h1')?.textContent.trim() || 'Portal' };
+  }
+  const trail = crumbTrail();
+  const appbar = el('header', { className: 'appbar' }, [
+    el('button', { className: 'btn btn--ghost btn--icon appbar__menu', attrs: { type: 'button', 'data-nav-open': '', 'aria-expanded': 'false', 'aria-label': 'Open navigation' } }, [iconEl('menu')]),
+    el('nav', { className: 'crumbs', attrs: { 'aria-label': 'Breadcrumb' } }, [
+      el('a', { className: 'crumbs__parent', text: trail.section, attrs: { href: 'overview.html' } }),
+      iconEl('chevron-right'),
+      el('span', { text: trail.page, attrs: { 'aria-current': 'page' } }),
+    ]),
+    el('span', { className: 'appbar__spacer' }),
+    el('button', { className: 'search-trigger', attrs: { type: 'button', 'data-command-open': '', 'aria-label': 'Search (Ctrl or Command K)' } }, [iconEl('search'), el('span', { text: 'Search payments, pages…' }), el('span', { className: 'kbd', text: '⌘K', attrs: { 'aria-hidden': 'true' } })]),
+    el('button', { className: 'env-toggle', attrs: { type: 'button', role: 'switch', 'aria-checked': 'false', 'data-env-toggle': '', 'aria-label': 'Test mode' } }, [
+      el('span', { className: 'switch', attrs: { 'aria-hidden': 'true' } }),
+      el('span', { className: 'env-toggle__label', text: 'Test mode' }),
+    ]),
+    el('button', { className: 'btn btn--primary btn--sm new-payment', attrs: { type: 'button', 'data-create-payment': '', 'aria-label': 'New payment' } }, [iconEl('plus'), el('span', { text: 'New payment' })]),
   ]);
   const envStrip = el('div', { className: 'env-strip', attrs: { role: 'status' } }, [iconEl('alert'), 'Test mode: test data only. No real money moves.']);
 
@@ -131,6 +140,6 @@
   ]);
 
   app.prepend(el('div', { className: 'scrim', attrs: { 'data-nav-close': '' } }), sidebar);
-  main.prepend(topbar, envStrip);
+  main.prepend(appbar, envStrip);
   document.body.appendChild(palette);
 })();

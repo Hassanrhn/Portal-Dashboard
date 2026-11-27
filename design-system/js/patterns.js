@@ -47,9 +47,32 @@
       dialog.addEventListener('close', () => { dialog.remove(); onClose?.(); });
       document.body.appendChild(dialog);
       Portal.dialog.open(dialog);
+      enableSheetDrag(dialog);
       return api;
     },
   };
+
+  /** On phones the drawer is a bottom sheet: dragging its header down more than 90px closes it. */
+  function enableSheetDrag(dialog) {
+    const head = dialog.querySelector('.drawer__head');
+    let startY = null;
+    head.addEventListener('pointerdown', (event) => {
+      if (!window.matchMedia('(max-width: 600px)').matches || event.target.closest('button')) return;
+      startY = event.clientY;
+      head.setPointerCapture(event.pointerId);
+    });
+    head.addEventListener('pointermove', (event) => {
+      if (startY === null) return;
+      dialog.style.transform = `translateY(${Math.max(0, event.clientY - startY)}px)`;
+    });
+    head.addEventListener('pointerup', (event) => {
+      if (startY === null) return;
+      const dragged = event.clientY - startY;
+      startY = null;
+      dialog.style.removeProperty('transform');
+      if (dragged > 90) Portal.dialog.close(dialog);
+    });
+  }
 
   /* Confirm ------------------------------------------------------------------------ */
   Portal.confirm = function confirm({ title, message, details = [], confirmLabel = 'Confirm', cancelLabel = 'Cancel', tone = 'primary' }) {

@@ -66,3 +66,7 @@
 .input-affix--suffix .input-affix__addon { border-right: var(--border-width) solid var(--input-border); border-left: 0; border-radius: 0 var(--input-radius) var(--input-radius) 0; }
 .input-affix--suffix:has(.input[aria-invalid="true"]) .input-affix__addon { border-color: var(--input-border-error); }
 .input-affix--suffix .input { border-radius: var(--input-radius) 0 0 var(--input-radius); }
+/* Phone number: country code select (flag + dial code) joined to the number input */
+.phone-field { display: flex; min-width: 0; }
+.phone-field .select { width: auto; flex-shrink: 0; border-radius: var(--input-radius) 0 0 var(--input-radius); border-right: 0; }
+.phone-field .input { flex: 1; min-width: 0; border-radius: 0 var(--input-radius) var(--input-radius) 0; }

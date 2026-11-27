@@ -24,3 +24,6 @@
 /* Inline text link */
 .inline-link { color: var(--accent-text); text-decoration: underline; text-decoration-color: var(--border-strong); text-underline-offset: 3px; transition: text-decoration-color var(--motion-fast) var(--motion-ease); }
 .inline-link:hover { text-decoration-color: currentColor; }
+/* Country flag (emoji) and card network marks */
+.flag { display: inline-block; font-size: 1.1em; line-height: 1; font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif; }
+.network-mark { width: 28px !important; height: 20px !important; border-radius: var(--radius-4); }

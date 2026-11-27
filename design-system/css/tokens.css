@@ -248,25 +248,26 @@
   --focus-ring-color: var(--accent-ring);
   --type-family: var(--font-family-sans);
   --type-family-mono: var(--font-family-mono);
-  --type-title-size: var(--font-size-24);
+  --type-title-size: var(--font-size-20);
   --type-title-weight: var(--font-weight-medium);
   --type-title-leading: var(--font-leading-tight);
   --type-title-tracking: var(--font-tracking-tight);
-  --type-heading-size: var(--font-size-16);
+  --type-heading-size: var(--font-size-14);
   --type-heading-weight: var(--font-weight-medium);
   --type-body-size: var(--font-size-14);
   --type-body-leading: var(--font-leading-normal);
   --type-body-tracking: var(--font-tracking-normal);
   --type-label-size: var(--font-size-13);
   --type-meta-size: var(--font-size-12);
-  --type-figure-size: var(--font-size-24);
+  --type-figure-size: var(--font-size-20);
   --type-figure-weight: var(--font-weight-semibold);
   --layout-sidebar-width: var(--size-256);
   --layout-page-pad-x: var(--space-64);
-  --layout-page-pad-top: var(--space-56);
+  --layout-page-pad-top: var(--space-32);
   --layout-page-max: 1120px;
   --layout-section-gap: var(--space-32);
   --layout-grid-gap: var(--space-12);
+  --layout-appbar-height: 56px;
   --control-height-sm: var(--size-28);
   --control-height-md: var(--size-32);
   --control-height-lg: var(--size-36);
@@ -294,6 +295,7 @@
   --button-disabled-bg: var(--action-disabled-bg);
   --button-disabled-fg: var(--action-disabled-fg);
   --button-press-scale: 0.97;
+  --button-lip: 2px;
   --input-height: var(--control-height-lg);
   --input-radius: var(--control-radius);
   --input-pad-x: var(--space-12);
@@ -359,6 +361,7 @@
   --motion-slow: var(--motion-duration-slow);
   --motion-ease: var(--motion-easing-standard);
   --motion-spring: var(--motion-easing-spring);
+  --motion-sheet: cubic-bezier(0.32, 0.72, 0, 1);
   --drawer-width: 560px;
   --drawer-pad: var(--space-24);
 }

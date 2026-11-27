@@ -20,3 +20,7 @@
 .menu__text { display: grid; gap: 1px; }
 .menu__desc { color: var(--text-secondary); font-size: var(--font-size-12); }
 .menu__sep { height: 1px; margin: var(--space-4) 0; background: var(--border-default); }
+@media (max-width: 600px) {
+  .menu { inset: auto var(--space-8) var(--space-8) var(--space-8) !important; max-width: none; padding: var(--space-8); animation: sheet-in var(--motion-base) var(--motion-sheet) both; }
+  .menu__item { padding: var(--space-12); }
+}

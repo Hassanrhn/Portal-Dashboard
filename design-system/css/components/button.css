@@ -12,6 +12,7 @@
   height: var(--button-height);
   padding: 0 var(--button-pad-x);
   border: var(--border-width) solid var(--_border);
+  border-bottom: var(--button-lip) solid var(--_lip, color-mix(in srgb, var(--_border) 78%, var(--color-black)));
   border-radius: var(--button-radius);
   background: var(--_bg);
   color: var(--_fg);
@@ -25,10 +26,26 @@
               transform var(--motion-fast) var(--motion-ease);
 }
 .btn:hover:not(:disabled) { background: var(--_bg-hover); }
-.btn:active:not(:disabled) { transform: scale(var(--button-press-scale)); }
+/* Duolingo-style press: the button sinks onto its lip */
+.btn:active:not(:disabled) { transform: translateY(calc(var(--button-lip) - var(--border-width))); border-bottom-width: var(--border-width); margin-bottom: calc(var(--button-lip) - var(--border-width)); }
 .btn:disabled { opacity: 0.45; }
 .btn--primary:disabled { opacity: 1; --_bg: var(--button-disabled-bg); --_bg-hover: var(--button-disabled-bg); --_fg: var(--button-disabled-fg); --_border: transparent; }
-.btn svg { width: var(--size-16); height: var(--size-16); }
+.btn svg { width: var(--size-16); height: var(--size-16); transition: transform var(--motion-base) var(--motion-spring); }
+
+/* Icon micro-animations: each icon moves in the direction of its meaning */
+.btn:hover:not(:disabled) svg { animation: icon-pop 420ms var(--motion-spring); }
+.btn:hover:not(:disabled) .i-plus { animation: none; transform: rotate(90deg); }
+.btn:hover:not(:disabled) :is(.i-arrow-right, .i-chevron-right) { animation: none; transform: translateX(3px); }
+.btn:hover:not(:disabled) .i-chevron-left { animation: none; transform: translateX(-3px); }
+.btn:hover:not(:disabled) :is(.i-download, .i-arrow-down) { animation: icon-drop 520ms var(--motion-spring); }
+.btn:hover:not(:disabled) :is(.i-upload, .i-arrow-up, .i-send, .i-payout, .i-external) { animation: none; transform: translate(2px, -2px); }
+.btn:hover:not(:disabled) :is(.i-refund, .i-rotate) { animation: none; transform: rotate(-180deg); transition-duration: var(--motion-slow); }
+.btn:hover:not(:disabled) :is(.i-trash, .i-bell, .i-x) { animation: icon-wiggle 420ms var(--motion-ease); }
+.btn:hover:not(:disabled) :is(.i-zap, .i-play) { animation: icon-pop 420ms var(--motion-spring); }
+.btn:active:not(:disabled) svg { transform: scale(0.86); }
+@keyframes icon-pop { 40% { transform: scale(1.22); } 70% { transform: scale(0.94); } }
+@keyframes icon-drop { 40% { transform: translateY(3px); } 70% { transform: translateY(-1px); } }
+@keyframes icon-wiggle { 25% { transform: rotate(-12deg); } 50% { transform: rotate(10deg); } 75% { transform: rotate(-6deg); } }
 
 .btn--primary {
   --_bg: var(--button-primary-bg);
@@ -37,6 +54,7 @@
   --_border: var(--button-primary-border);
 }
 .btn--ghost {
+  --_lip: transparent;
   --_bg: transparent;
   --_bg-hover: var(--button-ghost-bg-hover);
   --_fg: var(--button-ghost-fg);

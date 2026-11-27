@@ -175,4 +175,22 @@
     });
   };
   Portal.initComponents();
+
+  /* Table labels: copy each column header onto its cells (data-label) so rows can stack on phones. */
+  function labelTables(scope = document) {
+    scope.querySelectorAll('table.table').forEach((table) => {
+      const heads = Array.from(table.querySelectorAll('thead th')).map((th) => th.textContent.trim());
+      if (!heads.length) return;
+      table.querySelectorAll('tbody tr').forEach((tr) => {
+        Array.from(tr.children).forEach((td, i) => { if (heads[i] && !td.hasAttribute('colspan')) td.dataset.label = heads[i]; });
+      });
+    });
+  }
+  let labelQueued = false;
+  new MutationObserver(() => {
+    if (labelQueued) return;
+    labelQueued = true;
+    requestAnimationFrame(() => { labelQueued = false; labelTables(); });
+  }).observe(document.body, { childList: true, subtree: true });
+  labelTables();
 })();
