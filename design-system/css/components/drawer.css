@@ -40,3 +40,4 @@
 .confirm__details dd { font-variant-numeric: tabular-nums; text-align: right; }
 
 @media (max-width: 600px) { .drawer { border-left: 0; } }
+.drawer__body > * { min-height: min-content; }

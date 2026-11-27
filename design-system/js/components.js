@@ -126,7 +126,8 @@
     const value = button.dataset.copy;
     try {
       await navigator.clipboard.writeText(value);
-      Portal.toast(`Copied ${value}`);
+      // Never echo long values (secrets, URLs) on screen; data-copy-toast overrides the message.
+      Portal.toast(button.dataset.copyToast || (value.length <= 40 ? `Copied ${value}` : 'Copied to clipboard'));
     } catch {
       Portal.toast('Copy is blocked in this browser. Select the text instead.', { icon: 'alert' });
       return;
