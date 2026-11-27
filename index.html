@@ -15,7 +15,7 @@
 <body>
 <main class="hub">
   <header class="hub__head">
-    <span class="brand-mark" aria-hidden="true"></span>
+    <span class="logo" aria-label="The Orange Card" role="img"><span class="logo__the" aria-hidden="true">THE</span><span class="logo__word" aria-hidden="true"><span class="logo__orange">ORANGE</span><span class="logo__card">CARD</span></span></span>
     <button class="theme-switch" type="button" role="switch" aria-checked="false" aria-label="Dark mode" data-theme-toggle>
       <span class="theme-switch__knob" aria-hidden="true"></span>
       <span class="theme-switch__icon theme-switch__icon--sun" aria-hidden="true"><i data-icon="sun"></i></span>
@@ -23,15 +23,42 @@
     </button>
   </header>
   <h1 class="t-title">Portal redesign review</h1>
-  <p class="hub__sub">The dashboard and component gallery are built only from the design system, in light and dark. Sign in keeps its original design.</p>
+  <p class="hub__sub">Every internal dashboard page, built only from the design system, in light and dark. Sign in keeps its original design.</p>
 
+  <h2 class="hub__group">Payments</h2>
   <ul class="hub__list">
-    <li><a class="hub__link" href="pages/overview.html"><i data-icon="home"></i><span><b>Overview</b><span>Dashboard home: metrics, volume chart, routes, recent payments</span></span><i data-icon="arrow-right" class="hub__arrow"></i></a></li>
-    <li><a class="hub__link" href="pages/login.html"><i data-icon="key"></i><span><b>Sign in</b><span>Your existing login prototype v0.14, unchanged</span></span><i data-icon="arrow-right" class="hub__arrow"></i></a></li>
+    <li><a class="hub__link" href="pages/overview.html"><i data-icon="home"></i><span><b>Overview</b><span>Metrics, volume chart, routes, recent payments</span></span><i data-icon="arrow-right" class="hub__arrow"></i></a></li>
+    <li><a class="hub__link" href="pages/transactions.html"><i data-icon="payments"></i><span><b>Transactions</b><span>Ledger, filters, export, payment detail, refund and cancel</span></span><i data-icon="arrow-right" class="hub__arrow"></i></a></li>
+    <li><a class="hub__link" href="pages/payouts.html"><i data-icon="payout"></i><span><b>Payouts</b><span>Withdrawals, approval, new payout</span></span><i data-icon="arrow-right" class="hub__arrow"></i></a></li>
+    <li><a class="hub__link" href="pages/refunds.html"><i data-icon="refund"></i><span><b>Refunds</b><span>Refund history and refund a payment</span></span><i data-icon="arrow-right" class="hub__arrow"></i></a></li>
+  </ul>
+  <h2 class="hub__group">Cards</h2>
+  <ul class="hub__list">
+    <li><a class="hub__link" href="pages/cardholders.html"><i data-icon="user"></i><span><b>Cardholders</b><span>KYC, cards, freeze, add cardholder</span></span><i data-icon="arrow-right" class="hub__arrow"></i></a></li>
+    <li><a class="hub__link" href="pages/card-orders.html"><i data-icon="truck"></i><span><b>Card orders</b><span>Order status timeline, new card order</span></span><i data-icon="arrow-right" class="hub__arrow"></i></a></li>
+    <li><a class="hub__link" href="pages/issuers.html"><i data-icon="building"></i><span><b>Issuers</b><span>Axys, Hypercard, Interlace connections and scope</span></span><i data-icon="arrow-right" class="hub__arrow"></i></a></li>
+  </ul>
+  <h2 class="hub__group">Reports and developers</h2>
+  <ul class="hub__list">
+    <li><a class="hub__link" href="pages/reports.html"><i data-icon="reports"></i><span><b>Reports</b><span>Exports, statements, reconciliation</span></span><i data-icon="arrow-right" class="hub__arrow"></i></a></li>
+    <li><a class="hub__link" href="pages/api-keys.html"><i data-icon="key"></i><span><b>API keys</b><span>Scopes, reveal-once secrets, rotate and revoke</span></span><i data-icon="arrow-right" class="hub__arrow"></i></a></li>
+    <li><a class="hub__link" href="pages/webhooks.html"><i data-icon="webhook"></i><span><b>Webhooks</b><span>Endpoints, deliveries, retries, test events</span></span><i data-icon="arrow-right" class="hub__arrow"></i></a></li>
+    <li><a class="hub__link" href="pages/event-logs.html"><i data-icon="logs"></i><span><b>Event logs</b><span>API requests and events with live tail</span></span><i data-icon="arrow-right" class="hub__arrow"></i></a></li>
+    <li><a class="hub__link" href="pages/docs.html"><i data-icon="docs"></i><span><b>Docs</b><span>Go-live checklist, guides, API explorer</span></span><i data-icon="arrow-right" class="hub__arrow"></i></a></li>
+  </ul>
+  <h2 class="hub__group">Account</h2>
+  <ul class="hub__list">
+    <li><a class="hub__link" href="pages/team.html"><i data-icon="invite"></i><span><b>Team</b><span>Members, roles, invites</span></span><i data-icon="arrow-right" class="hub__arrow"></i></a></li>
+    <li><a class="hub__link" href="pages/settings.html"><i data-icon="settings"></i><span><b>Settings</b><span>Organization, security, checkout, notifications</span></span><i data-icon="arrow-right" class="hub__arrow"></i></a></li>
+    <li><a class="hub__link" href="pages/support.html"><i data-icon="support"></i><span><b>Contact support</b><span>New request, your requests, system status</span></span><i data-icon="arrow-right" class="hub__arrow"></i></a></li>
+    <li><a class="hub__link" href="pages/login.html"><i data-icon="lock"></i><span><b>Sign in</b><span>Original login prototype v0.14, unchanged</span></span><i data-icon="arrow-right" class="hub__arrow"></i></a></li>
+  </ul>
+  <h2 class="hub__group">Design system</h2>
+  <ul class="hub__list">
     <li><a class="hub__link" href="design-system/preview/index.html"><i data-icon="cards"></i><span><b>Components</b><span>Tokens, type, buttons, forms, status, tables, navigation</span></span><i data-icon="arrow-right" class="hub__arrow"></i></a></li>
   </ul>
 
-  <p class="t-meta hub__foot">Things to try: switch theme with the sun/moon switch, press ⌘K or Ctrl K on Overview, hover the volume chart, and change the range or status filters.</p>
+  <p class="t-meta hub__foot">Things to try: switch theme with the sun/moon switch, press ⌘K or Ctrl K anywhere in the dashboard, switch Live and Test in the sidebar, and open any table row.</p>
 </main>
 </body>
 </html>
