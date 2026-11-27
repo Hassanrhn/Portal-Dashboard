@@ -44,7 +44,7 @@
 .column-filter__bar { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-8); padding: var(--space-8) var(--card-pad); border-top: var(--border-width) solid var(--card-border); }
 .column-filter__bar.is-empty { display: none; }
 .column-filter__sheet-btn { display: none; }
-.chip--filter { max-width: 100%; height: var(--size-24); padding-right: var(--space-2); border-color: var(--accent-solid); background: var(--accent-subtle); color: var(--text-primary); animation: pop-in var(--motion-base) var(--motion-spring); }
+.chip.chip--filter { max-width: 100%; height: var(--size-24); padding-right: var(--space-2); color: var(--text-primary); animation: pop-in var(--motion-base) var(--motion-spring); }
 .chip__text { overflow: hidden; text-overflow: ellipsis; }
 .chip__remove { display: grid; place-items: center; flex-shrink: 0; width: var(--size-20); height: var(--size-20); border-radius: var(--radius-4); color: var(--text-secondary); }
 .chip__remove svg { width: var(--space-12); height: var(--space-12); }

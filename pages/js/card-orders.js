@@ -28,6 +28,9 @@
   if (params.get('q')) filters.q = params.get('q').slice(0, 80);
 
   const holderOf = (order) => cardholders.find((h) => h.id === order.cardholderId);
+  // Sample photos exist for the seeded cardholders only.
+  const PHOTO_IDS = new Set(cardholders.map((h) => h.id));
+  const avatarOf = (holder) => Portal.avatar({ src: PHOTO_IDS.has(holder.id) ? `assets/avatars/${holder.id}.svg` : null, name: holder.name });
   const issuerOf = (name) => issuers.find((i) => i.name === name);
   const countryName = (code) => countries.find((c) => c.code === code)?.name || code;
   const issuerLabel = (issuer, text = issuer) => el('span', { className: 'with-flag' }, [iconEl(networkOf(issuer), 'network-mark'), text]);
@@ -49,7 +52,7 @@
     empty: { icon: 'search', title: 'No card orders match these filters', text: 'Try another status or issuer, or clear the filters.', action: btn('Clear filters', { onClick: clearFilters }) },
     columns: [
       { label: 'Order ID', filter: { type: 'text', value: (o) => o.id }, render: (o) => Portal.copyable(o.id, { label: 'Copy order ID' }) },
-      { label: 'Cardholder', filter: { type: 'text', value: (o) => `${holderOf(o).name} ${holderOf(o).email}`, placeholder: 'Name or email' }, render: (o) => { const h = holderOf(o); return el('span', {}, [h.name, el('span', { className: 'cell-sub', text: h.email })]); } },
+      { label: 'Cardholder', filter: { type: 'text', value: (o) => `${holderOf(o).name} ${holderOf(o).email}`, placeholder: 'Name or email' }, render: (o) => { const h = holderOf(o); return el('span', { className: 'table__lead' }, [avatarOf(h), el('span', {}, [h.name, el('span', { className: 'cell-sub', text: h.email })])]); } },
       { label: 'Issuer', filter: { type: 'options', value: (o) => o.issuer }, render: (o) => issuerLabel(o.issuer) },
       { label: 'Card type', filter: { type: 'options', value: (o) => o.type }, render: (o) => el('span', {}, [fmt.humanize(o.type), el('span', { className: 'cell-sub', text: o.currency })]) },
       { label: 'Status', filter: { type: 'options', value: (o) => o.status }, render: (o) => Portal.badge(o.status) },

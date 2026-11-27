@@ -59,7 +59,9 @@
     ]);
   }
   const cardsOf = (holder) => cards.filter((c) => c.cardholderId === holder.id);
-  const initials = (holder) => `${holder.first[0]}${holder.last[0]}`.toUpperCase();
+  // Sample photos exist for the seeded cardholders only; people added in this session show initials.
+  const PHOTO_IDS = new Set(cardholders.map((h) => h.id));
+  const avatarOf = (holder, size) => Portal.avatar({ src: PHOTO_IDS.has(holder.id) ? `assets/avatars/${holder.id}.svg` : null, name: holder.name, size });
   const nowIso = () => new Date(NOW).toISOString();
 
   /* KPIs ---------------------------------------------------------------------- */
@@ -95,7 +97,7 @@
     empty: emptyState(),
     columns: [
       { label: 'Cardholder', filter: { type: 'text', value: (h) => `${h.name} ${h.email} ${h.id}`, placeholder: 'Name, email or ID' }, render: (h) => el('span', { className: 'table__lead' }, [
-        el('span', { className: 'tile', text: initials(h), attrs: { 'aria-hidden': 'true' } }),
+        avatarOf(h),
         el('span', {}, [h.name, el('span', { className: 'cell-sub', text: h.email })]),
       ]) },
       { label: 'Country', filter: { type: 'options', value: (h) => h.country, label: (code) => countryOf(code)?.name || code }, render: (h) => countryLabel(h.country) },
@@ -262,7 +264,7 @@
   }
 
   function openCardholder(holder) {
-    const drawer = Portal.drawer.open({ title: holder.name, subtitle: `${holder.email} · ${holder.issuer}` });
+    const drawer = Portal.drawer.open({ title: holder.name, subtitle: `${holder.email} · ${holder.issuer}`, leading: avatarOf(holder, 'lg') });
     showDetail(holder, drawer);
   }
 

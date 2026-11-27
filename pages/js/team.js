@@ -33,7 +33,8 @@
     ['Team and settings', ['Admin']],
   ];
 
-  const initials = (name) => name.split(/\s+/).map((part) => part[0]).join('').slice(0, 2).toUpperCase();
+  // Sample photos exist for the seeded members only; people who join in this session show initials.
+  const PHOTO_IDS = new Set(members.map((m) => m.id));
   const isMe = (m) => m.email === ME;
 
   function roleCards(name, selected) {
@@ -52,7 +53,7 @@
     empty: { icon: 'invite', title: 'No members yet', text: 'Invite your team to share access.' },
     columns: [
       { label: 'Member', filter: { type: 'text', value: (m) => `${m.name} ${m.email}`, placeholder: 'Name or email' }, render: (m) => el('span', { className: 'table__lead' }, [
-        el('span', { className: 'tile', text: initials(m.name), attrs: { 'aria-hidden': 'true' } }),
+        Portal.avatar({ src: PHOTO_IDS.has(m.id) ? `assets/avatars/${m.id}.svg` : null, name: m.name }),
         el('span', {}, [m.name, isMe(m) ? el('span', { className: 'chip team__you', text: 'You' }) : null, el('span', { className: 'cell-sub', text: m.email })]),
       ]) },
       { label: 'Role', filter: { type: 'options', value: (m) => m.role, options: ROLES.map((r) => r.id) }, render: (m) => m.role },

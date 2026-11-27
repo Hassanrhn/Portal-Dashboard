@@ -1,7 +1,7 @@
 /*
  * Interaction patterns for dashboard pages. Requires theme.js, icons.js, components.js, dom.js.
  *
- *   Portal.drawer.open({ title, subtitle, body, footer, footNote }) → { el, close, setBody, setFooter }
+ *   Portal.drawer.open({ title, subtitle, leading, body, footer, footNote }) → { el, close, setBody, setFooter }  (leading: e.g. an avatar before the title)
  *   Portal.confirm({ title, message, details, confirmLabel, tone }) → Promise<boolean>
  *   Portal.menu.button(items, label) → ⋯ button that opens a menu of { label, icon, description, tone, onSelect }
  *   Portal.dataTable(host, { columns, pageSize, empty, onRowClick, rowLabel }) → { setRows(rows) }
@@ -19,13 +19,14 @@
 
   /* Drawer ---------------------------------------------------------------------- */
   Portal.drawer = {
-    open({ title, subtitle, body = [], footer = [], footNote, onClose, labelledBy } = {}) {
+    open({ title, subtitle, leading, body = [], footer = [], footNote, onClose, labelledBy } = {}) {
       const titleId = `drawer-title-${Math.random().toString(36).slice(2, 8)}`;
       const bodyEl = el('div', { className: 'drawer__body' });
       const footEl = el('div', { className: 'drawer__foot' });
       const subtitleEl = subtitle ? el('p', { className: 'drawer__subtitle' }, [subtitle]) : null;
       const dialog = el('dialog', { className: 'drawer', attrs: { 'aria-labelledby': labelledBy || titleId } }, [
         el('div', { className: 'drawer__head' }, [
+          leading || null,
           el('div', { className: 'drawer__titles' }, [el('h2', { className: 'drawer__title', text: title, attrs: { id: titleId } }), subtitleEl]),
           btn('Close', { variant: 'ghost', size: 'sm', iconName: 'x', iconOnly: true, attrs: { 'data-dialog-close': '' } }),
         ]),

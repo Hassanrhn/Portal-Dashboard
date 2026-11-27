@@ -1,0 +1,20 @@
+/* Avatar: round person photo (Portal.avatar) with an initials fallback underneath. Sizes sm 24, md 32, lg 48. */
+.avatar {
+  position: relative;
+  display: inline-grid; place-items: center;
+  flex-shrink: 0;
+  width: var(--size-32); height: var(--size-32);
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-full);
+  background: var(--bg-sidebar);
+  color: var(--text-secondary);
+  font-size: var(--font-size-12);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1;
+  overflow: hidden;
+  user-select: none;
+}
+.avatar__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.avatar--sm { width: var(--size-24); height: var(--size-24); font-size: var(--font-size-11); }
+.avatar--lg { width: var(--size-48); height: var(--size-48); font-size: var(--font-size-16); }
+.drawer__head:has(> .avatar) { align-items: center; }
