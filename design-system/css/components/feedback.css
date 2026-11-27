@@ -11,7 +11,7 @@
 .banner svg { width: var(--size-16); height: var(--size-16); margin-top: 1px; }
 
 .progress { height: var(--progress-height); border-radius: var(--radius-full); background: var(--progress-track); overflow: hidden; }
-.progress__fill { height: 100%; width: var(--value, 0%); border-radius: inherit; background: var(--progress-fill); transform-origin: left; animation: progress-grow var(--motion-slow) var(--motion-ease) both; }
+.progress__fill { height: 100%; width: var(--value, 0%); border-radius: inherit; background: var(--progress-fill); transition: background-color var(--motion-base) var(--motion-ease); transform-origin: left; animation: progress-grow var(--motion-slow) var(--motion-ease) both; }
 @keyframes progress-grow { from { transform: scaleX(0); } }
 
 .toast-region { position: fixed; right: var(--space-24); bottom: var(--space-24); z-index: 100; display: grid; gap: var(--space-8); pointer-events: none; }
@@ -32,3 +32,9 @@
 @keyframes toast-in { from { opacity: 0; transform: translateY(8px) scale(0.98); } }
 @keyframes toast-out { to { opacity: 0; transform: translateY(4px); } }
 @media (max-width: 600px) { .toast-region { left: var(--space-16); right: var(--space-16); bottom: var(--space-16); } .toast { max-width: none; } }
+/* Usage levels: green below 75%, orange from 75%, red from 90% (set by components.js from data-progress) */
+.progress__fill[data-level="ok"] { background: var(--progress-fill-ok); }
+.progress__fill[data-level="warning"] { background: var(--progress-fill-warning); }
+.progress__fill[data-level="danger"] { background: var(--progress-fill-danger); }
+.meter.is-danger .meter__row span { color: var(--status-danger-fg); }
+.meter.is-warning .meter__row span { color: var(--status-warning-fg); }

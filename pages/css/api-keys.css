@@ -1,7 +1,8 @@
 /* API keys page specifics. Tokens only. */
 .stack--tight { display: grid; gap: var(--space-12); }
-.secret-field { display: flex; gap: var(--space-8); }
-.secret-field .input { flex: 1; min-width: 0; }
-.offering-list { display: grid; gap: var(--space-8); margin-top: var(--space-12); padding: var(--space-12); border: var(--border-width) solid var(--border-default); border-radius: var(--radius-8); background: var(--bg-sidebar); }
+/* Offering restriction: an indented list under its checkbox, no box of its own. */
+.offering-list { display: grid; gap: var(--space-8); margin-top: var(--space-12); padding-left: var(--space-24); }
 .offering-list[hidden] { display: none; }
 .offering-list .u-mono { overflow-wrap: anywhere; }
+/* Work-around: shared stacked-table rule outranks td.cell-actions, so row actions sit left on phones. */
+@media (max-width: 600px) { .table-card .table tbody td.cell-actions { justify-content: flex-end; } .table td .chips { justify-content: flex-end; } }

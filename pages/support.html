@@ -30,73 +30,34 @@
           <h1 class="t-title">Contact support</h1>
           <p class="page__sub">Ask about a payment, payout or integration. We reply within one business day, and within the hour for urgent requests.</p>
         </div>
+        <div class="page__actions">
+          <button class="btn btn--primary btn--lg" type="button" data-new-request><i data-icon="plus"></i>New request</button>
+        </div>
       </div>
 
-      <div class="support">
-        <form class="card" data-ticket-form novalidate aria-labelledby="new-title">
-          <div class="card__head"><h2 class="card__title" id="new-title">New request</h2></div>
-          <div class="card__body form-grid">
-            <div class="form-grid form-grid--2">
-              <div class="field">
-                <label class="field__label" for="tk-topic">Topic</label>
-                <select class="select select--block" id="tk-topic" name="topic">
-                  <option value="">Choose a topic</option>
-                  <option>Payments</option><option>Payouts</option><option>Refunds</option><option>Cards</option><option>Webhooks</option><option>API and keys</option><option>Account</option>
-                </select>
-              </div>
-              <div class="field">
-                <label class="field__label" for="tk-request">Related request ID <span class="u-muted">(optional)</span></label>
-                <input class="input input--mono" id="tk-request" name="requestId" maxlength="40" autocomplete="off" spellcheck="false" placeholder="req_8f3a91c2e7">
-              </div>
-            </div>
-            <div class="field">
-              <span class="field__label" id="tk-priority-label">Priority</span>
-              <div class="segmented support__priority" role="radiogroup" aria-labelledby="tk-priority-label" data-segmented data-priority>
-                <button class="segmented__option" type="button" role="radio" aria-checked="false" data-value="Low">Low</button>
-                <button class="segmented__option" type="button" role="radio" aria-checked="true" data-value="Normal">Normal</button>
-                <button class="segmented__option" type="button" role="radio" aria-checked="false" data-value="Urgent">Urgent</button>
-              </div>
-              <div class="banner" data-urgent-note hidden><i data-icon="alert"></i><span>Urgent is for live payment outages, such as all payments failing. We page the on-call engineer.</span></div>
-            </div>
-            <div class="field">
-              <label class="field__label" for="tk-subject">Subject</label>
-              <input class="input" id="tk-subject" name="subject" maxlength="120" placeholder="Card payments declined since 10:00 UTC">
-            </div>
-            <div class="field">
-              <div class="field__row"><label class="field__label" for="tk-message">Message</label><span class="field__counter" data-counter aria-live="polite">0 / 2000</span></div>
-              <textarea class="input textarea" id="tk-message" name="message" rows="7" maxlength="2000" aria-describedby="tk-message-help" placeholder="What happened, when, and what you expected instead."></textarea>
-              <p class="field__help" id="tk-message-help">Paste request IDs, offering IDs or error codes instead of screenshots. Never include card numbers, API secrets or other personal data.</p>
-            </div>
-            <div class="support__submit">
-              <button class="btn btn--primary btn--lg" type="submit" data-submit><i data-icon="send"></i>Send request</button>
-            </div>
+      <div class="stack support">
+        <section class="card" data-lazy="tickets" aria-busy="true" aria-labelledby="tickets-title">
+          <div class="card__head"><h2 class="card__title" id="tickets-title">Your requests</h2></div>
+          <div class="card__body">
+            <div class="skeleton-stack" data-skeleton><div class="skeleton-row"><span class="skeleton skeleton--text"></span><span class="skeleton skeleton--pill"></span></div><div class="skeleton-row"><span class="skeleton skeleton--text"></span><span class="skeleton skeleton--pill"></span></div><div class="skeleton-row"><span class="skeleton skeleton--text"></span><span class="skeleton skeleton--pill"></span></div></div>
+            <ul class="rows" data-lazy-content data-tickets></ul>
           </div>
-        </form>
+        </section>
 
-        <div class="stack">
-          <section class="card" data-lazy="tickets" aria-busy="true" aria-labelledby="tickets-title">
-            <div class="card__head"><h2 class="card__title" id="tickets-title">Your requests</h2></div>
-            <div class="card__body">
-              <div class="skeleton-stack" data-skeleton><div class="skeleton-row"><span class="skeleton skeleton--text"></span><span class="skeleton skeleton--pill"></span></div><div class="skeleton-row"><span class="skeleton skeleton--text"></span><span class="skeleton skeleton--pill"></span></div><div class="skeleton-row"><span class="skeleton skeleton--text"></span><span class="skeleton skeleton--pill"></span></div></div>
-              <ul class="rows" data-lazy-content data-tickets></ul>
-            </div>
-          </section>
+        <section class="card" data-lazy="status" aria-busy="true" aria-labelledby="status-title">
+          <div class="card__head"><h2 class="card__title" id="status-title">System status</h2><span class="t-meta" data-status-summary></span></div>
+          <div class="card__body">
+            <div class="skeleton-stack" data-skeleton><div class="skeleton-row"><span class="skeleton skeleton--short"></span><span class="skeleton skeleton--pill"></span></div><div class="skeleton-row"><span class="skeleton skeleton--short"></span><span class="skeleton skeleton--pill"></span></div><div class="skeleton-row"><span class="skeleton skeleton--short"></span><span class="skeleton skeleton--pill"></span></div></div>
+            <ul class="rows" data-lazy-content data-status></ul>
+          </div>
+        </section>
 
-          <section class="card" data-lazy="status" aria-busy="true" aria-labelledby="status-title">
-            <div class="card__head"><h2 class="card__title" id="status-title">System status</h2><span class="t-meta" data-status-summary></span></div>
-            <div class="card__body">
-              <div class="skeleton-stack" data-skeleton><div class="skeleton-row"><span class="skeleton skeleton--short"></span><span class="skeleton skeleton--pill"></span></div><div class="skeleton-row"><span class="skeleton skeleton--short"></span><span class="skeleton skeleton--pill"></span></div><div class="skeleton-row"><span class="skeleton skeleton--short"></span><span class="skeleton skeleton--pill"></span></div></div>
-              <ul class="rows" data-lazy-content data-status></ul>
-            </div>
-          </section>
-
-          <section class="card" aria-labelledby="contact-title">
-            <div class="card__head"><h2 class="card__title" id="contact-title">Other ways to reach us</h2></div>
-            <div class="card__body">
-              <ul class="rows" data-contacts></ul>
-            </div>
-          </section>
-        </div>
+        <section class="card" aria-labelledby="contact-title">
+          <div class="card__head"><h2 class="card__title" id="contact-title">Other ways to reach us</h2></div>
+          <div class="card__body">
+            <ul class="rows" data-contacts></ul>
+          </div>
+        </section>
       </div>
     </main>
   </div>

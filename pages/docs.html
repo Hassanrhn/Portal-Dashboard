@@ -84,8 +84,8 @@
             <h2 class="t-heading" id="auth-title">Authentication</h2>
             <p>Every call goes to one base URL and carries your API key in the <code>X-Api-Key</code> header. The key is your key ID and secret joined by a dot. Requests and responses are JSON, and money is always a decimal string such as <code>"25.00"</code>, never a JSON number.</p>
             <dl class="kv">
-              <dt>Base URL</dt><dd><span class="u-mono">https://pay-api.the-block.com</span></dd>
-              <dt>Header</dt><dd><span class="u-mono">X-Api-Key: &lt;keyId&gt;.&lt;secret&gt;</span></dd>
+              <dt>Base URL</dt><dd><span class="copy"><span class="u-mono">https://pay-api.the-block.com</span><button class="copy__btn" type="button" data-copy="https://pay-api.the-block.com" aria-label="Copy base URL"><i data-icon="copy" class="icon-copy"></i><i data-icon="check" class="icon-check"></i></button></span></dd>
+              <dt>Header</dt><dd><span class="copy"><span class="u-mono">X-Api-Key: &lt;keyId&gt;.&lt;secret&gt;</span><button class="copy__btn" type="button" data-copy="X-Api-Key" aria-label="Copy header name X-Api-Key"><i data-icon="copy" class="icon-copy"></i><i data-icon="check" class="icon-check"></i></button></span></dd>
               <dt>Content type</dt><dd><span class="u-mono">application/json</span></dd>
             </dl>
             <p class="t-meta">Test and Live keys are separate. Create them on <a class="docs__link" href="api-keys.html">API keys</a>. Keep secrets on your server; never ship them in a browser or mobile app.</p>
@@ -117,7 +117,7 @@
               <div role="tabpanel" id="panel-py" aria-labelledby="tab-py" data-sample="py" hidden></div>
             </div>
             <p class="t-meta">Reusing a <code>requestId</code> returns 409. A prefix such as <code>ORD-</code> or <code>WD-</code> keeps them unique across pay-ins and payouts.</p>
-            <div><button class="btn" type="button" data-create-payment><i data-icon="plus"></i>Create a test payment in Portal</button></div>
+            <div><button class="btn btn--neutral" type="button" data-create-payment><i data-icon="plus"></i>Create a test payment in Portal</button></div>
           </section>
 
           <!-- 5. Statuses --------------------------------------------------------------------->
@@ -201,12 +201,12 @@
                   </div>
                   <div class="field" data-explorer-path hidden>
                     <label class="field__label" for="ex-request">requestId</label>
-                    <input class="input input--mono" id="ex-request" maxlength="40" autocomplete="off" spellcheck="false" value="req_77b0d415aa">
+                    <input class="input input--mono" id="ex-request" maxlength="40" autocomplete="off" spellcheck="false" value="req_77b0d415aa" placeholder="req_77b0d415aa">
                   </div>
                 </div>
                 <div class="field" data-explorer-body-field>
                   <div class="field__row"><label class="field__label" for="ex-body">Request body (JSON)</label><button class="btn btn--ghost btn--sm" type="button" data-explorer-reset>Reset example</button></div>
-                  <textarea class="input textarea input--mono docs__body" id="ex-body" rows="10" maxlength="4000" spellcheck="false"></textarea>
+                  <textarea class="input textarea input--mono docs__body" id="ex-body" rows="10" maxlength="4000" spellcheck="false" placeholder='{ "requestId": "req_8f3a91c2e7", "amount": "25.00", "currency": "USD" }'></textarea>
                 </div>
                 <div class="field__row">
                   <span class="t-meta">Simulated response. No money moves and nothing is sent over the network.</span>

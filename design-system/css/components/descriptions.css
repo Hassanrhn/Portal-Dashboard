@@ -1,12 +1,12 @@
 /* Key/value list, timeline, code block, chips, empty state. */
-.kv { display: grid; grid-template-columns: minmax(110px, 34%) 1fr; border: var(--border-width) solid var(--border-default); border-radius: var(--radius-8); overflow: hidden; font-size: var(--font-size-13); }
+.kv { display: grid; grid-template-columns: minmax(110px, 34%) 1fr; border-top: var(--border-width) solid var(--border-subtle); font-size: var(--font-size-13); }
 .kv > dt, .kv > dd { padding: var(--space-10) var(--space-12); border-bottom: var(--border-width) solid var(--border-subtle); min-width: 0; }
-.kv > dt { color: var(--text-secondary); background: var(--bg-sidebar); }
+.kv > dt { padding-left: 0; color: var(--text-secondary); }
 .kv > dd { display: flex; align-items: center; gap: var(--space-6); overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
 .kv > dt:nth-last-of-type(1), .kv > dd:last-of-type { border-bottom: 0; }
 
 .amount-hero { display: flex; align-items: baseline; gap: var(--space-8); flex-wrap: wrap; }
-.amount-hero__value { font-size: var(--font-size-30); font-weight: var(--font-weight-semibold); letter-spacing: var(--font-tracking-tight); font-variant-numeric: tabular-nums; line-height: 1; }
+.amount-hero__value { font-size: var(--font-size-24); font-weight: var(--font-weight-semibold); letter-spacing: var(--font-tracking-tight); font-variant-numeric: tabular-nums; line-height: 1; }
 .amount-hero__currency { color: var(--text-secondary); font-size: var(--font-size-16); }
 
 .timeline { display: grid; gap: 0; }
@@ -46,10 +46,11 @@
 .note svg { width: var(--size-16); height: var(--size-16); margin-top: 1px; }
 
 /* Simple bordered list of rows (label left, meta right) */
-.rows { display: grid; border: var(--border-width) solid var(--border-default); border-radius: var(--radius-8); overflow: hidden; }
+.rows { display: grid; }
 .rows__item { display: flex; align-items: center; justify-content: space-between; gap: var(--space-12); min-height: 44px; padding: var(--space-8) var(--space-12); border-top: var(--border-width) solid var(--border-subtle); font-size: var(--font-size-13); }
 .rows__item:first-child { border-top: 0; }
 .rows__meta { display: flex; align-items: center; gap: var(--space-8); flex-wrap: wrap; justify-content: flex-end; }
 .rows__main { display: grid; gap: 2px; min-width: 0; }
 .rows__sub { color: var(--text-secondary); font-size: var(--font-size-12); }
-.kv .copy__btn, .rows .copy__btn { opacity: 1; }
+
+.kv .chip { height: auto; min-height: 22px; white-space: normal; overflow-wrap: anywhere; }

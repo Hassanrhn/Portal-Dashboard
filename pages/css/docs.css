@@ -1,6 +1,6 @@
 /* Docs page: sticky scrollspy TOC, readable content column, go-live checklist, API explorer. Tokens only. */
 .docs { display: grid; grid-template-columns: calc(var(--size-256) * 0.75) minmax(0, 1fr); gap: var(--space-48); align-items: start; }
-.docs__toc { position: sticky; top: var(--space-24); display: grid; gap: var(--space-8); }
+.docs__toc { position: sticky; top: calc(var(--layout-appbar-height) + var(--space-24)); display: grid; gap: var(--space-8); }
 .docs__toc-select { display: none; }
 .docs__toc-title { padding-left: var(--space-10); color: var(--text-secondary); font-size: var(--type-meta-size); }
 .docs__toc-list { display: grid; gap: var(--space-2); list-style: none; margin: 0; padding: 0; border-left: var(--border-width) solid var(--border-default); }

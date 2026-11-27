@@ -10,7 +10,8 @@
 
   const Portal = window.Portal;
   const { el, btn, iconEl, fmt } = Portal;
-  const { NOW, issuers, countries, cardholders, cards, orders } = Portal.data.cards;
+  const { NOW, networkOf, issuers, cardholders, cards, orders } = Portal.data.cards;
+  const { countries } = Portal;
   const $ = (s, scope = document) => scope.querySelector(s);
 
   const STATUSES = ['requested', 'processing', 'shipped', 'active', 'failed'];
@@ -27,8 +28,18 @@
   if (params.get('q')) filters.q = params.get('q').slice(0, 80);
 
   const holderOf = (order) => cardholders.find((h) => h.id === order.cardholderId);
+  // Sample photos exist for the seeded cardholders only.
+  const PHOTO_IDS = new Set(cardholders.map((h) => h.id));
+  const avatarOf = (holder) => Portal.avatar({ src: PHOTO_IDS.has(holder.id) ? `assets/avatars/${holder.id}.svg` : null, name: holder.name });
   const issuerOf = (name) => issuers.find((i) => i.name === name);
   const countryName = (code) => countries.find((c) => c.code === code)?.name || code;
+  const issuerLabel = (issuer, text = issuer) => el('span', { className: 'with-flag' }, [iconEl(networkOf(issuer), 'network-mark'), text]);
+  /** Flag + text; the flag is decorative because the text already names the country. */
+  function withFlag(code, text) {
+    const flag = Portal.flag(code);
+    flag.setAttribute('aria-hidden', 'true');
+    return el('span', { className: 'with-flag' }, [flag, text]);
+  }
   const nowIso = () => new Date(NOW).toISOString();
   const randomHex = (bytes) => Array.from(crypto.getRandomValues(new Uint8Array(bytes)), (b) => b.toString(16).padStart(2, '0')).join('');
   const orderable = () => cardholders.filter((h) => h.kyc === 'verified' && h.status !== 'suspended' && issuerOf(h.issuer).status === 'connected');
@@ -40,12 +51,12 @@
     rowLabel: (o) => `card order ${o.id}`,
     empty: { icon: 'search', title: 'No card orders match these filters', text: 'Try another status or issuer, or clear the filters.', action: btn('Clear filters', { onClick: clearFilters }) },
     columns: [
-      { label: 'Order ID', render: (o) => Portal.copyable(o.id, { label: 'Copy order ID' }) },
-      { label: 'Cardholder', render: (o) => { const h = holderOf(o); return el('span', {}, [h.name, el('span', { className: 'cell-sub', text: h.email })]); } },
-      { label: 'Issuer', render: (o) => el('span', { className: 'u-muted', text: o.issuer }) },
-      { label: 'Card type', render: (o) => el('span', {}, [fmt.humanize(o.type), el('span', { className: 'cell-sub', text: o.currency })]) },
-      { label: 'Status', render: (o) => Portal.badge(o.status) },
-      { label: 'Created', num: true, render: (o) => el('span', { className: 'u-muted', text: fmt.dateTime(o.created) }) },
+      { label: 'Order ID', filter: { type: 'text', value: (o) => o.id }, render: (o) => Portal.copyable(o.id, { label: 'Copy order ID' }) },
+      { label: 'Cardholder', filter: { type: 'text', value: (o) => `${holderOf(o).name} ${holderOf(o).email}`, placeholder: 'Name or email' }, render: (o) => { const h = holderOf(o); return el('span', { className: 'table__lead' }, [avatarOf(h), el('span', {}, [h.name, el('span', { className: 'cell-sub', text: h.email })])]); } },
+      { label: 'Issuer', filter: { type: 'options', value: (o) => o.issuer }, render: (o) => issuerLabel(o.issuer) },
+      { label: 'Card type', filter: { type: 'options', value: (o) => o.type }, render: (o) => el('span', {}, [fmt.humanize(o.type), el('span', { className: 'cell-sub', text: o.currency })]) },
+      { label: 'Status', filter: { type: 'options', value: (o) => o.status }, render: (o) => Portal.badge(o.status) },
+      { label: 'Created', num: true, filter: { type: 'date', value: (o) => o.created }, render: (o) => el('span', { className: 'u-muted', text: fmt.dateTime(o.created) }) },
     ],
   });
 
@@ -133,7 +144,7 @@
     const s = o.shipping;
     return section('Shipping', [kv([
       ['Address', `${s.line1}, ${s.city} ${s.postal}`],
-      ['Country', countryName(s.country)],
+      ['Country', withFlag(s.country, countryName(s.country))],
       ['Tracking number', o.tracking ? Portal.copyable(o.tracking) : el('span', { className: 'u-muted', text: 'Assigned when the card ships' })],
     ])]);
   }
@@ -144,6 +155,7 @@
       el('div', { className: 'amount-hero' }, [
         el('span', { className: 'amount-hero__value', text: fmt.humanize(o.type) }),
         el('span', { className: 'amount-hero__currency', text: `card · ${o.issuer}` }),
+        iconEl(networkOf(o.issuer), 'network-mark'),
         Portal.badge(o.status),
       ]),
       o.failure ? el('div', { className: 'note note--danger' }, [iconEl('x-circle'), el('span', {}, [el('b', { text: 'Why it failed: ' }), o.failure])]) : null,
@@ -151,10 +163,10 @@
       section('Details', [kv([
         ['Order ID', Portal.copyable(o.id)],
         ['Cardholder', el('a', { className: 'inline-link', text: h.name, attrs: { href: `cardholders.html?cardholder=${encodeURIComponent(h.id)}` } })],
-        ['Issuer', `${o.issuer} · ${issuerOf(o.issuer).program}`],
+        ['Issuer', issuerLabel(o.issuer, `${o.issuer} · ${issuerOf(o.issuer).program}`)],
         ['Card type', fmt.humanize(o.type)],
         ['Spending limit', `${fmt.money(o.limit)} ${o.currency}`],
-        o.cardId ? ['Card', `•••• ${cards.find((c) => c.id === o.cardId)?.last4 || '----'}`] : null,
+        o.cardId ? ['Card', issuerLabel(o.issuer, `•••• ${cards.find((c) => c.id === o.cardId)?.last4 || '----'}`)] : null,
         ['Created', fmt.dateTime(o.created)],
       ])]),
       o.shipping ? shippingSection(o) : null,
@@ -219,7 +231,7 @@
       ]);
       const holder = el('select', { className: 'select select--block', attrs: { id: 'no-holder' } });
       const currency = el('select', { className: 'select select--block', attrs: { id: 'no-currency' } });
-      const limit = el('input', { className: 'input u-num', attrs: { id: 'no-limit', inputmode: 'decimal', maxlength: '9', value: values.limit } });
+      const limit = el('input', { className: 'input u-num', attrs: { id: 'no-limit', inputmode: 'decimal', maxlength: '9', value: values.limit, placeholder: '1000.00' } });
       const type = el('div', { className: 'radio-cards radio-cards--2', attrs: { role: 'radiogroup', 'aria-label': 'Card type' } }, [
         ['virtual', 'Virtual', 'Usable right away in wallets and online'],
         ['physical', 'Physical', 'Shipped to the cardholder in 5–10 days'],
@@ -228,12 +240,12 @@
         el('span', { className: 'radio-card__body' }, [el('span', { className: 'radio-card__title', text: t }), el('span', { className: 'radio-card__desc', text: d })]),
         el('span', { className: 'radio-card__dot', attrs: { 'aria-hidden': 'true' } }),
       ])));
-      const line1 = el('input', { className: 'input', attrs: { id: 'no-line1', maxlength: '80', value: values.line1, autocomplete: 'off' } });
-      const city = el('input', { className: 'input', attrs: { id: 'no-city', maxlength: '40', value: values.city, autocomplete: 'off' } });
-      const postal = el('input', { className: 'input', attrs: { id: 'no-postal', maxlength: '10', value: values.postal, autocomplete: 'off' } });
+      const line1 = el('input', { className: 'input', attrs: { id: 'no-line1', maxlength: '80', value: values.line1, autocomplete: 'off', placeholder: '12 Marina Walk, Apt 1804' } });
+      const city = el('input', { className: 'input', attrs: { id: 'no-city', maxlength: '40', value: values.city, autocomplete: 'off', placeholder: 'Dubai' } });
+      const postal = el('input', { className: 'input', attrs: { id: 'no-postal', maxlength: '10', value: values.postal, autocomplete: 'off', placeholder: '00000' } });
       const country = el('select', { className: 'select select--block', attrs: { id: 'no-country' } }, [
         el('option', { text: 'Select a country', attrs: { value: '' } }),
-        ...countries.map((c) => el('option', { text: c.name, attrs: { value: c.code, selected: c.code === values.country } })),
+        ...countries.map((c) => el('option', { text: `${c.flag} ${c.name}`, attrs: { value: c.code, selected: c.code === values.country } })),
       ]);
       const shipping = el('section', { className: 'drawer__section', attrs: { hidden: values.type !== 'physical' } }, [
         el('h3', { className: 'drawer__section-title', text: 'Shipping address' }),
@@ -317,11 +329,11 @@
         el('p', { className: 't-meta', text: `${values.issuer} creates the card after you confirm. You will get card_order.status_updated webhooks as it moves from requested to active.` }),
         kv([
           ['Cardholder', `${h.name} · ${h.email}`],
-          ['Issuer', `${values.issuer} · ${issuerOf(values.issuer).program}`],
+          ['Issuer', issuerLabel(values.issuer, `${values.issuer} · ${issuerOf(values.issuer).program}`)],
           ['Card type', fmt.humanize(values.type)],
           ['Currency', values.currency],
           ['Spending limit', `${fmt.money(values.limit)} ${values.currency} per month`],
-          physical ? ['Ship to', `${values.line1}, ${values.city} ${values.postal}, ${countryName(values.country)}`] : null,
+          physical ? ['Ship to', withFlag(values.country, `${values.line1}, ${values.city} ${values.postal}, ${countryName(values.country)}`)] : null,
         ]),
       ]);
       drawer.setFooter([

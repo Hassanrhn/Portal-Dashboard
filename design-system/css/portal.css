@@ -12,6 +12,7 @@
 @import url("components/switch.css");
 @import url("components/segmented.css");
 @import url("components/badge.css");
+@import url("components/avatar.css");
 @import url("components/card.css");
 @import url("components/table.css");
 @import url("components/nav.css");
@@ -23,6 +24,7 @@
 @import url("components/form-controls.css");
 @import url("components/tabs.css");
 @import url("components/toolbar.css");
+@import url("components/column-filter.css");
 @import url("components/descriptions.css");
 @import url("components/settings.css");
 @import url("components/menu.css");

@@ -60,6 +60,24 @@
     return el('span', { className: 'copy' }, [el('span', { className: mono ? 'u-mono' : '', text: value }), button]);
   }
 
+  /**
+   * Round person photo with an initials fallback: avatar({ src, name, size: 'sm' | 'md' | 'lg' }).
+   * Decorative (aria-hidden): always show the person's name next to it. If the image fails, the initials stay.
+   */
+  const AVATAR_SIZES = ['sm', 'md', 'lg'];
+  function avatar({ src, name = '', size = 'md' } = {}) {
+    const initials = String(name).split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0].toUpperCase()).join('');
+    const node = el('span', { className: `avatar avatar--${AVATAR_SIZES.includes(size) ? size : 'md'}`, attrs: { 'aria-hidden': 'true' } }, [
+      el('span', { className: 'avatar__initials', text: initials || '?' }),
+    ]);
+    if (src) {
+      const img = el('img', { className: 'avatar__img', attrs: { src, alt: '', loading: 'lazy', decoding: 'async', draggable: 'false' } });
+      img.addEventListener('error', () => img.remove(), { once: true });
+      node.appendChild(img);
+    }
+    return node;
+  }
+
   /* Formatting ------------------------------------------------------------------ */
   const fmt = {
     money: (value) => Number(value).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
@@ -115,5 +133,16 @@
   const request = (value, { delay = 300 + Math.random() * 450, fail = false } = {}) =>
     new Promise((resolve, reject) => window.setTimeout(() => (fail ? reject(new Error('Request failed')) : resolve(value)), delay));
 
-  Object.assign(Portal, { el, iconEl: icon, btn, badge, copyable, fmt, jsonBlock, codePanel, request });
+  /* Countries: flag emoji from ISO code (no image requests), names and dialling codes. */
+  const COUNTRIES = [
+    ['AE', 'United Arab Emirates', '+971'], ['SA', 'Saudi Arabia', '+966'], ['QA', 'Qatar', '+974'], ['KW', 'Kuwait', '+965'],
+    ['BH', 'Bahrain', '+973'], ['OM', 'Oman', '+968'], ['EG', 'Egypt', '+20'], ['TR', 'Türkiye', '+90'],
+    ['GB', 'United Kingdom', '+44'], ['DE', 'Germany', '+49'], ['FR', 'France', '+33'], ['US', 'United States', '+1'],
+    ['IN', 'India', '+91'], ['PK', 'Pakistan', '+92'], ['SG', 'Singapore', '+65'], ['NG', 'Nigeria', '+234'],
+  ];
+  const flagEmoji = (code) => String(code).toUpperCase().replace(/[A-Z]/g, (c) => String.fromCodePoint(0x1f1a5 + c.charCodeAt(0)));
+  function flag(code) { return el('span', { className: 'flag', text: flagEmoji(code), attrs: { role: 'img', 'aria-label': (COUNTRIES.find((c) => c[0] === code) || [code, code])[1] } }); }
+  const countries = COUNTRIES.map(([code, name, dial]) => ({ code, name, dial, flag: flagEmoji(code) }));
+
+  Object.assign(Portal, { flag, flagEmoji, countries, el, iconEl: icon, btn, badge, copyable, avatar, fmt, jsonBlock, codePanel, request });
 })();

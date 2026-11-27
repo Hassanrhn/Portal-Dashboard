@@ -23,13 +23,13 @@
     rowLabel: (p) => `payment ${p.id}`,
     empty: { icon: 'search', title: 'No payments match these filters', text: 'Try a wider date range or clear the filters.', action: btn('Clear filters', { onClick: clearFilters }) },
     columns: [
-      { label: 'Request ID', render: (p) => Portal.copyable(p.id, { label: 'Copy request ID' }) },
-      { label: 'Reference', render: (p) => el('span', { className: 'u-muted', text: p.ref }) },
-      { label: 'Customer', render: (p) => el('span', { className: 'u-muted', text: p.customer }) },
-      { label: 'Route', render: (p) => el('span', {}, [p.route, el('span', { className: 'cell-sub', text: p.method === 'FIAT_CARD' ? 'Card' : 'Crypto' })]) },
-      { label: 'Status', render: (p) => Portal.badge(p.status) },
-      { label: 'Amount', num: true, render: (p) => el('span', {}, [fmt.money(p.amount), el('span', { className: 'amount__currency', text: ` ${p.currency}` })]) },
-      { label: 'Date', num: true, render: (p) => el('span', { className: 'u-muted', text: fmt.dateTime(p.created) }) },
+      { label: 'Request ID', filter: { type: 'text', value: (p) => p.id }, render: (p) => Portal.copyable(p.id, { label: 'Copy request ID' }) },
+      { label: 'Reference', filter: { type: 'text', value: (p) => p.ref, placeholder: 'e.g. ORD-10489' }, render: (p) => el('span', { className: 'u-muted', text: p.ref }) },
+      { label: 'Customer', filter: { type: 'text', value: (p) => p.customer, placeholder: 'Name or email' }, render: (p) => el('span', { className: 'u-muted', text: p.customer }) },
+      { label: 'Route', filter: { type: 'options', value: (p) => p.route }, render: (p) => el('span', {}, [p.route, el('span', { className: 'cell-sub', text: p.method === 'FIAT_CARD' ? 'Card' : 'Crypto' })]) },
+      { label: 'Status', filter: { type: 'options', value: (p) => p.status }, render: (p) => Portal.badge(p.status) },
+      { label: 'Amount', num: true, filter: { type: 'number', value: (p) => p.amount }, render: (p) => el('span', {}, [fmt.money(p.amount), el('span', { className: 'amount__currency', text: ` ${p.currency}` })]) },
+      { label: 'Date', num: true, filter: { type: 'date', value: (p) => p.created }, render: (p) => el('span', { className: 'u-muted', text: fmt.dateTime(p.created) }) },
     ],
   });
 
@@ -187,7 +187,7 @@
   }
 
   function refundForm(p, drawer) {
-    const amount = el('input', { className: 'input u-num', attrs: { id: 'rf-amount', inputmode: 'decimal', value: p.amount, maxlength: '12', disabled: true } });
+    const amount = el('input', { className: 'input u-num', attrs: { id: 'rf-amount', inputmode: 'decimal', value: p.amount, placeholder: p.amount, maxlength: '12', disabled: true } });
     const reason = el('select', { className: 'select select--block', attrs: { id: 'rf-reason' } }, ['Requested by customer', 'Duplicate payment', 'Fraudulent', 'Other'].map((r) => el('option', { text: r })));
     const type = el('div', { className: 'radio-cards radio-cards--2', attrs: { role: 'radiogroup', 'aria-label': 'Refund type' } }, [['full', 'Full refund', `${fmt.money(p.amount)} ${p.currency}`], ['partial', 'Partial refund', 'Choose an amount']].map(([v, t, d]) => el('label', { className: 'radio-card' }, [
       el('input', { attrs: { type: 'radio', name: 'refund-type', value: v, checked: v === 'full' } }),

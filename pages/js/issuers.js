@@ -13,6 +13,7 @@
   const $ = (s, scope = document) => scope.querySelector(s);
 
   const DAYS_30 = 30 * 86400000;
+  const NETWORK_LABEL = { visa: 'Visa', mastercard: 'Mastercard' };
   const STATUS_LABEL = { connected: 'Connected', needs_scope: 'Needs Cards scope', disconnected: 'Disconnected' };
   const SCOPE_ERROR = 'The key authenticates, but the issuer API answered 403 insufficient_scope: CARDS is missing.';
 
@@ -28,6 +29,14 @@
       active: cards.filter((c) => c.issuer === issuer.name && c.status === 'active').length,
       orders: orders.filter((o) => o.issuer === issuer.name && NOW - new Date(o.created).getTime() <= DAYS_30).length,
     };
+  }
+
+  function networkMark(network) {
+    const mark = iconEl(network, 'network-mark');
+    mark.setAttribute('role', 'img');
+    mark.setAttribute('aria-label', NETWORK_LABEL[network]);
+    mark.removeAttribute('aria-hidden');
+    return mark;
   }
 
   function stat(label, value) {
@@ -94,7 +103,7 @@
     return el('article', { className: 'card issuer', attrs: { 'aria-labelledby': `issuer-${issuer.name}` } }, [
       el('div', { className: 'card__head' }, [
         el('div', { className: 'table__lead' }, [
-          el('span', { className: 'tile', text: issuer.name[0], attrs: { 'aria-hidden': 'true' } }),
+          networkMark(issuer.network),
           el('div', {}, [
             el('h2', { className: 'card__title', text: issuer.name, attrs: { id: `issuer-${issuer.name}` } }),
             el('p', { className: 'issuer__program', text: issuer.program }),
@@ -161,7 +170,7 @@
     return el('li', { className: 'rows__item' }, [
       el('span', { className: 'rows__main' }, [
         el('span', { className: 'u-mono', text: w.event }),
-        el('span', { className: 'rows__sub', text: `${w.endpoint} · last ${fmt.relative(w.last, NOW)}` }),
+        el('span', { className: 'rows__sub' }, [Portal.copyable(w.endpoint, { mono: false, label: 'Copy endpoint URL' }), `last ${fmt.relative(w.last, NOW)}`]),
       ]),
       el('span', { className: 'rows__meta' }, [
         el('span', { className: 'u-muted', text: `${fmt.count(w.delivered)} delivered · ${fmt.count(w.failed)} failed` }),

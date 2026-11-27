@@ -34,6 +34,7 @@
     calendar: [['rect', { x: 3, y: 4.5, width: 18, height: 16.5, rx: 2 }], ['path', { d: 'M3 9.5h18M8 2.5v4M16 2.5v4' }]],
     'arrow-up': [['path', { d: 'M12 19V5M5 12l7-7 7 7' }]],
     'arrow-down': [['path', { d: 'M12 5v14M19 12l-7 7-7-7' }]],
+    'arrow-up-down': [['path', { d: 'm21 16-4 4-4-4M17 20V4M3 8l4-4 4 4M7 4v16' }]],
     'arrow-right': [['path', { d: 'M5 12h14M13 6l6 6-6 6' }]],
     alert: [['path', { d: 'm21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3' }], ['path', { d: 'M12 9v4M12 17h.01' }]],
     menu: [['path', { d: 'M4 6h16M4 12h16M4 18h16' }]],
@@ -72,6 +73,16 @@
     'x-circle': [['circle', { cx: 12, cy: 12, r: 10 }], ['path', { d: 'm15 9-6 6M9 9l6 6' }]],
     snowflake: [['path', { d: 'M2 12h20M12 2v20m-8-6 16-8M4 8l16 8M9 4l3 3 3-3M9 20l3-3 3 3' }]],
     scale: [['path', { d: 'M12 3v18M7 21h10M3 7h18M6 7l-3 7a3 3 0 0 0 6 0zM18 7l-3 7a3 3 0 0 0 6 0z' }]],
+    visa: { fill: true, parts: [
+      ['rect', { x: 0, y: 4, width: 24, height: 16, rx: 2.5, fill: '#1A1F71' }],
+      ['text', { x: 12, y: 15.2, 'text-anchor': 'middle', 'font-size': 7.6, 'font-weight': 800, 'font-style': 'italic', 'font-family': 'Arial, sans-serif', fill: '#FFFFFF', 'letter-spacing': 0.2, text: 'VISA' }],
+    ] },
+    mastercard: { fill: true, parts: [
+      ['rect', { x: 0, y: 4, width: 24, height: 16, rx: 2.5, fill: '#141414' }],
+      ['circle', { cx: 9.5, cy: 12, r: 5, fill: '#EB001B' }],
+      ['circle', { cx: 14.5, cy: 12, r: 5, fill: '#F79E1B' }],
+      ['path', { d: 'M12 8.1a5 5 0 0 1 0 7.8 5 5 0 0 1 0-7.8z', fill: '#FF5F00' }],
+    ] },
     google: { fill: true, parts: [
       ['path', { d: 'M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.27-4.74 3.27-8.1z', fill: '#4285F4' }],
       ['path', { d: 'M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84A11 11 0 0 0 12 23z', fill: '#34A853' }],
@@ -92,9 +103,10 @@
     const base = { viewBox: '0 0 24 24', width: 16, height: 16, 'aria-hidden': 'true', focusable: 'false' };
     const stroke = { fill: 'none', stroke: 'currentColor', 'stroke-width': 1.75, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' };
     Object.entries(isBrand ? base : { ...base, ...stroke }).forEach(([k, v]) => svg.setAttribute(k, v));
+    svg.classList.add(`i-${name}`); // hook for per-icon micro-animations (button.css)
     parts.forEach(([tag, attrs]) => {
       const el = document.createElementNS(SVG_NS, tag);
-      Object.entries(attrs).forEach(([k, v]) => el.setAttribute(k, v));
+      Object.entries(attrs).forEach(([k, v]) => (k === 'text' ? (el.textContent = v) : el.setAttribute(k, v)));
       svg.appendChild(el);
     });
     return svg;

@@ -5,9 +5,8 @@
 .issuer .card__head { align-items: flex-start; }
 .issuer__body { display: grid; gap: var(--space-16); flex: 1; align-content: start; }
 .issuer__program { color: var(--text-secondary); font-size: var(--font-size-12); }
-.issuer__stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: var(--border-width) solid var(--border-default); border-radius: var(--radius-8); }
-.issuer__stat { display: grid; gap: var(--space-4); padding: var(--space-10); min-width: 0; }
-.issuer__stat + .issuer__stat { border-left: var(--border-width) solid var(--border-subtle); }
+.issuer__stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-12); }
+.issuer__stat { display: grid; gap: var(--space-4); align-content: start; min-width: 0; }
 .issuer__stat-label { color: var(--text-secondary); font-size: var(--font-size-12); }
 .issuer__stat-value { font-size: var(--font-size-16); font-weight: var(--font-weight-semibold); font-variant-numeric: tabular-nums; }
 .issuer__meta { display: grid; gap: var(--space-6); font-size: var(--font-size-13); }
@@ -20,3 +19,5 @@
   .issuer-grid__skeleton, .issuer-grid__list { grid-template-columns: minmax(0, 1fr); }
 }
 .issuer__head-meta { display: flex; align-items: center; gap: var(--space-4); flex-shrink: 0; }
+.card__body > .rows .rows__item { padding-inline: 0; }
+.rows__sub .copy { margin-right: var(--space-4); }

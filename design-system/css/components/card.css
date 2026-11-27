@@ -52,3 +52,4 @@
 .kpi__skeleton { margin-top: var(--space-12); gap: var(--space-12); }
 .kpi-strip--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 @media (max-width: 1100px) { .kpi-strip--3 { grid-template-columns: minmax(0, 1fr); } .kpi-strip--3 .kpi + .kpi { border-left: 0; border-top: var(--border-width) solid var(--card-border); } }
+.kpi__value .status-dot { font-size: var(--font-size-16); font-weight: var(--font-weight-semibold); letter-spacing: 0; }

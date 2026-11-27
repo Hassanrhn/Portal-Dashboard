@@ -29,6 +29,15 @@
   };
   const seeds = { '7d': 7, '30d': 30, '90d': 90 };
   Object.entries(ranges).forEach(([key, r]) => { r.series = series(parseInt(key, 10), Number(r.total), seeds[key]); });
+  // Route and currency mix shift a little per range, so the share bars visibly animate between ranges.
+  ranges['7d'].shares = {
+    route: [['Crossmint', 0.52, 'chart-1'], ['ForumPay', 0.27, 'chart-2'], ['Blockchain rail', 0.21, 'chart-3']],
+    currency: [['USD', 0.66, 'chart-1'], ['USDT', 0.21, 'chart-2'], ['USDC', 0.13, 'chart-3']],
+  };
+  ranges['90d'].shares = {
+    route: [['Crossmint', 0.41, 'chart-1'], ['ForumPay', 0.34, 'chart-2'], ['Blockchain rail', 0.25, 'chart-3']],
+    currency: [['USD', 0.74, 'chart-1'], ['USDT', 0.15, 'chart-2'], ['USDC', 0.11, 'chart-3']],
+  };
 
   window.Portal.data = Object.freeze({
     overview: {

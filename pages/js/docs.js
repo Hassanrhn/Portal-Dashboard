@@ -70,7 +70,7 @@
 
   function stepLink(step) {
     if (!step.link) return null;
-    if (step.link.createPayment) return el('button', { className: 'btn btn--sm', attrs: { type: 'button', 'data-create-payment': '' } }, [iconEl('plus'), step.link.label]);
+    if (step.link.createPayment) return el('button', { className: 'btn btn--neutral btn--sm', attrs: { type: 'button', 'data-create-payment': '' } }, [iconEl('plus'), step.link.label]);
     return el('a', { className: 'btn btn--sm', attrs: { href: step.link.href } }, [step.link.label, iconEl('arrow-right')]);
   }
 
@@ -136,9 +136,9 @@
     pageSize: 10,
     rowLabel: (o) => o.id,
     columns: [
-      { label: 'Offering ID', render: (o) => Portal.copyable(o.id, { label: 'Copy offering ID' }) },
-      { label: 'Provider', render: (o) => o.provider },
-      { label: 'Action', render: (o) => el('span', { className: 'chip chip--mono', text: o.action }) },
+      { label: 'Offering ID', filter: { type: 'text', value: (o) => o.id, placeholder: 'e.g. CROSSMINT' }, render: (o) => Portal.copyable(o.id, { label: 'Copy offering ID' }) },
+      { label: 'Provider', filter: { type: 'options', value: (o) => o.provider }, render: (o) => o.provider },
+      { label: 'Action', filter: { type: 'options', value: (o) => o.action }, render: (o) => el('span', { className: 'chip chip--mono', text: o.action }) },
       { label: 'Currencies', render: (o) => el('span', { className: 'chips' }, o.currencies.map((c) => el('span', { className: 'chip', text: c }))) },
     ],
   });
@@ -205,6 +205,7 @@ export function isValidSignature(rawBody, timestamp, signature, secret) {
     Portal.fieldError(bodyInput, '');
     Portal.fieldError(requestInput, '');
     responseHost.replaceChildren();
+    Portal.animateSwap($('[data-explorer-body-field]'));
   }
 
   function syncEnv() {
@@ -281,6 +282,7 @@ export function isValidSignature(rawBody, timestamp, signature, secret) {
       ]),
       Portal.codePanel('Response', result.body),
     );
+    Portal.animateSwap(responseHost);
   }
 
   endpoint.addEventListener('change', syncEndpoint);

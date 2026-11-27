@@ -2,6 +2,7 @@
  * Sample card program data shared by Cardholders, Card orders and Issuers.
  * Deterministic so every reviewer sees the same data. Replace with GET /cards/issuers, /cardholders, /cards, /card-orders.
  * Interlace is connected with a key that lacks the CARDS scope, so Portal cannot read any of its records.
+ * Card networks: Axys and Interlace issue Visa, Hypercard issues Mastercard.
  */
 (function () {
   'use strict';
@@ -11,27 +12,22 @@
 
   const ISSUERS = [
     {
-      name: 'Axys', status: 'connected', program: 'Orange Visa Debit', currencies: ['USD', 'USDC'],
+      name: 'Axys', network: 'visa', status: 'connected', program: 'Orange Visa Debit', currencies: ['USD', 'USDC'],
       lastWebhook: '2026-11-27T11:48:00Z', events: ['card_order.status_updated', 'cardholder.status_updated'],
     },
     {
-      name: 'Hypercard', status: 'connected', program: 'Orange Mastercard Prepaid', currencies: ['USD', 'AED', 'USDT'],
+      name: 'Hypercard', network: 'mastercard', status: 'connected', program: 'Orange Mastercard Prepaid', currencies: ['USD', 'AED', 'USDT'],
       lastWebhook: '2026-11-27T10:05:00Z', events: ['card_order.status_updated', 'cardholder.status_updated'],
     },
     {
-      name: 'Interlace', status: 'needs_scope', program: 'Orange Travel Card', currencies: ['USD', 'USDC'],
+      name: 'Interlace', network: 'visa', status: 'needs_scope', program: 'Orange Travel Card', currencies: ['USD', 'USDC'],
       lastWebhook: null, events: [],
     },
   ];
 
-  const COUNTRIES = [
-    { code: 'AE', name: 'United Arab Emirates', dial: '+971', city: 'Dubai', postal: '00000' },
-    { code: 'GB', name: 'United Kingdom', dial: '+44', city: 'London', postal: 'EC2A 4NE' },
-    { code: 'US', name: 'United States', dial: '+1', city: 'Austin', postal: '78701' },
-    { code: 'DE', name: 'Germany', dial: '+49', city: 'Berlin', postal: '10115' },
-    { code: 'SG', name: 'Singapore', dial: '+65', city: 'Singapore', postal: '018956' },
-    { code: 'FR', name: 'France', dial: '+33', city: 'Paris', postal: '75002' },
-  ];
+  // Countries the sample cardholders live in; name, dial code and flag come from the shared Portal.countries list.
+  const ADDRESSES = { AE: ['Dubai', '00000'], GB: ['London', 'EC2A 4NE'], US: ['Austin', '78701'], DE: ['Berlin', '10115'], SG: ['Singapore', '018956'], FR: ['Paris', '75002'] };
+  const COUNTRIES = Object.entries(ADDRESSES).map(([code, [city, postal]]) => ({ ...window.Portal.countries.find((c) => c.code === code), city, postal }));
 
   const PEOPLE = [
     ['Ava', 'Haddad'], ['Noah', 'Fischer'], ['Mia', 'Tanaka'], ['Liam', 'Okafor'], ['Zara', 'Khan'], ['Omar', 'Saleh'],
@@ -143,7 +139,10 @@
     { event: 'cardholder.status_updated', endpoint: 'https://api.theorangecard.com/hooks/cards', delivered: 61, failed: 2, last: '2026-11-27T10:05:00Z', status: 'retrying' },
   ];
 
+  /** Card network icon name ('visa' or 'mastercard') for an issuer name. */
+  const networkOf = (issuer) => ISSUERS.find((i) => i.name === issuer)?.network || 'visa';
+
   window.Portal.data = Object.assign(window.Portal.data || {}, {
-    cards: { NOW, issuers: ISSUERS, countries: COUNTRIES, cardholders, cards, orders, webhooks },
+    cards: { NOW, networkOf, issuers: ISSUERS, countries: COUNTRIES, cardholders, cards, orders, webhooks },
   });
 })();

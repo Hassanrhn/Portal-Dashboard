@@ -19,9 +19,9 @@
   const AMOUNT_PATTERN = /^\d{1,9}(\.\d{1,2})?$/;
   const REFERENCE_PATTERN = /^[A-Za-z0-9._-]{1,40}$/;
   const ADDRESS_RULES = {
-    TRC20: { pattern: /^T[1-9A-HJ-NP-Za-km-z]{33}$/, hint: 'A TRC20 address starts with T and is 34 characters.', placeholder: 'T…  (34 characters)', maxlength: 34 },
-    ERC20: { pattern: /^0x[0-9a-fA-F]{40}$/, hint: 'An ERC20 address is 0x followed by 40 hex characters.', placeholder: '0x…  (42 characters)', maxlength: 42 },
-    Polygon: { pattern: /^0x[0-9a-fA-F]{40}$/, hint: 'A Polygon address is 0x followed by 40 hex characters.', placeholder: '0x…  (42 characters)', maxlength: 42 },
+    TRC20: { pattern: /^T[1-9A-HJ-NP-Za-km-z]{33}$/, hint: 'A TRC20 address starts with T and is 34 characters.', placeholder: 'TQn9Y2khEsLJW1ChVWFMSMeRDow5KcbLSE', maxlength: 34 },
+    ERC20: { pattern: /^0x[0-9a-fA-F]{40}$/, hint: 'An ERC20 address is 0x followed by 40 hex characters.', placeholder: '0x71C7656EC7ab88b098defB751B7401B5f6d8976F', maxlength: 42 },
+    Polygon: { pattern: /^0x[0-9a-fA-F]{40}$/, hint: 'A Polygon address is 0x followed by 40 hex characters.', placeholder: '0x9fB2a1C4d7E83b06A5F1c2D9e4B7a3C8F0d6E215', maxlength: 42 },
   };
   const STATUS_BADGE = {
     awaiting_approval: ['awaiting', 'Awaiting approval'],
@@ -39,6 +39,13 @@
   /* Helpers ------------------------------------------------------------------- */
   const statusBadge = (status) => Portal.badge(...STATUS_BADGE[status]);
   const shortAddress = (a) => `${a.slice(0, 6)}…${a.slice(-4)}`;
+  /** Short address on screen, full address on the copy button. */
+  function addressCopy(address) {
+    const node = Portal.copyable(address, { label: 'Copy address' });
+    node.firstChild.textContent = shortAddress(address);
+    node.firstChild.title = address;
+    return node;
+  }
   const money = (value, currency) => `${fmt.money(value)} ${currency}`;
   const amountCell = (value, currency) => el('span', {}, [fmt.money(value), el('span', { className: 'amount__currency', text: ` ${currency}` })]);
   const nowIso = () => new Date(NOW).toISOString();
@@ -76,12 +83,12 @@
     rowLabel: (p) => `payout ${p.id}`,
     empty: { icon: 'search', title: 'No payouts match these filters', text: 'Try another status or clear the filters.', action: btn('Clear filters', { onClick: clearFilters }) },
     columns: [
-      { label: 'Payout ID', render: (p) => Portal.copyable(p.id, { label: 'Copy payout ID' }) },
-      { label: 'Destination', render: (p) => el('span', { className: 'payout-dest' }, [el('span', { className: 'chip', text: p.network }), el('span', { className: 'u-mono', text: shortAddress(p.address), attrs: { title: p.address } })]) },
-      { label: 'Reference', render: (p) => el('span', { className: 'u-muted', text: p.ref }) },
-      { label: 'Status', render: (p) => statusBadge(p.status) },
-      { label: 'Amount', num: true, render: (p) => amountCell(p.amount, p.currency) },
-      { label: 'Created', num: true, render: (p) => el('span', { className: 'u-muted', text: fmt.dateTime(p.created) }) },
+      { label: 'Payout ID', filter: { type: 'text', value: (p) => p.id }, render: (p) => Portal.copyable(p.id, { label: 'Copy payout ID' }) },
+      { label: 'Destination', filter: { type: 'options', value: (p) => p.network, label: String }, render: (p) => el('span', { className: 'payout-dest' }, [el('span', { className: 'chip', text: p.network }), addressCopy(p.address)]) },
+      { label: 'Reference', filter: { type: 'text', value: (p) => p.ref, placeholder: 'e.g. WD-2041' }, render: (p) => el('span', { className: 'u-muted', text: p.ref }) },
+      { label: 'Status', filter: { type: 'options', value: (p) => p.status, label: (s) => STATUS_BADGE[s][1] }, render: (p) => statusBadge(p.status) },
+      { label: 'Amount', num: true, filter: { type: 'number', value: (p) => p.amount }, render: (p) => amountCell(p.amount, p.currency) },
+      { label: 'Created', num: true, filter: { type: 'date', value: (p) => p.created }, render: (p) => el('span', { className: 'u-muted', text: fmt.dateTime(p.created) }) },
     ],
   });
 
@@ -280,8 +287,8 @@
     const currency = el('select', { className: 'select select--block', attrs: { id: 'po-currency' } }, CURRENCIES.map((c) => el('option', { text: c })));
     const network = el('select', { className: 'select select--block', attrs: { id: 'po-network' } });
     const address = el('input', { className: 'input input--mono', attrs: { id: 'po-address', autocomplete: 'off', spellcheck: 'false', autocapitalize: 'off', 'aria-describedby': 'po-address-help' } });
-    const amount = el('input', { className: 'input u-num', attrs: { id: 'po-amount', inputmode: 'decimal', autocomplete: 'off', maxlength: '12', placeholder: '0.00', 'aria-describedby': 'po-amount-help' } });
-    const reference = el('input', { className: 'input', attrs: { id: 'po-reference', maxlength: '40', autocomplete: 'off', value: nextReference(), 'aria-describedby': 'po-reference-help' } });
+    const amount = el('input', { className: 'input u-num', attrs: { id: 'po-amount', inputmode: 'decimal', autocomplete: 'off', maxlength: '12', placeholder: '2500.00', 'aria-describedby': 'po-amount-help' } });
+    const reference = el('input', { className: 'input', attrs: { id: 'po-reference', maxlength: '40', autocomplete: 'off', value: nextReference(), placeholder: nextReference(), 'aria-describedby': 'po-reference-help' } });
     const balanceHelp = el('p', { className: 'field__help', attrs: { id: 'po-amount-help' } });
     const addressHelp = el('p', { className: 'field__help', attrs: { id: 'po-address-help' } });
     const unit = el('span', { className: 'input-affix__addon' });
@@ -361,7 +368,7 @@
       section('Review', [kv([
         ['From', `${d.currency} balance (${money(balances[d.currency], d.currency)} available)`],
         ['Network', `${d.network} · ${NETWORKS[d.network].chain}`],
-        ['Destination', el('span', { className: 'u-mono', text: d.address })],
+        ['Destination', Portal.copyable(d.address, { label: 'Copy address' })],
         ['Reference', d.ref],
         ['Offering', el('span', { className: 'chip chip--mono', text: OFFERING })],
       ])]),

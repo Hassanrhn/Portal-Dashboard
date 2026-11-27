@@ -10,45 +10,52 @@
   const app = document.querySelector('[data-app]');
   if (!app) return;
 
-  /* Sidebar collapse (desktop) ---------------------------------------------- */
-  const collapseToggle = app.querySelector('[data-collapse-toggle]');
+  /* Sidebar toggle (one header button): collapses to icons on desktop, opens the drawer below 860px */
+  const toggle = document.querySelector('[data-sidebar-toggle]');
+  const sidebar = app.querySelector('.sidebar');
+  const isCompact = () => window.matchMedia('(max-width: 860px)').matches;
   const setCollapsed = (collapsed) => {
     app.classList.toggle('is-collapsed', collapsed);
-    collapseToggle?.setAttribute('aria-pressed', String(collapsed));
-    collapseToggle?.setAttribute('aria-label', collapsed ? 'Expand sidebar' : 'Collapse sidebar');
+    if (collapsed) root.dataset.sidebar = 'collapsed'; else delete root.dataset.sidebar;
     Portal.store.set('sidebar', collapsed ? 'collapsed' : 'expanded');
+    syncToggle();
   };
-  setCollapsed(Portal.store.get('sidebar') === 'collapsed');
-  collapseToggle?.addEventListener('click', () => setCollapsed(!app.classList.contains('is-collapsed')));
-
-  /* Drawer (mobile) ---------------------------------------------------------- */
-  const menuButton = app.querySelector('[data-nav-open]');
-  const sidebar = app.querySelector('.sidebar');
   const setNavOpen = (open) => {
     app.classList.toggle('is-nav-open', open);
-    menuButton?.setAttribute('aria-expanded', String(open));
+    syncToggle();
     if (open) sidebar.querySelector('a, button')?.focus();
-    else if (document.activeElement && sidebar.contains(document.activeElement)) menuButton?.focus();
+    else if (sidebar.contains(document.activeElement)) toggle?.focus();
   };
-  menuButton?.addEventListener('click', () => setNavOpen(true));
+  function syncToggle() {
+    if (!toggle) return;
+    const expanded = isCompact() ? app.classList.contains('is-nav-open') : !app.classList.contains('is-collapsed');
+    toggle.setAttribute('aria-expanded', String(expanded));
+    toggle.setAttribute('aria-label', expanded ? 'Hide sidebar' : 'Show sidebar');
+  }
+  setCollapsed(Portal.store.get('sidebar') === 'collapsed');
+  toggle?.addEventListener('click', () => (isCompact() ? setNavOpen(!app.classList.contains('is-nav-open')) : setCollapsed(!app.classList.contains('is-collapsed'))));
   app.querySelector('[data-nav-close]')?.addEventListener('click', () => setNavOpen(false));
+  window.matchMedia('(max-width: 860px)').addEventListener('change', syncToggle);
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape' && app.classList.contains('is-nav-open')) setNavOpen(false);
   });
 
   /* Environment ---------------------------------------------------------------- */
   const ENVS = ['live', 'test'];
-  const envControl = app.querySelector('[data-env-control]');
+  const envToggles = () => document.querySelectorAll('[data-env-toggle]');
   const setEnv = (env, { announce = false } = {}) => {
     if (!ENVS.includes(env)) return;
     root.dataset.env = env;
     Portal.store.set('env', env);
-    envControl?.portalSelect?.(env);
+    envToggles().forEach((toggle) => {
+      toggle.setAttribute('aria-checked', String(env === 'test'));
+      toggle.querySelector('.switch')?.setAttribute('aria-checked', String(env === 'test'));
+    });
     if (announce) Portal.toast(env === 'test' ? 'Switched to Test mode. No real money moves.' : 'Switched to Live mode.');
   };
   Portal.env = { get: () => root.dataset.env, set: setEnv };
   setEnv(ENVS.includes(Portal.store.get('env')) ? Portal.store.get('env') : 'live');
-  envControl?.addEventListener('segmented:change', (event) => setEnv(event.detail.value, { announce: true }));
+  envToggles().forEach((toggle) => toggle.addEventListener('click', () => setEnv(root.dataset.env === 'test' ? 'live' : 'test', { announce: true })));
 
   /* Pages not built yet: explain instead of following a dead link ------------------ */
   document.addEventListener('click', (event) => {
@@ -164,5 +171,84 @@
       event.preventDefault();
       dialog.open ? Portal.dialog.close(dialog) : openPalette();
     }
+  });
+})();
+
+/*
+ * Custom context menu (right-click / long-press) replacing the browser menu on dashboard pages.
+ * Offers actions that fit what was clicked: copy a value or selection, open a row or link, page actions.
+ * Text fields keep the native menu so paste/spellcheck still work.
+ */
+(function () {
+  'use strict';
+
+  const Portal = window.Portal;
+  if (!document.querySelector('[data-app]') || !Portal.menu) return;
+
+  const copy = async (value, toast) => {
+    try { await navigator.clipboard.writeText(value); Portal.toast(toast); } catch { Portal.toast('Copy is blocked in this browser.', { icon: 'alert' }); }
+  };
+
+  /** Actions depend on what was right-clicked; only the most relevant ones are offered. */
+  function itemsFor(target) {
+    const selection = String(window.getSelection() || '').trim();
+    if (selection) {
+      return [
+        { label: 'Copy', icon: 'copy', onSelect: () => copy(selection, 'Copied') },
+        { label: `Search for “${selection.length > 24 ? `${selection.slice(0, 22)}…` : selection}”`, icon: 'search', onSelect: () => openSearch(selection) },
+      ];
+    }
+    const row = target.closest('tr.is-clickable, tbody tr');
+    if (row) {
+      const ids = Array.from(row.querySelectorAll('[data-copy]')).map((b) => b.dataset.copy);
+      const header = row.closest('table')?.querySelector('thead th')?.textContent.trim() || 'ID';
+      return [
+        row.classList.contains('is-clickable') && { label: 'Open details', icon: 'arrow-right', onSelect: () => row.click() },
+        ids[0] && { label: `Copy ${header.toLowerCase()}`, icon: 'copy', description: ids[0], onSelect: () => copy(ids[0], 'Copied') },
+        ids[1] && { label: 'Copy reference', icon: 'copy', description: ids[1], onSelect: () => copy(ids[1], 'Copied') },
+        { label: 'Copy row', icon: 'file', onSelect: () => copy(Array.from(row.cells).map((c) => c.innerText.replace(/\s+/g, ' ').trim()).join('\t'), 'Row copied') },
+      ].filter(Boolean);
+    }
+    const head = target.closest('thead th');
+    if (head) {
+      const filter = head.querySelector('button');
+      return [filter && { label: `Filter ${head.textContent.trim().toLowerCase()}`, icon: 'filter', onSelect: () => filter.click() }].filter(Boolean);
+    }
+    const copyable = target.closest('.copy')?.querySelector('[data-copy]') || target.closest('[data-copy]');
+    if (copyable) return [{ label: 'Copy', icon: 'copy', description: copyable.dataset.copy.length > 36 ? `${copyable.dataset.copy.slice(0, 34)}…` : copyable.dataset.copy, onSelect: () => copy(copyable.dataset.copy, 'Copied') }];
+    const link = target.closest('a[href]');
+    if (link) {
+      return [
+        { label: 'Open in new tab', icon: 'external', onSelect: () => window.open(link.href, '_blank', 'noopener') },
+        { label: 'Copy link', icon: 'link', onSelect: () => copy(link.href, 'Link copied') },
+      ];
+    }
+    return [
+      { label: 'New payment', icon: 'plus', onSelect: () => Portal.createPayment?.() },
+      { label: 'Search', icon: 'search', description: '⌘K', onSelect: () => openSearch('') },
+      { label: 'Copy page link', icon: 'link', onSelect: () => copy(window.location.href, 'Page link copied') },
+    ];
+  }
+
+  function openSearch(query) {
+    document.querySelector('[data-command-open]')?.click();
+    const input = document.querySelector('.cmd__input');
+    if (input && query) { input.value = query; input.dispatchEvent(new Event('input')); }
+  }
+
+  document.addEventListener('contextmenu', (event) => {
+    if (event.target.closest('input, textarea, [contenteditable="true"]') || event.shiftKey) return; // Shift+right-click = native menu
+    event.preventDefault();
+    const anchor = document.createElement('span');
+    anchor.className = 'context-anchor';
+    anchor.tabIndex = -1;
+    anchor.style.left = `${event.clientX}px`;
+    anchor.style.top = `${event.clientY}px`;
+    document.body.appendChild(anchor);
+    const items = itemsFor(event.target);
+    if (!items.length) { anchor.remove(); return; }
+    Portal.menu.open(anchor, items);
+    const cleanup = new MutationObserver(() => { if (!document.querySelector('.menu')) { anchor.remove(); cleanup.disconnect(); } });
+    cleanup.observe(document.body, { childList: true });
   });
 })();

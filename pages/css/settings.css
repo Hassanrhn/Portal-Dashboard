@@ -6,7 +6,8 @@
 .setting__desc code { font-size: var(--font-size-12); }
 .input-affix--suffix .input { width: calc(var(--size-48) + var(--space-24)); }
 .setting__control .field .field__error { max-width: calc(var(--size-256) * 0.9); }
-.redirect-preview { display: block; width: 100%; padding: var(--space-10) var(--space-12); overflow-wrap: anywhere; color: var(--text-primary); }
+.redirect-preview { display: flex; align-items: flex-start; gap: var(--space-4); width: 100%; overflow-wrap: anywhere; color: var(--text-primary); font-size: var(--font-size-13); }
+.redirect-preview > span { min-width: 0; padding-top: var(--space-2); }
 .redirect-preview__query { color: var(--code-string); }
 .danger-zone .setting__title { color: var(--status-danger-fg); }
 @media (max-width: 600px) {
@@ -14,3 +15,8 @@
   .setting__control .input-affix--suffix .input { width: 100%; }
 }
 .settings > .card__head { padding-bottom: var(--space-12); }
+.phone-row { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: var(--space-8); width: 280px; max-width: 100%; }
+.setting__control .phone-row .select, .setting__control .phone-row .input { width: 100%; }
+.with-flag { display: inline-flex; align-items: center; gap: var(--space-6); }
+.card__body > .rows .rows__item { padding-inline: 0; }
+@media (max-width: 600px) { .phone-row { width: 100%; } }

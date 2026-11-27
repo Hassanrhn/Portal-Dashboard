@@ -75,15 +75,10 @@
   /** Shows a full secret once. Done stays disabled until the user confirms they stored it. */
   function revealSecret({ title, intro, secret }) {
     const field = el('input', { className: 'input input--mono', attrs: { id: 'reveal-secret', readonly: true, value: secret, autocomplete: 'off', spellcheck: 'false', 'aria-label': 'Secret key' } });
-    const copy = btn('Copy', { iconName: 'copy', onClick: async () => {
-      try {
-        await navigator.clipboard.writeText(secret);
-        Portal.toast('Secret copied to the clipboard');
-      } catch {
-        field.select();
-        Portal.toast('Copy is blocked in this browser. The secret is selected, press Ctrl+C.', { icon: 'alert' });
-      }
-    } });
+    // Shared copy button and animation; the toast never echoes the secret.
+    const copy = el('button', {
+      className: 'copy__btn', attrs: { type: 'button', 'data-copy': secret, 'data-copy-toast': 'Secret copied to the clipboard', 'aria-label': 'Copy secret key' },
+    }, [iconEl('copy', 'icon-copy'), iconEl('check', 'icon-check')]);
     const ack = el('input', { attrs: { type: 'checkbox', id: 'reveal-ack' } });
     const done = btn('Done', { variant: 'primary', attrs: { disabled: true }, onClick: () => Portal.dialog.close(dialog) });
     ack.addEventListener('change', () => { done.disabled = !ack.checked; });
@@ -92,13 +87,13 @@
       locked: () => !ack.checked,
       body: [el('div', { className: 'stack--tight' }, [
         el('p', { text: intro }),
-        el('div', { className: 'field' }, [el('div', { className: 'secret-field' }, [field, copy])]),
+        el('div', { className: 'input-group input-group--trailing' }, [field, el('span', { className: 'input-group__action' }, [copy])]),
         el('p', { className: 'banner' }, [iconEl('alert'), el('span', { text: 'This secret will not be shown again. Store it in your secret manager now. If you lose it, rotate the key.' })]),
         el('label', { className: 'check' }, [ack, el('span', { text: "I've stored this secret safely" })]),
       ])],
       footer: [done],
     });
-    dialog.addEventListener('close', () => { field.value = ''; });
+    dialog.addEventListener('close', () => { field.value = ''; copy.removeAttribute('data-copy'); });
     field.addEventListener('focus', () => field.select());
   }
 
@@ -108,13 +103,13 @@
     rowLabel: (k) => `key ${k.name}`,
     empty: { icon: 'key', title: 'No keys here yet', text: 'Create a key to call the API from your server. Start with a Test key.', action: btn('Create key', { variant: 'primary', iconName: 'plus', onClick: () => openCreate() }) },
     columns: [
-      { label: 'Name', render: (k) => el('span', {}, [k.name, k.ips.length ? el('span', { className: 'cell-sub', text: `${k.ips.length} allowed IP ${k.ips.length === 1 ? 'range' : 'ranges'}` }) : null]) },
-      { label: 'Key ID', render: (k) => keyIdCell(k.id) },
+      { label: 'Name', filter: { type: 'text', value: (k) => k.name, placeholder: 'e.g. Checkout server' }, render: (k) => el('span', {}, [k.name, k.ips.length ? el('span', { className: 'cell-sub', text: `${k.ips.length} allowed IP ${k.ips.length === 1 ? 'range' : 'ranges'}` }) : null]) },
+      { label: 'Key ID', filter: { type: 'text', value: (k) => k.id }, render: (k) => keyIdCell(k.id) },
       { label: 'Scopes', render: (k) => el('span', { className: 'chips' }, k.scopes.map((s) => el('span', { className: 'chip', text: SCOPE_LABEL[s] }))) },
       { label: 'Offerings', render: (k) => el('span', { className: k.offerings.length ? '' : 'u-muted', text: k.offerings.length ? `${k.offerings.length} restricted` : 'All' }) },
-      { label: 'Created', render: (k) => el('span', { className: 'u-muted', text: fmt.date(k.created) }) },
-      { label: 'Last used', render: (k) => el('span', { className: 'u-muted', text: k.lastUsed ? fmt.relative(k.lastUsed) : 'Never', attrs: { title: k.lastUsed ? `${fmt.dateTime(k.lastUsed)} UTC` : null } }) },
-      { label: 'Status', render: (k) => Portal.badge(k.status) },
+      { label: 'Created', filter: { type: 'date', value: (k) => k.created }, render: (k) => el('span', { className: 'u-muted', text: fmt.date(k.created) }) },
+      { label: 'Last used', filter: { type: 'date', value: (k) => k.lastUsed }, render: (k) => el('span', { className: 'u-muted', text: k.lastUsed ? fmt.relative(k.lastUsed) : 'Never', attrs: { title: k.lastUsed ? `${fmt.dateTime(k.lastUsed)} UTC` : null } }) },
+      { label: 'Status', filter: { type: 'options', value: (k) => k.status }, render: (k) => Portal.badge(k.status) },
       { label: 'Actions', className: 'cell-actions', render: rowMenu },
     ],
   });
@@ -189,7 +184,7 @@
   const invalidIps = (lines) => lines.filter((line) => !IP_PATTERN.test(line));
 
   function openCreate({ preselect = [] } = {}) {
-    const name = el('input', { className: 'input', attrs: { id: 'ck-name', maxlength: String(NAME_MAX), autocomplete: 'off', placeholder: 'e.g. Production checkout', required: true } });
+    const name = el('input', { className: 'input', attrs: { id: 'ck-name', maxlength: String(NAME_MAX), autocomplete: 'off', placeholder: 'Production checkout', required: true } });
     const envCards = el('div', { className: 'radio-cards radio-cards--2', attrs: { role: 'radiogroup', 'aria-label': 'Environment' } }, [
       radioCard('ck-env', 'test', 'Test (recommended)', 'Test data only. No real money moves.', true),
       radioCard('ck-env', 'live', 'Live', 'Real payments and cards.', false),
@@ -252,7 +247,7 @@
 
   /* Row actions ---------------------------------------------------------------------------- */
   function renameKey(k) {
-    const input = el('input', { className: 'input', attrs: { id: 'rn-name', value: k.name, maxlength: String(NAME_MAX), autocomplete: 'off' } });
+    const input = el('input', { className: 'input', attrs: { id: 'rn-name', value: k.name, maxlength: String(NAME_MAX), autocomplete: 'off', placeholder: 'Production checkout' } });
     const save = () => {
       const value = input.value.trim();
       if (!Portal.fieldError(input, value ? '' : 'Enter a name.')) { input.focus(); return; }

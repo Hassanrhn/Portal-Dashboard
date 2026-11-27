@@ -28,7 +28,7 @@
   const money = (value, currency) => `${fmt.money(value)} ${currency}`;
   const amountCell = (value, currency) => el('span', {}, [fmt.money(value), el('span', { className: 'amount__currency', text: ` ${currency}` })]);
   const paymentHref = (id) => `transactions.html?payment=${encodeURIComponent(id)}`;
-  const paymentLink = (id) => el('a', { className: 'link u-mono', text: id, attrs: { href: paymentHref(id) } });
+  const paymentLink = (id) => el('a', { className: 'inline-link u-mono', text: id, attrs: { href: paymentHref(id) } });
   const kv = (pairs) => el('dl', { className: 'kv' }, pairs.filter(Boolean).flatMap(([k, v]) => [el('dt', { text: k }), el('dd', {}, [v])]));
   const section = (title, children) => el('section', { className: 'drawer__section' }, [el('h3', { className: 'drawer__section-title', text: title }), ...children]);
   const within30 = (iso) => NOW - new Date(iso).getTime() <= 30 * DAY;
@@ -64,13 +64,13 @@
     rowLabel: (r) => `refund ${r.id}`,
     empty: { icon: 'refund', title: 'No refunds match these filters', text: 'Try another status or clear the search.', action: btn('Clear filters', { onClick: clearFilters }) },
     columns: [
-      { label: 'Refund ID', render: (r) => Portal.copyable(r.id, { label: 'Copy refund ID' }) },
-      { label: 'Payment', render: (r) => paymentLink(r.paymentId) },
-      { label: 'Reference', render: (r) => el('span', { className: 'u-muted', text: r.ref }) },
-      { label: 'Reason', render: (r) => el('span', { className: 'u-muted', text: r.reason }) },
-      { label: 'Status', render: (r) => Portal.badge(r.status) },
-      { label: 'Amount', num: true, render: (r) => amountCell(r.amount, r.currency) },
-      { label: 'Created', num: true, render: (r) => el('span', { className: 'u-muted', text: fmt.dateTime(r.created) }) },
+      { label: 'Refund ID', filter: { type: 'text', value: (r) => r.id }, render: (r) => Portal.copyable(r.id, { label: 'Copy refund ID' }) },
+      { label: 'Payment', filter: { type: 'text', value: (r) => r.paymentId }, render: (r) => paymentLink(r.paymentId) },
+      { label: 'Reference', filter: { type: 'text', value: (r) => r.ref, placeholder: 'e.g. ORD-10489' }, render: (r) => el('span', { className: 'u-muted', text: r.ref }) },
+      { label: 'Reason', filter: { type: 'options', value: (r) => r.reason, label: String }, render: (r) => el('span', { className: 'u-muted', text: r.reason }) },
+      { label: 'Status', filter: { type: 'options', value: (r) => r.status }, render: (r) => Portal.badge(r.status) },
+      { label: 'Amount', num: true, filter: { type: 'number', value: (r) => r.amount }, render: (r) => amountCell(r.amount, r.currency) },
+      { label: 'Created', num: true, filter: { type: 'date', value: (r) => r.created }, render: (r) => el('span', { className: 'u-muted', text: fmt.dateTime(r.created) }) },
     ],
   });
 
@@ -190,7 +190,7 @@
   }
 
   function pickStep(flow) {
-    const search = el('input', { className: 'input', attrs: { id: 'rf-search', type: 'search', maxlength: '80', autocomplete: 'off', placeholder: 'Request ID or reference, e.g. ORD-10492', value: flow.query } });
+    const search = el('input', { className: 'input', attrs: { id: 'rf-search', type: 'search', maxlength: '80', autocomplete: 'off', placeholder: 'req_77b0d415aa or ORD-10492', value: flow.query } });
     const results = el('div', { attrs: { role: 'radiogroup', 'aria-label': 'Paid payments' } });
     const count = el('p', { className: 'field__help', attrs: { 'aria-live': 'polite' } });
 
@@ -239,7 +239,7 @@
   /* Step 2: amount and reason ------------------------------------------------------------ */
   function amountStep(flow) {
     const p = flow.payment;
-    const amount = el('input', { className: 'input u-num', attrs: { id: 'rf-amount', inputmode: 'decimal', autocomplete: 'off', maxlength: '12', value: flow.amount || p.amount, disabled: flow.type !== 'partial' } });
+    const amount = el('input', { className: 'input u-num', attrs: { id: 'rf-amount', inputmode: 'decimal', autocomplete: 'off', maxlength: '12', value: flow.amount || p.amount, placeholder: p.amount, disabled: flow.type !== 'partial' } });
     const reason = el('select', { className: 'select select--block', attrs: { id: 'rf-reason' } }, REASONS.map((r) => el('option', { text: r, attrs: { selected: r === flow.reason } })));
     const type = el('div', { className: 'radio-cards radio-cards--2', attrs: { role: 'radiogroup', 'aria-label': 'Refund type' } }, [['full', 'Full refund', money(p.amount, p.currency)], ['partial', 'Partial refund', 'Choose an amount']].map(([v, t, d]) => el('label', { className: 'radio-card' }, [
       el('input', { attrs: { type: 'radio', name: 'rf-type', value: v, checked: v === flow.type } }),
@@ -256,7 +256,7 @@
 
     return {
       nodes: [
-        kv([['Payment', el('span', { className: 'u-mono', text: p.id })], ['Reference', p.ref], ['Paid', `${money(p.amount, p.currency)} via ${p.route}`]]),
+        kv([['Payment', Portal.copyable(p.id, { label: 'Copy request ID' })], ['Reference', p.ref], ['Paid', `${money(p.amount, p.currency)} via ${p.route}`]]),
         type,
         el('div', { className: 'form-grid form-grid--2' }, [
           el('div', { className: 'field' }, [el('label', { className: 'field__label', text: `Amount (${p.currency})`, attrs: { for: 'rf-amount' } }), amount]),
@@ -286,7 +286,7 @@
           el('span', { className: 'amount-hero__currency', text: p.currency }),
         ]),
         kv([
-          ['Payment', el('span', { className: 'u-mono', text: p.id })],
+          ['Payment', Portal.copyable(p.id, { label: 'Copy request ID' })],
           ['Reference', p.ref],
           ['Customer', p.customer],
           ['Type', full ? 'Full refund' : `Partial refund of ${money(p.amount, p.currency)}`],
