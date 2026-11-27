@@ -43,7 +43,7 @@
   /** Status badge: badge('paid') → <span class="badge badge--success">Paid</span> */
   const STATUS_TONE = {
     paid: 'success', active: 'success', connected: 'success', delivered: 'success', succeeded: 'success', approved: 'success', verified: 'success', completed: 'success', shipped: 'success', ready: 'success', open: 'info',
-    pending: 'warning', processing: 'warning', review: 'warning', retrying: 'warning', invited: 'warning', awaiting: 'warning', in_transit: 'warning', needs_scope: 'warning', generating: 'warning',
+    pending: 'warning', awaiting_approval: 'warning', mismatch: 'danger', matched: 'success', resolved: 'success', processing: 'warning', review: 'warning', retrying: 'warning', invited: 'warning', awaiting: 'warning', in_transit: 'warning', needs_scope: 'warning', generating: 'warning',
     failed: 'danger', revoked: 'danger', rejected: 'danger', dead: 'danger', disconnected: 'danger', frozen: 'info', refunded: 'info', partially_refunded: 'info', expired: 'danger', blocked: 'danger',
     cancelled: '', disabled: '', closed: '', draft: '',
   };

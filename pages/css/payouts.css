@@ -7,3 +7,5 @@
 .kv .copy { min-width: 0; }
 .kv .copy > span { min-width: 0; overflow-wrap: anywhere; }
 .toolbar > .segmented { max-width: 100%; overflow-x: auto; scrollbar-width: none; }
+/* Work-around: shared .drawer__body grid rows shrink to fit instead of scrolling when content is taller than the drawer. */
+.drawer__body { grid-auto-rows: max-content; }

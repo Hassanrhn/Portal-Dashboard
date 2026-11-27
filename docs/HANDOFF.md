@@ -106,22 +106,30 @@ theme.js (no defer) → icons → dom → layout → components → patterns →
 
 | Page | File | Status |
 | --- | --- | --- |
-| Overview | overview.html | Done |
-| Transactions + payment detail, refund, cancel | transactions.html | Done (reference implementation) |
-| Payouts | payouts.html | See the table at the bottom |
-| Refunds | refunds.html | |
-| Cardholders | cardholders.html | |
-| Card orders | card-orders.html | |
-| Issuers | issuers.html | |
-| Reports | reports.html | |
-| API keys | api-keys.html | |
-| Webhooks | webhooks.html | |
-| Event logs | event-logs.html | |
-| Docs (+ go-live checklist, API explorer) | docs.html | |
-| Team | team.html | |
-| Settings | settings.html | |
-| Contact support | support.html | |
-| Sign in | login.html | Original, untouched |
+| Overview | overview.html | Done: Metrics, volume chart, routes, recent payments |
+| Transactions | transactions.html | Done: Filters, CSV export, payment drawer, refund, cancel (reference implementation) |
+| Payouts | payouts.html | Done: Balances, approval rule over 1,000, new payout with address validation |
+| Refunds | refunds.html | Done: Refund history, refund-a-payment flow |
+| Cardholders | cardholders.html | Done: KYC filters, profile drawer, freeze cards, add cardholder |
+| Card orders | card-orders.html | Done: Status timeline, tracking, retry or cancel, new order |
+| Issuers | issuers.html | Done: Connection status, test connection, CARDS scope guidance |
+| Reports | reports.html | Done: Exports, statements, reconciliation |
+| API keys | api-keys.html | Done: Scopes, reveal-once secret, rotate, revoke, ?scope=cards |
+| Webhooks | webhooks.html | Done: Endpoints (max 10), signing secret, deliveries, retry, test event |
+| Event logs | event-logs.html | Done: API requests (masked key), live tail, events |
+| Docs | docs.html | Done: Go-live checklist, guides, code tabs, API explorer (Test only) |
+| Team | team.html | Done: Members, roles, invites, permissions matrix |
+| Settings | settings.html | Done: Organization, security, checkout redirects, notifications, save bar |
+| Contact support | support.html | Done: New request, tickets, system status |
+| Sign in | login.html | Original prototype, untouched |
+
+**Deep links:** `transactions.html?payment=<id>&status=&q=`, `payouts.html?payout=`, `refunds.html?refund=`, `cardholders.html?issuer=&kyc=&cardholder=`, `card-orders.html?new=1&cardholder=`, `api-keys.html?scope=cards`, `reports.html?tab=statements`, `support.html?request=<id>`.
+
+**Next steps:**
+1. Wire `Portal.request()` to the real API, and add its host to CSP `connect-src`.
+2. Replace `pages/js/data/*.js` with fetched data.
+3. Add server security headers (see `design-system/README.md`).
+4. Consider a real router or framework only if the page count keeps growing.
 
 ## Domain facts to keep consistent
 

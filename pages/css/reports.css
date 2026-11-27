@@ -18,3 +18,5 @@
 .kv .copy { min-width: 0; }
 .link { color: var(--text-primary); text-decoration: underline; text-decoration-color: var(--border-strong); text-underline-offset: 3px; }
 .link:hover { text-decoration-color: currentColor; }
+/* Work-around: shared .drawer__body grid rows shrink to fit instead of scrolling when content is taller than the drawer. */
+.drawer__body { grid-auto-rows: max-content; }

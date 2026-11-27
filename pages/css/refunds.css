@@ -29,3 +29,5 @@
 .pick__sub { color: var(--text-secondary); font-size: var(--font-size-12); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .pick__amount { font-variant-numeric: tabular-nums; white-space: nowrap; }
 .steps { color: var(--text-tertiary); font-size: var(--font-size-12); }
+/* Work-around: shared .drawer__body grid rows shrink to fit instead of scrolling when content is taller than the drawer. */
+.drawer__body { grid-auto-rows: max-content; }

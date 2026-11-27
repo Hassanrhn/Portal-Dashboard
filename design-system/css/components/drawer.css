@@ -27,7 +27,7 @@
 .drawer__titles { flex: 1; min-width: 0; }
 .drawer__title { font-size: var(--font-size-18); font-weight: var(--font-weight-semibold); line-height: var(--font-leading-snug); }
 .drawer__subtitle { margin-top: var(--space-4); color: var(--text-secondary); font-size: var(--font-size-13); }
-.drawer__body { flex: 1; overflow-y: auto; padding: var(--drawer-pad); display: grid; align-content: start; gap: var(--space-24); }
+.drawer__body { flex: 1; overflow-y: auto; padding: var(--drawer-pad); display: grid; grid-auto-rows: max-content; align-content: start; gap: var(--space-24); }
 .drawer__foot { display: flex; align-items: center; justify-content: flex-end; gap: var(--space-8); padding: var(--space-12) var(--drawer-pad); border-top: var(--border-width) solid var(--border-default); background: var(--bg-sidebar); }
 .drawer__foot-note { margin-right: auto; color: var(--text-secondary); font-size: var(--font-size-12); }
 .drawer__section { display: grid; gap: var(--space-12); }
